@@ -18,6 +18,11 @@ def entropy_check(ts: TransportSolution, generation=None, loss=None,
     """Second law: entropy handed to the surroundings minus entropy received
     with the heat input, plus what the body stores, must not be negative.
 
+    Closed systems only: heat crossing a boundary is divided by the
+    temperature it crosses at.  With flow through the domain the stream also
+    carries entropy (m cp ln T), which needs its own budget - see
+    ``cooling_channel`` in sims/fluids.py.
+
     ``generation`` is the true volumetric heating [W/m^3] (defaults to the
     problem source); ``loss`` = (volumetric loss coefficient, ambient K) for a
     distributed convective loss that was folded into source/sink terms.
