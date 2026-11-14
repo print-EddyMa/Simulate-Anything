@@ -102,7 +102,10 @@ def skip(name, category, why) -> Check:
 def bounds(name, category, lo, hi, vmin, vmax, slack=1e-6, detail="",
            unit="") -> Check:
     """Maximum-principle style check: the field must stay within [lo, hi]."""
-    span = max(abs(hi - lo), abs(hi), abs(lo), 1e-300)
+    finite = [abs(v) for v in (lo, hi) if math.isfinite(v)]   # one-sided bounds allowed
+    if len(finite) == 2:
+        finite.append(abs(hi - lo))
+    span = max(finite + [1e-300])
     tol = slack * span
     ok = (vmin >= lo - tol) and (vmax <= hi + tol)
     u = f" {unit}" if unit else ""

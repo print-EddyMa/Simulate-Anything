@@ -62,6 +62,8 @@ def bounds_check(ts: TransportSolution, lo=None, hi=None, why="") -> ck.Check:
 
 def heat_checks(ts: TransportSolution, lo=None, hi=None, generation=None,
                 loss=None, why="") -> list:
-    return [ts.conservation_check("energy balance (in = out + stored)", ck.HEAT, " W"),
+    ambient = None if loss is None else loss[1]
+    return [ts.conservation_check("energy balance (in = out + stored)", ck.HEAT, " W",
+                                  ambient=ambient),
             bounds_check(ts, lo, hi, why),
             entropy_check(ts, generation, loss)]

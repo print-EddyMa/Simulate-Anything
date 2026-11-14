@@ -530,8 +530,14 @@ class TransportSolution:
                      + (1 - tx) * ty * f[i, j + 1] + tx * ty * f[i + 1, j + 1])
 
     # -- reusable checks --------------------------------------------------------
-    def conservation_check(self, name, category, unit="", tol=1e-8) -> ck.Check:
-        """In - out + generated - stored = 0."""
+    def conservation_check(self, name, category, unit="", tol=1e-8,
+                           ambient=None) -> ck.Check:
+        """In - out + generated - stored = 0.
+
+        ``ambient`` is the reference level of a distributed loss that was
+        written as ``sink * (phi - ambient)``; it only changes how the totals
+        are worded (net generation and net loss), not the test.
+        """
         if self.history is not None:
             gross = max(abs(self.stored_change), abs(self.net_input), 1e-300)
             return ck.small(name, category,
@@ -539,12 +545,15 @@ class TransportSolution:
                             f"stored {self.stored_change:.6g}{unit} vs time-integrated "
                             f"net input {self.net_input:.6g}{unit}; relative mismatch")
         net, gross = self.balance()
+        p, g = self.problem, self.grid
+        shift = 0.0 if ambient is None else float(
+            np.sum((p.sink * ambient * g.vol)[~p.fixed]))
         inflow = self.boundary_inflow()
-        parts = ", ".join(f"{s} {v:+.4g}" for s, v in inflow.items() if v)
+        parts = ", ".join(f"{s} {v:+.4g}" for s, v in inflow.items() if v) or "none"
         return ck.small(name, category, net / gross, tol,
-                        f"sources {self.source_total():+.4g}, losses "
-                        f"{-self.sink_total():+.4g}, boundaries [{parts}]{unit}; "
-                        f"relative imbalance")
+                        f"generated {self.source_total() - shift:+.4g}, distributed "
+                        f"loss {-(self.sink_total() - shift):+.4g}, through boundaries "
+                        f"[{parts}]{unit}; relative imbalance")
 
     def symmetry_checks(self, tol=1e-8) -> list:
         out = []

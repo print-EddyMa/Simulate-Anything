@@ -269,6 +269,14 @@ def parse_unit(unit: str):
 _NUM = re.compile(r"^\s*([-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?)\s*(.*)$")
 
 
+def split_quantity(text: str):
+    """``"30 mm"`` -> ``(30.0, "mm")``."""
+    m = _NUM.match(text)
+    if not m:
+        raise DimensionError(f"cannot parse quantity '{text}'")
+    return float(m.group(1)), m.group(2).strip()
+
+
 def Q(value, unit: str | None = None) -> Quantity:
     """Build a quantity: ``Q(5, "mm")``, ``Q("5 mm")`` or ``Q("25 degC")``."""
     if isinstance(value, Quantity):

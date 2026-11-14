@@ -25,7 +25,8 @@ import numpy as np
 
 from . import checks as ck
 from .checks import Check, Report
-from .units import DimensionError, Quantity, convert, dim_str, parse_unit
+from .units import (DimensionError, Quantity, convert, dim_str, parse_unit,
+                    split_quantity)
 
 
 class ParamError(ValueError):
@@ -93,6 +94,16 @@ class Param:
              "unit": self.unit, "doc": self.doc}
         if self.choices:
             d["choices"] = self.choices
+        if self.kind == "quantity" and not isinstance(self.default, (list, tuple)):
+            # how to turn a slider position (in the default's own unit) into `unit`
+            shown = (split_quantity(self.default)[1] if isinstance(self.default, str)
+                     else "") or self.unit
+            s_in, _, o_in = parse_unit(shown)
+            s_out, _, o_out = parse_unit(self.unit)
+            if self.delta:
+                o_in = o_out = 0.0
+            d.update(default_value=self.parse(self.default), display_unit=shown,
+                     display_scale=s_in / s_out, display_offset=(o_in - o_out) / s_out)
         if self.lo is not None:
             d["min"] = self.lo
         if self.hi is not None:
