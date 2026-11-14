@@ -99,7 +99,8 @@ h2 { font-size: 13px; margin: 0 0 10px; text-transform: uppercase; letter-spacin
 .tile .v { font-size: 21px; font-weight: 650; letter-spacing: -.01em; margin-top: 2px;
   font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .tile .u { font-size: 12px; font-weight: 400; color: var(--text-2); margin-left: 4px; }
-.plots { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 16px; }
+.plots { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 16px;
+  align-items: start; }
 .plot-title { font-weight: 600; margin-bottom: 8px; }
 .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px;
   color: var(--text-2); margin-bottom: 6px; }
@@ -265,7 +266,7 @@ function lineChart(host, f) {
   const names = Object.keys(f.series), x = f.x;
   const draw = () => {
     host.querySelector("svg")?.remove();
-    const W = Math.max(300, host.clientWidth), H = 250, m = { l: 58, r: 14, t: 10, b: 38 };
+    const W = Math.max(280, host.clientWidth - 32), H = 250, m = { l: 58, r: 14, t: 10, b: 38 };
     const all = names.flatMap((n) => f.series[n]).filter((v) => v !== null);
     let ylo = Math.min(...all), yhi = Math.max(...all);
     const pad = (yhi - ylo || Math.abs(yhi) || 1) * 0.06;
@@ -334,7 +335,7 @@ function lineChart(host, f) {
   };
   if (names.length > 1)
     host.append(el("div", { class: "legend" }, names.map((n, k) =>
-      el("span", {}, el("i", { style: `background:var(${SERIES[k % 8]})` }), n))));
+      el("span", {}, el("i", { style: `background:var(${SERIES[k % 8]})` }), unit(n)))));
   const stride = Math.max(1, Math.ceil(x.length / 40));
   host.append(el("details", { class: "table" }, el("summary", {}, "Data table"),
     el("table", {}, el("tr", {}, el("th", {}, f.xlabel), names.map((n) => el("th", {}, n))),
@@ -437,8 +438,8 @@ function renderStatic(data) {
   $("app").classList.add("static");
   for (const id of ["sidebar", "ask", "params"]) $(id).remove();
   const last = data.results[data.results.length - 1];
-  $("head").append(el("h1", {}, last ? last.title : "Simulate Anything"),
-    data.problem ? el("p", { class: "lead" }, data.problem) : null);
+  $("head").append(el("h1", {}, last ? last.title : "Simulate Anything"));
+  if (data.problem) $("head").append(el("p", { class: "lead" }, data.problem));
   const res = $("results");
   if (data.answer) res.append(el("div", { class: "card" }, el("h2", {}, "Answer"),
     el("div", { class: "note" }, data.answer)));
@@ -537,6 +538,8 @@ async function post(url, body) {
 async function runNow() {
   const seq = ++state.seq, res = $("results");
   res.classList.add("loading");
+  if (!res.children.length)
+    res.append(el("div", { class: "card note" }, "Running the simulation and its checks\u2026"));
   try {
     const data = await post("/api/run", { name: state.sim.name, params: state.values,
       resolution: state.resolution });

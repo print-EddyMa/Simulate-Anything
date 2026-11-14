@@ -31,6 +31,8 @@ Self-checks
 
 (Output shortened; every line carries its numbers.)
 
+![The web app: inputs with sliders on the left, results, plots and the check report on the right](docs/screenshot.png)
+
 A wrong input is caught instead of computed:
 
 ```console
