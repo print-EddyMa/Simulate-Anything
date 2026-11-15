@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "simulate-anything"
-version = "0.1.0"
-description = "Turn a physics problem into a simulation that checks itself"
+name = "create-anything"
+version = "0.2.0"
+description = "Design anything and test it against the real world on simulations that check themselves"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Eddy Ma" }]
@@ -17,12 +17,14 @@ dev = ["pytest>=7"]
 
 [project.scripts]
 simulate-anything = "simulate_anything.cli:main"
+create-anything = "create_anything.__main__:main"
 
 [tool.setuptools.packages.find]
-include = ["simulate_anything*"]
+include = ["simulate_anything*", "create_anything*"]
 
 [tool.setuptools.package-data]
 simulate_anything = ["web/*.html"]
+create_anything = ["web/dist/**/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

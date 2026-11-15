@@ -19,7 +19,10 @@ import simulate_anything as sa
 from simulate_anything.units import DimensionError, convert
 
 from . import materials
-from .design import AXES, DesignError, extents, part_by_id, total_mass_kg, volume_mm3
+from simulate_anything.units import split_quantity
+
+from .design import (AXES, DesignError, aabb, contains, extents, mass_volume_mm3,
+                     part_by_id, total_mass_kg, volume_mm3)
 
 G0 = 9.80665
 FLUIDS = {"water": (998.0, 1.0e-3), "air": (1.2, 1.8e-5), "oil": (870.0, 0.1),
@@ -55,6 +58,40 @@ def _violation(metrics) -> float:
     return max(worst, 0.0)
 
 
+def beam_axes(part: dict, sc: dict):
+    """(span, load, side) axis indices of a box treated as a beam."""
+    e = extents(part)
+    span = AXES[sc["span_axis"]] if sc.get("span_axis") in AXES else int(np.argmax(e))
+    rest = [a for a in range(3) if a != span]
+    if sc.get("load_axis") in AXES and AXES[sc["load_axis"]] != span:
+        load = AXES[sc["load_axis"]]
+    else:
+        load = 2 if span != 2 else min(rest, key=lambda a: e[a])
+    side = next(a for a in rest if a != load)
+    return span, load, side
+
+
+def spec(part: dict, key: str, unit: str, default=None):
+    """A datasheet value from part['specs'], converted to ``unit``."""
+    raw = (part.get("specs") or {}).get(key, default)
+    if raw is None:
+        return None
+    try:
+        return convert(raw, unit)
+    except DimensionError as exc:
+        raise ScenarioError(f"part '{part['id']}', spec '{key}': {exc}") from None
+
+
+def spec_db(part: dict, key: str, default: float) -> float:
+    raw = (part.get("specs") or {}).get(key)
+    if raw is None:
+        return default
+    try:
+        return float(split_quantity(str(raw))[0])
+    except Exception:
+        raise ScenarioError(f"part '{part['id']}', spec '{key}' must look like \"10 dB\"") from None
+
+
 def section(part: dict, sc: dict):
     """Beam idealisation of a part: (length, width, height) in metres + note.
 
@@ -71,13 +108,7 @@ def section(part: dict, sc: dict):
                 "round section modelled as the rectangle of equal stiffness and strength")
     if shape not in ("box", "mesh"):
         raise ScenarioError(f"a {shape} cannot be tested as a beam")
-    span = AXES[sc["span_axis"]] if sc.get("span_axis") in AXES else int(np.argmax(e))
-    rest = [a for a in range(3) if a != span]
-    if sc.get("load_axis") in AXES and AXES[sc["load_axis"]] != span:
-        load = AXES[sc["load_axis"]]
-    else:
-        load = 2 if span != 2 else min(rest, key=lambda a: e[a])
-    side = next(a for a in rest if a != load)
+    span, load, side = beam_axes(part, sc)
     length, height, width, note = e[span], e[load], e[side], ""
     if shape == "mesh":
         solidity = volume_mm3(part) / max(e[0] * e[1] * e[2], 1e-12)
@@ -114,7 +145,7 @@ def test_load(design, part, sc, verify):
     force = _q(sc, "force", "N")
     support = sc.get("support", "cantilever")
     position = float(sc.get("position", 1.0 if support == "cantilever" else 0.5))
-    weight = mat["density"] * G0 * volume_mm3(part) * 1e-9 / length      # self-weight, N/m
+    weight = mat["density"] * G0 * mass_volume_mm3(part) * 1e-9 / length  # self-weight, N/m
     res = _run("beam", {
         "length": f"{length} m", "width": f"{width} m", "height": f"{height} m",
         "youngs_modulus": f"{mat['youngs_modulus']} Pa",
@@ -145,7 +176,8 @@ def test_drop(design, part, sc, verify):
     sf_min = float(sc.get("min_safety_factor", 1.0))
     sf = res.value("safety_factor")
     metrics = [_metric("safety factor at impact", sf, "", sf_min, "min")]
-    head = (f"{mass * 1e3:.3g} g dropped {drop:.2g} m onto the {part['name'].lower()}: peak "
+    shown = f"{mass:.3g} kg" if mass >= 1 else f"{mass * 1e3:.3g} g"
+    head = (f"{shown} dropped {drop:.2g} m onto the {part['name'].lower()}: peak "
             f"force {res.value('peak_force'):.3g} N ({res.value('impact_factor'):.0f}x the "
             f"weight), safety factor {sf:.2f} (needs {sf_min:g})")
     return res, metrics, head, [note] if note else [], f"Drop: {drop:.2g} m"
@@ -328,8 +360,190 @@ def test_flow(design, part, sc, verify):
     return res, metrics, head, [], f"Flow: {rate * 6e4:.3g} L/min"
 
 
+DRAG = {"wire_mesh": (1.3, 0.25), "bowtie": (1.3, 0.3), "solar": (1.3, 1.0),
+        "tripod": (1.2, 0.15)}
+
+
+def _wind_area(part: dict, direction: int):
+    """(drag coefficient x projected area [m^2]) of a part facing the wind."""
+    e = extents(part)
+    a0, a1 = aabb(part)
+    size = a1 - a0                                   # world-axis box, rotation included
+    across = [i for i in range(3) if i != direction]
+    area = size[across[0]] * size[across[1]] / 1e6
+    if part["shape"] in ("cylinder", "tube", "yagi"):
+        if part["shape"] == "yagi":
+            boom = part["boom_length"] * 2 * part["boom_radius"]
+            els = part["n_elements"] * part["element_length"] * 0.925 * 2 * part["element_radius"]
+            return 1.2 * (boom + els) / 1e6
+        return 1.2 * area
+    cd, solidity = DRAG.get(part.get("look"), (1.15, 1.0))
+    return cd * solidity * area
+
+
+def test_wind(design, part, sc, verify):
+    mat = materials.get(part["material"])
+    speed = _q(sc, "speed", "m/s")
+    rho = _q(sc, "air_density", "kg/m^3", "1.225 kg/m^3")
+    direction = AXES.get(sc.get("direction", "x"), 0)
+    qdyn = 0.5 * rho * speed ** 2
+    length, width, height, note = section(part, {**sc, "span_axis": "z"})
+    base_z = float(aabb(part)[0][2])
+    own = qdyn * 1.2 * height                     # N/m on the mast itself
+    moment, area_total = 0.0, 0.0
+    missing = []
+    for pid in sc.get("carries", []):
+        try:
+            other = part_by_id(design, pid)
+        except DesignError:
+            missing.append(pid)
+            continue
+        cda = _wind_area(other, direction)
+        arm = (float(np.mean(aabb(other), axis=0)[2]) - base_z) / 1e3
+        moment += qdyn * cda * max(arm, 0.0)
+        area_total += cda
+    tip = moment / length                         # same base moment, applied at the top
+    res = _run("beam", {
+        "length": f"{length} m", "width": f"{width} m", "height": f"{height} m",
+        "youngs_modulus": f"{mat['youngs_modulus']} Pa",
+        "yield_strength": f"{mat['strength']} Pa", "support": "cantilever",
+        "point_load": f"{tip} N", "load_position": 1.0,
+        "distributed_load": f"{own} N/m"}, verify)
+    sf_min = float(sc.get("min_safety_factor", 1.5))
+    sway = _q(sc, "max_deflection", "mm", f"{length * 1e3 / 40} mm")
+    sf, defl = res.value("safety_factor"), res.value("max_deflection")
+    metrics = [_metric("safety factor", sf, "", sf_min, "min"),
+               _metric("sway at the top", defl, "mm", sway, "max")]
+    head = (f"A {speed:.0f} m/s gust ({speed * 2.237:.0f} mph) on the {part['name'].lower()} "
+            f"and everything on it: safety factor {sf:.2f} (needs {sf_min:g}), the top sways "
+            f"{defl:.0f} mm (limit {sway:.0f} mm)")
+    notes = [n for n in (note,) if n] + [
+        f"wind pressure {qdyn:.0f} Pa on {area_total:.2f} m^2 of drag area carried, plus the "
+        "mast itself (drag coefficient 1.2)",
+        "loads carried on the mast are moved to its top with the same base bending moment: "
+        "the stress at the base is exact, the sway is slightly overstated"]
+    if missing:
+        notes.append(f"not in the design yet, so not loaded: {', '.join(missing)}")
+    return res, metrics, head, notes, f"Wind: {speed:.0f} m/s"
+
+
+def _inside(design, box):
+    return [q for q in design["parts"] if q is not box and contains(box, q)]
+
+
+def test_enclosure(design, part, sc, verify):
+    if part["shape"] != "box" or not part.get("wall"):
+        raise ScenarioError("an enclosure test needs a hollow box (a box with a wall)")
+    mat = materials.get(part["material"])
+    power = _q(sc, "power", "W", None) if sc.get("power") is not None else None
+    if power is None:
+        inside = _inside(design, part)
+        if not inside:
+            raise ScenarioError(f"nothing is inside the {part['name'].lower()}, so there is no "
+                                "heat to test; give the test a power or put parts inside")
+        power = sum(spec(q, "power", "W", "0 W") for q in inside)
+    limit = _q(sc, "max_temperature", "K", "60 degC")
+    x, y, z = (v / 1e3 for v in part["size"])
+    absorb = float(sc.get("absorptivity", (part.get("specs") or {}).get("absorptivity", 0.5)))
+    res = _run("enclosure_thermal", {
+        "size_x": f"{x} m", "size_y": f"{y} m", "size_z": f"{z} m",
+        "wall": f"{part['wall'] / 1e3} m",
+        "wall_conductivity": f"{mat['conductivity']} W/(m*K)",
+        "internal_power": f"{power} W", "irradiance": sc.get("irradiance", "1000 W/m^2"),
+        "absorptivity": absorb, "wind": sc.get("wind", "1 m/s"),
+        "ambient_temperature": sc.get("ambient", "35 degC"),
+        "sky_temperature": sc.get("sky", "20 degC")}, verify)
+    t_in = res.value("internal_temperature")
+    metrics = [_metric("air temperature inside", t_in, "degC", limit - 273.15, "max")]
+    head = (f"{power:.3g} W of electronics in full sun: {t_in:.0f} degC inside the "
+            f"{part['name'].lower()} (limit {limit - 273.15:.0f} degC), "
+            f"{res.value('absorbed_sun'):.0f} W of it is sunlight")
+    return res, metrics, head, [f"solar absorptivity {absorb:g} (paint colour)"], \
+        f"Summer sun: {sc.get('ambient', '35 degC')}"
+
+
+def test_power(design, part, sc, verify):
+    mat = materials.get(part["material"])
+    if "energy_density" not in mat:
+        raise ScenarioError("a power test needs a battery part (material 'lifepo4')")
+    capacity = spec(part, "capacity", "J") or volume_mm3(part) * 1e-9 * mat["energy_density"]
+    panel = part_by_id(design, sc["panel"]) if sc.get("panel") else None
+    rating = 0.0
+    if panel is not None:
+        pm = materials.get(panel["material"])
+        rating = spec(panel, "power", "W") or (
+            sorted(extents(panel))[1] * sorted(extents(panel))[2] / 1e6
+            * 1000.0 * pm.get("efficiency", 0.2))
+    load = (_q(sc, "load", "W") if sc.get("load") is not None else
+            sum(spec(part_by_id(design, pid), "power", "W", "0 W") for pid in sc.get("loads", [])))
+    days = int(sc.get("days", 3))
+    res = _run("solar_battery", {
+        "panel_power": f"{max(rating, 1e-6)} W", "battery_capacity": f"{capacity} J",
+        "load": f"{load} W", "days": days,
+        "peak_irradiance": sc.get("peak_irradiance", "500 W/m^2"),
+        "day_length": sc.get("day_length", "10 h"),
+        "weather_factor": float(sc.get("weather_factor", 0.35))}, verify)
+    reserve = float(sc.get("min_charge", 0.2))
+    low = res.value("lowest_charge")
+    metrics = [_metric("lowest battery charge", low * 100, "%", reserve * 100, "min"),
+               _metric("energy not supplied", res.value("energy_not_supplied"), "Wh", 0.0, "max")]
+    head = (f"{days} overcast winter days on a {rating:.0f} W panel and a "
+            f"{capacity / 3600:.0f} Wh battery feeding {load:.1f} W: the charge bottoms out at "
+            f"{low * 100:.0f}% (needs {reserve * 100:.0f}%)")
+    notes = [f"battery capacity {capacity / 3600:.0f} Wh from its size (about 100 Wh per litre "
+             "of LiFePO4 pack)" if not (part.get('specs') or {}).get('capacity') else
+             "battery capacity from its datasheet",
+             f"panel rating {rating:.0f} W" + ("" if (panel or {}).get("specs", {}).get("power")
+                                              else " from its area at 20% efficiency")]
+    return res, metrics, head, notes, f"Power: {days} cloudy days"
+
+
+def test_coverage(design, part, sc, verify):
+    gain = spec_db(part, "gain", 10.0)
+    beam = spec(part, "beamwidth", "rad", "60 deg")
+    ftb = spec_db(part, "front_to_back", 15.0)
+    notes = []
+    if sc.get("screen"):
+        try:
+            screen = part_by_id(design, sc["screen"])
+            extra = spec_db(screen, "rejection", 10.0)
+            ftb += extra
+            notes.append(f"the {screen['name'].lower()} adds {extra:g} dB of rejection toward "
+                         "the transmitter")
+        except DesignError:
+            notes.append("no screen in the design")
+    nf = spec_db(part_by_id(design, sc["receiver"]), "noise_figure", 4.0) \
+        if sc.get("receiver") else 4.0
+    required = _q(sc, "required_range", "m")
+    params = {"tx_erp": sc.get("tx_erp", "1 MW"), "frequency": sc.get("frequency", "569 MHz"),
+              "bandwidth": sc.get("bandwidth", "6 MHz"), "baseline": sc.get("baseline", "20 km"),
+              "tx_bearing": sc.get("tx_bearing", "180 deg"), "rx_gain_dbi": gain,
+              "beamwidth": f"{beam} rad", "front_to_back_db": ftb, "noise_figure_db": nf,
+              "losses_db": float(sc.get("losses_db", 8.0)),
+              "cancellation_db": float(split_quantity(str(sc.get("cancellation", "30 dB")))[0]),
+              "rcs": sc.get("rcs", "0.01 m^2"),
+              "integration_time": sc.get("integration_time", "0.5 s"),
+              "required_range": f"{required} m", "extent": f"{2.5 * required} m",
+              "rx_height": f"{float(np.mean(aabb(part), axis=0)[2]) / 1e3} m",
+              "target_altitude": sc.get("target_altitude", "100 m")}
+    res = _run("passive_radar", params, verify)
+    rng, rise = res.value("detection_range"), res.value("noise_floor_rise")
+    metrics = [_metric("detection range straight ahead", rng / 1e3, "km", required / 1e3, "min")]
+    limited = ("leaked TV signal, not receiver noise, sets the floor "
+               f"(+{rise:.0f} dB)" if rise > 3 else "receiver noise sets the floor")
+    head = (f"A {params['rcs'].replace('^2', '²')} target is detected out to {rng / 1e3:.2f} km "
+            f"(needs {required / 1e3:.2g} km); {limited}")
+    notes += [f"surveillance antenna: {gain:g} dBi, {math.degrees(beam):.0f} deg beam, "
+              f"{ftb:g} dB front-to-back",
+              f"direct signal suppressed by {params['cancellation_db']:g} dB before detection",
+              "free space over flat ground: terrain, multipath and clutter are not modelled"]
+    return res, metrics, head, notes, f"Detect at {required / 1e3:.2g} km"
+
+
 TESTS = {"load": test_load, "drop": test_drop, "vibration": test_vibration,
-         "heat": test_heat, "fire": test_fire, "current": test_current, "flow": test_flow}
+         "heat": test_heat, "fire": test_fire, "current": test_current, "flow": test_flow,
+         "wind": test_wind, "enclosure": test_enclosure, "power": test_power,
+         "coverage": test_coverage}
 
 DESCRIPTIONS = {
     "load": "a steady force on a part held like a beam: needs force; optional support "
@@ -348,6 +562,22 @@ DESCRIPTIONS = {
                "max_temperature (70 degC), max_voltage_drop, or voltage + max_drop_percent",
     "flow": "liquid or gas through a tube: needs flow_rate; optional fluid (water | air | "
             "oil | glycol), max_pressure_drop (10 kPa), max_velocity",
+    "wind": "a gust on a vertical mast or pole and everything it carries: needs speed; "
+            "optional carries (part ids on the mast), direction (x | y), min_safety_factor "
+            "(1.5), max_deflection (length/40)",
+    "enclosure": "a sealed box of electronics in the sun: part must be a box with a wall; "
+                 "power defaults to the sum of specs.power of the parts inside; optional "
+                 "ambient (35 degC), irradiance (1000 W/m^2), wind (1 m/s), absorptivity "
+                 "(0.5), max_temperature (60 degC)",
+    "power": "off-grid endurance: part is a battery (material lifepo4); panel (part id of a "
+             "solar panel), loads (part ids with specs.power) or load; optional days (3), "
+             "peak_irradiance (500 W/m^2), day_length (10 h), weather_factor (0.35), "
+             "min_charge (0.2)",
+    "coverage": "passive radar detection coverage around a surveillance antenna (part with "
+                "specs gain, beamwidth, front_to_back): needs required_range; optional "
+                "tx_erp (1 MW), frequency (569 MHz), baseline (20 km), tx_bearing (180 deg), "
+                "rcs (0.01 m^2), integration_time (0.5 s), cancellation (30 dB), receiver "
+                "(part id with specs noise_figure), screen (part id with specs rejection)",
 }
 
 
@@ -378,6 +608,14 @@ def run_scenario(design: dict, sc: dict, verify: bool = True, detail: bool = Tru
         out.update(status="fail", violation=_violation(metrics))
     out["checks"] = {"verdict": res.report.verdict, "summary": res.report.summary(),
                      "verified": bool(verify)}
+    if sc["type"] == "coverage" and res.qoi:
+        c = np.mean(aabb(part_by_id(design, sc["part"])), axis=0)
+        out["overlay"] = {"kind": "ground", "field": 0,
+                          "threshold": 13.0,
+                          "unit": "dB", "center_mm": [float(c[0]), float(c[1])],
+                          "source_bearing_deg": float(split_quantity(
+                              str(sc.get("tx_bearing", "180 deg")))[0]),
+                          "range_m": float(_q(sc, "required_range", "m"))}
     if detail:
         out["sim"] = res.to_dict(with_fields=True)
     return out

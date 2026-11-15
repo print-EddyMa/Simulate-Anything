@@ -27,7 +27,11 @@ import numpy as np
 
 from . import materials
 
-SHAPES = ("box", "cylinder", "tube", "sphere", "heatsink", "mesh")
+SHAPES = ("box", "cylinder", "tube", "sphere", "heatsink", "yagi", "mesh")
+LOOKS = ("pcb", "solar", "battery", "screen", "glass", "rubber", "cable", "bowtie",
+         "wire_mesh", "laptop", "tripod")
+# open frames: their bounding box is mostly air, so mass and overlap use a fill factor
+OPEN_LOOKS = {"bowtie": 0.012, "wire_mesh": 0.004, "tripod": 0.0012}
 AXES = {"x": 0, "y": 1, "z": 2}
 FASTENER_HINTS = ("screw", "bolt", "nut", "rivet", "pin", "fastener", "washer")
 
@@ -108,6 +112,19 @@ def normalise(design: dict) -> dict:
             p["n_fins"] = int(_num(p, "n_fins", where))
             if p["n_fins"] * p["fin_thickness"] > p["base"][0]:
                 raise DesignError(f"{where}: the fins do not fit across the base")
+        elif shape == "yagi":
+            for key in ("boom_length", "element_length"):
+                p[key] = _num(p, key, where)
+            p["n_elements"] = int(_num(p, "n_elements", where))
+            p["boom_radius"] = float(p.get("boom_radius") or 6.0)
+            p["element_radius"] = float(p.get("element_radius") or 3.0)
+            p["axis"] = str(p.get("axis") or "x").lower()
+            default_el = "z" if p["axis"] != "z" else "x"
+            p["element_axis"] = str(p.get("element_axis") or default_el).lower()
+            if p["axis"] not in AXES or p["element_axis"] not in AXES \
+                    or p["axis"] == p["element_axis"]:
+                raise DesignError(f"{where}: axis and element_axis must be two different "
+                                  "of x, y, z")
         elif shape == "mesh":
             m = p.get("mesh")
             if not isinstance(m, dict) or "size" not in m or "volume" not in m:
@@ -121,6 +138,20 @@ def normalise(design: dict) -> dict:
         p["quantity"] = max(1, int(p.get("quantity") or 1))
         p["process"] = str(p.get("process") or materials.get(p["material"])["processes"][0])
         p["purpose"] = str(p.get("purpose") or "")
+        p["group"] = str(p.get("group") or "")
+        if p.get("look") is not None and p["look"] not in LOOKS:
+            raise DesignError(f"{where}: look must be one of {list(LOOKS)}")
+        specs = p.get("specs") or {}
+        if not isinstance(specs, dict):
+            raise DesignError(f"{where}: specs must be an object of name: value")
+        p["specs"] = {str(k): str(v) for k, v in specs.items()}
+        fill = p.get("fill", OPEN_LOOKS.get(p.get("look"), 1.0))
+        try:
+            p["fill"] = float(fill)
+        except (TypeError, ValueError):
+            raise DesignError(f"{where}: fill must be a number between 0 and 1") from None
+        if not 0 < p["fill"] <= 1:
+            raise DesignError(f"{where}: fill must be between 0 and 1")
     steps = d.get("assembly") or []
     if not isinstance(steps, list):
         raise DesignError("'assembly' must be a list of steps")
@@ -147,6 +178,15 @@ def normalise(design: dict) -> dict:
             raise DesignError(f"scenario '{s['id']}' refers to unknown part '{s.get('part')}'")
         s["part"] = str(s["part"])
     d["scenarios"] = scenarios
+    diagram = d.get("diagram")
+    if diagram is not None:
+        if not isinstance(diagram, dict):
+            raise DesignError("'diagram' must be an object with nodes and edges")
+        nodes = [n for n in diagram.get("nodes") or [] if isinstance(n, dict) and n.get("id")]
+        ids_n = {str(n["id"]) for n in nodes}
+        edges = [e for e in diagram.get("edges") or [] if isinstance(e, dict)
+                 and str(e.get("from")) in ids_n and str(e.get("to")) in ids_n]
+        d["diagram"] = {"nodes": nodes, "edges": edges}
     return d
 
 
@@ -172,6 +212,11 @@ def extents(part: dict) -> list:
     if s == "heatsink":
         w, dpt, t = part["base"]
         return [w, dpt, t + part["fin_height"]]
+    if s == "yagi":
+        out = [2 * part["boom_radius"]] * 3
+        out[AXES[part["axis"]]] = part["boom_length"]
+        out[AXES[part["element_axis"]]] = max(part["element_length"], 2 * part["boom_radius"])
+        return out
     return list(part["mesh"]["size"])
 
 
@@ -190,6 +235,10 @@ def volume_mm3(part: dict) -> float:
     if s == "heatsink":
         w, dpt, t = part["base"]
         return w * dpt * t + part["n_fins"] * part["fin_thickness"] * part["fin_height"] * dpt
+    if s == "yagi":
+        mean_el = part["element_length"] * (1 + 0.85) / 2
+        return (math.pi * part["boom_radius"] ** 2 * part["boom_length"]
+                + part["n_elements"] * math.pi * part["element_radius"] ** 2 * mean_el)
     return float(part["mesh"]["volume"])
 
 
@@ -212,6 +261,11 @@ def aabb(part: dict):
     return world.min(axis=0), world.max(axis=0)
 
 
+def mass_volume_mm3(part: dict) -> float:
+    """Volume that carries mass (open frames count only their fill)."""
+    return volume_mm3(part) * part.get("fill", 1.0)
+
+
 def is_fastener(part: dict) -> bool:
     text = f"{part['id']} {part['name']} {part.get('process', '')}".lower()
     return any(h in text for h in FASTENER_HINTS)
@@ -222,10 +276,11 @@ def summary(design: dict) -> dict:
     rows, lo, hi = [], np.full(3, np.inf), np.full(3, -np.inf)
     for p in design["parts"]:
         mat = materials.get(p["material"])
-        mass = volume_mm3(p) * 1e-9 * mat["density"] * p["quantity"]
+        mass = mass_volume_mm3(p) * 1e-9 * mat["density"] * p["quantity"]
         a, b = aabb(p)
         lo, hi = np.minimum(lo, a), np.maximum(hi, b)
         rows.append({"id": p["id"], "name": p["name"], "material": mat["name"],
+                     "group": p.get("group", ""), "specs": p.get("specs", {}),
                      "material_id": mat["id"], "process": p["process"],
                      "quantity": p["quantity"], "mass_g": mass * 1e3,
                      "cost": mass * mat["cost_per_kg"], "purpose": p["purpose"],
@@ -241,6 +296,12 @@ def total_mass_kg(design: dict) -> float:
 
 
 # -- geometric checks -------------------------------------------------------------
+def contains(outer: dict, inner: dict) -> bool:
+    """Is ``inner`` inside the hollow ``outer`` (bounding boxes)?"""
+    (a0, a1), (b0, b1) = aabb(outer), aabb(inner)
+    return bool(np.all(b0 >= a0 - 1e-6) and np.all(b1 <= a1 + 1e-6))
+
+
 def geometry_issues(design: dict) -> list:
     """Things that are wrong with the assembly before any physics: parts that
     touch nothing, parts buried in each other, steps that leave parts out."""
@@ -258,7 +319,9 @@ def geometry_issues(design: dict) -> list:
             if gap <= tol:
                 touching[i][j] = touching[j][i] = True
             overlap = np.minimum(a1, b1) - np.maximum(a0, b0)
-            if np.all(overlap > 0) and not (is_fastener(parts[i]) or is_fastener(parts[j])):
+            open_frame = parts[i].get("fill", 1) < 0.2 or parts[j].get("fill", 1) < 0.2
+            if np.all(overlap > 0) and not (is_fastener(parts[i]) or is_fastener(parts[j])
+                                            or open_frame):
                 # a part inside a hollow shell or tube is how things are housed
                 hollow = any(q.get("wall") or q["shape"] == "tube" for q in (parts[i], parts[j]))
                 small = min(np.prod(a1 - a0), np.prod(b1 - b0))

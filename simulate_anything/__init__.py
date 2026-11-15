@@ -17,7 +17,7 @@ from .units import DimensionError, Q, Quantity
 __version__ = "0.1.0"
 
 # Every module of simulation templates.  Importing one registers its classes.
-MODULES = ("electronics", "thermal", "mechanical", "fluids", "electromagnetics",
+MODULES = ("electronics", "thermal", "mechanical", "fluids", "electromagnetics", "realworld",
            "aerospace", "energy", "bio", "chemistry", "earth")
 
 _loaded = False

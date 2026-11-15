@@ -41,19 +41,33 @@ _ROWS = {
              "#e2c79b", ["saw"]),
     "carbon_fibre": ("Carbon-fibre composite", "composite", 1600, 70e9, 600e6, 5, 1000, 120,
                      400, None, 80, "#3b3f44", ["layup"]),
+    "galvanised_steel": ("Galvanised steel", "metal", 7850, 200e9, 250e6, 50, 490, 400, None,
+                         1.6e-7, 2, "#a7adb2", ["sheet_metal", "weld"]),
+    "lifepo4": ("LiFePO4 battery", "battery", 1000, 1e9, 10e6, 1.0, 1100, 60, None, None, 25,
+                "#2b2f33", ["buy"]),
+    "solar_module": ("Solar module (glass, cells, frame)", "solar", 320, 70e9, 40e6, 1.0, 800,
+                     85, None, None, 9, "#1d2a4a", ["buy"]),
+    "electronics": ("Electronics (board and parts)", "electronics", 1900, 20e9, 50e6, 0.4,
+                    900, 85, 400, None, 200, "#1f6f43", ["buy"]),
 }
+
+# extra properties used by the energy tests
+_EXTRA = {"lifepo4": {"energy_density": 3.6e8},     # J/m^3 of pack (~100 Wh/L incl. case)
+          "solar_module": {"efficiency": 0.20}}
 
 _FIELDS = ("name", "family", "density", "youngs_modulus", "strength", "conductivity",
            "specific_heat", "service_temp", "ignition_temp", "resistivity", "cost_per_kg",
            "color", "processes")
 
-MATERIALS = {key: dict(zip(_FIELDS, row), id=key) for key, row in _ROWS.items()}
+MATERIALS = {key: dict(zip(_FIELDS, row), id=key, **_EXTRA.get(key, {}))
+             for key, row in _ROWS.items()}
 
 ALIASES = {"aluminum": "aluminium", "al": "aluminium", "6061": "aluminium",
            "mild_steel": "steel", "stainless_steel": "stainless", "ss304": "stainless",
            "pc": "polycarbonate", "pmma": "acrylic", "pa12": "nylon", "wood": "pine",
            "birch": "plywood", "cfrp": "carbon_fibre", "carbon_fiber": "carbon_fibre",
-           "cu": "copper", "ti": "titanium"}
+           "cu": "copper", "ti": "titanium", "galvanized_steel": "galvanised_steel",
+           "lfp": "lifepo4", "battery": "lifepo4", "solar": "solar_module", "pcb": "electronics"}
 
 
 def get(key: str) -> dict:

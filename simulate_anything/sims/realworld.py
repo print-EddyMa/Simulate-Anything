@@ -513,3 +513,559 @@ class DropImpact(Simulation):
                             f"length / height = {slender:.3g} (beam theory wants >= 8)",
                             warn=True))
         return out
+
+
+# -- passive radar ------------------------------------------------------------------
+C0, K_B, T0 = 299_792_458.0, 1.380649e-23, 290.0
+
+
+def _db(x):
+    return 10.0 * np.log10(x)
+
+
+def _lin(db):
+    return 10.0 ** (np.asarray(db, float) / 10.0)
+
+
+@register
+class PassiveRadarCoverage(Simulation):
+    name = "passive_radar"
+    title = "Passive radar detection coverage (TV illuminator, bistatic radar equation)"
+    domain = DOMAIN
+    description = """Where can a receive-only radar that listens to a TV
+    transmitter see a small target?  Evaluates the bistatic radar equation over
+    a map around the receiver: echo energy after coherent integration against
+    the receiver noise plus whatever the direct TV signal leaks into the
+    surveillance antenna after cancellation.  The antenna has a directional
+    pattern from its gain, beamwidth and front-to-back ratio.  Free space, flat
+    earth: no terrain, multipath or clutter beyond the direct signal."""
+    params = [
+        Param("tx_erp", "1 MW", "W", "effective radiated power of the TV transmitter",
+              lo=1e3, hi=5e6),
+        Param("frequency", "569 MHz", "Hz", "TV channel centre frequency", lo=5e7, hi=1e9),
+        Param("bandwidth", "6 MHz", "Hz", "signal bandwidth (ATSC 6 MHz)", lo=1e5, hi=2e7),
+        Param("baseline", "20 km", "m", "distance from the receiver to the transmitter",
+              lo=100, hi=150e3),
+        Param("tx_bearing", "180 deg", "rad",
+              "direction of the transmitter seen from the receiver (0 = straight ahead)"),
+        Param("rx_gain_dbi", 10.0, None, "surveillance antenna gain [dBi]"),
+        Param("beamwidth", "60 deg", "rad", "half-power beamwidth of the surveillance antenna"),
+        Param("front_to_back_db", 15.0, None,
+              "how much weaker the antenna is behind than in front [dB]"),
+        Param("noise_figure_db", 4.0, None, "receiver noise figure [dB]"),
+        Param("losses_db", 8.0, None, "processing and system losses [dB]"),
+        Param("cancellation_db", 50.0, None,
+              "how far the direct signal is suppressed before detection [dB]"),
+        Param("rcs", "0.05 m^2", "m^2", "radar cross-section of the target", lo=1e-4, hi=100),
+        Param("integration_time", "0.5 s", "s", "coherent integration time", lo=0.01, hi=5),
+        Param("snr_threshold_db", 13.0, None, "signal-to-noise ratio needed to declare a detection"),
+        Param("required_range", "1 km", "m", "range the radar must see to, straight ahead",
+              lo=50, hi=50e3),
+        Param("extent", "2.5 km", "m", "half-width of the map around the receiver",
+              lo=100, hi=60e3),
+        Param("rx_height", "2.5 m", "m", "antenna height above ground"),
+        Param("target_altitude", "100 m", "m", "target height above ground"),
+    ]
+    default_resolution = 192
+    min_resolution = 16
+    primary = ("detection_range",)
+    resolution_doc = "map cells per side"
+
+    def validate(self):
+        p = self.p
+        for key in ("tx_erp", "frequency", "bandwidth", "baseline", "rcs",
+                    "integration_time", "extent", "beamwidth"):
+            if getattr(p, key) <= 0:
+                raise ParamError(f"{key} must be positive")
+        if p.beamwidth >= math.pi:
+            raise ParamError("beamwidth must be under 180 degrees")
+
+    # -- the physics, in one place ---------------------------------------------------
+    def _pattern(self, theta):
+        """Antenna gain (linear) at angle theta from boresight."""
+        p = self.p
+        g0 = _lin(p.rx_gain_dbi)
+        c = (1.0 + math.cos(p.beamwidth / 2)) / 2.0
+        n = math.log(0.5) / math.log(c)
+        main = ((1.0 + np.cos(theta)) / 2.0) ** n
+        return g0 * np.maximum(main, _lin(-p.front_to_back_db))
+
+    def _consts(self):
+        p = self.p
+        lam = C0 / p.frequency
+        tx = np.array([math.cos(p.tx_bearing), math.sin(p.tx_bearing)]) * p.baseline
+        g_dir = float(self._pattern(np.array(p.tx_bearing)))
+        direct = p.tx_erp * g_dir * lam ** 2 / ((4 * math.pi) ** 2 * p.baseline ** 2)
+        thermal = K_B * T0 * _lin(p.noise_figure_db)
+        residual = direct * _lin(-p.cancellation_db) / p.bandwidth
+        return lam, tx, direct, thermal, thermal + residual
+
+    def snr(self, x, y):
+        """Detection SNR (linear) of the target at (x, y) metres from the receiver."""
+        p = self.p
+        lam, tx, _, _, n0 = self._consts()
+        rr = np.hypot(x, y)
+        rt = np.hypot(x - tx[0], y - tx[1])
+        g = self._pattern(np.arctan2(y, x))
+        echo = (p.tx_erp * g * lam ** 2 * p.rcs
+                / ((4 * math.pi) ** 3 * rt ** 2 * rr ** 2 * _lin(p.losses_db)))
+        return echo * p.integration_time / n0
+
+    def _blind(self, x, y):
+        """Inside the direct signal's own range cell: cannot be separated from it."""
+        _, tx, *_ = self._consts()
+        excess = np.hypot(x, y) + np.hypot(x - tx[0], y - tx[1]) - self.p.baseline
+        return excess < C0 / self.p.bandwidth
+
+    def _boresight_root(self):
+        """Exact boresight detection range: root of SNR(r) = threshold."""
+        from scipy.optimize import brentq
+        thr = _lin(self.p.snr_threshold_db)
+        f = lambda r: math.log(float(self.snr(np.array(r), np.array(0.0))) / thr)
+        lo, hi = 1e-3, 1.0
+        if f(lo) < 0:
+            return 0.0
+        while f(hi) > 0 and hi < 1e7:
+            hi *= 2
+        return brentq(f, lo, hi, xtol=1e-9, rtol=1e-12)
+
+    def equations(self):
+        lam = Q(C0, "m/s") / self.q("frequency")
+        r = Q(1, "m")
+        return {"bistatic radar equation": {
+            "received echo energy P_t G_t G_r lambda^2 sigma T_i / ((4 pi)^3 R_t^2 R_r^2)":
+                self.q("tx_erp") * lam ** 2 * self.q("rcs") * self.q("integration_time")
+                / (r ** 2 * r ** 2),
+            "noise spectral density k T0 F": Q(K_B, "J/K") * Q(T0, "K"),
+            "leaked direct signal per hertz": self.q("tx_erp") * lam ** 2
+                / (self.q("baseline") ** 2 * self.q("bandwidth"))}}
+
+    def dimensionless(self):
+        lam = Q(C0, "m/s") / self.q("frequency")
+        return {"time-bandwidth product T_i B": self.q("integration_time") * self.q("bandwidth"),
+                "baseline in wavelengths": self.q("baseline") / lam}
+
+    def well_posed(self):
+        p = self.p
+        return [ck.truth("geometry complete", ck.MATH, p.baseline > 0 and p.extent > 0,
+                         "transmitter, receiver and the mapped area are all defined"),
+                ck.truth("transmitter outside the map edge or clearly placed", ck.MATH, True,
+                         f"transmitter {p.baseline / 1e3:.3g} km away at "
+                         f"{math.degrees(p.tx_bearing):.0f} deg; map +/- "
+                         f"{p.extent / 1e3:.3g} km")]
+
+    def solve(self, n):
+        p = self.p
+        lam, tx, direct, thermal, n0 = self._consts()
+        edges = np.linspace(-p.extent, p.extent, n + 1)
+        xc = 0.5 * (edges[1:] + edges[:-1])
+        X, Y = np.meshgrid(xc, xc, indexing="ij")
+        with np.errstate(divide="ignore"):
+            snr_db = _db(self.snr(X, Y))
+        snr_db = np.where(np.hypot(X, Y) < 1e-9, np.inf, snr_db)
+        detect = (snr_db >= p.snr_threshold_db) & ~self._blind(X, Y)
+        # boresight range from the map: bilinear samples along the +x axis
+        from scipy.interpolate import RegularGridInterpolator
+        interp = RegularGridInterpolator((xc, xc), np.minimum(snr_db, 300.0),
+                                         bounds_error=False, fill_value=None)
+        rs = np.linspace(0, p.extent, 4 * n + 1)[1:]
+        line = interp(np.column_stack([rs, np.zeros_like(rs)])) - p.snr_threshold_db
+        below = np.nonzero(line < 0)[0]
+        if len(below) == 0:
+            rng = p.extent
+        elif below[0] == 0:
+            rng = 0.0
+        else:
+            i = below[0]
+            rng = rs[i - 1] + line[i - 1] / (line[i - 1] - line[i]) * (rs[i] - rs[i - 1])
+        cell = (edges[1] - edges[0]) ** 2
+        in_disc = np.hypot(X, Y) <= p.required_range
+        covered = float(np.sum(detect & in_disc)) / max(float(np.sum(in_disc)), 1.0)
+        horizon = 4120.0 * (math.sqrt(p.rx_height) + math.sqrt(p.target_altitude))
+        qoi = {
+            "detection_range": (rng, "m"),
+            "meets_required_range": (1.0 if rng >= p.required_range else 0.0, ""),
+            "covered_fraction": (covered, ""),
+            "detectable_area": (float(np.sum(detect)) * cell / 1e6, "km^2"),
+            "noise_floor_rise": (float(_db(n0 / thermal)), "dB"),
+            "direct_signal_power": (float(_db(direct * 1e3)), "dBm"),
+            "range_resolution": (C0 / p.bandwidth, "m"),
+            "doppler_per_mps": (2.0 / lam, "Hz/(m/s)"),
+            "radio_horizon": (horizon / 1e3, "km"),
+        }
+        shown = np.clip(snr_db, p.snr_threshold_db - 30, p.snr_threshold_db + 40)
+        shown = np.where(self._blind(X, Y), p.snr_threshold_db - 30, shown)
+        fields = [Field("detection SNR", xc, shown, xc, "dB", "east [m]", "north [m]")]
+        return Solution(qoi, fields, None, residual_note="closed-form radar equation "
+                        "evaluated on a map", data={"X": X, "Y": Y, "snr_db": snr_db,
+                                                    "detect": detect, "lam": lam})
+
+    def known_solution(self, sol):
+        p = self.p
+        exact = self._boresight_root()
+        exact_c = min(exact, p.extent)
+        out = [ck.close("known solution: boresight detection range", ck.UNIVERSAL,
+                        sol.qoi["detection_range"][0], exact_c, 0.01,
+                        detail="range read off the map vs the exact root of the radar "
+                               "equation along the boresight", unit="m")]
+        # covered fraction: independent polar quadrature of the same detection region
+        thr = _lin(p.snr_threshold_db)
+        angs = np.linspace(-math.pi, math.pi, 721)[:-1] + math.pi / 720
+        radii = (np.arange(400) + 0.5) / 400 * p.required_range
+        R, A = np.meshgrid(radii, angs, indexing="ij")
+        xs, ys = R * np.cos(A), R * np.sin(A)
+        hit = (self.snr(xs, ys) >= thr) & ~self._blind(xs, ys)
+        frac = float(np.sum(hit * R) / np.sum(R))
+        h = 2 * p.extent / sol.data["X"].shape[0]
+        out.append(ck.close("known solution: covered fraction by polar quadrature",
+                            ck.UNIVERSAL, sol.qoi["covered_fraction"][0], frac, 0.0,
+                            atol=max(0.01, 4 * h / max(p.required_range, h)),
+                            detail="cell count on the map vs 288,000-point polar integration"))
+        return out
+
+    def domain_checks(self, sol):
+        p, lam = self.p, sol.data["lam"]
+        _, tx, _, _, n0 = self._consts()
+        x, y = 0.6 * p.extent, 0.3 * p.extent              # any sample point
+        rr, rt = math.hypot(x, y), math.hypot(x - tx[0], y - tx[1])
+        g = float(self._pattern(np.array(math.atan2(y, x))))
+        s_t = p.tx_erp / (4 * math.pi * rt ** 2)            # W/m^2 at the target
+        s_r = s_t * p.rcs / (4 * math.pi * rr ** 2)         # scattered, at the receiver
+        a_e = g * lam ** 2 / (4 * math.pi)                  # effective aperture
+        chain = s_r * a_e / _lin(p.losses_db) * p.integration_time / n0
+        out = [ck.close("energy flow (Poynting) adds up", ck.EM,
+                        float(self.snr(np.array(x), np.array(y))), chain, 1e-12,
+                        detail="map value vs power density -> scattering -> aperture chain "
+                               "at a sample point")]
+        snr = sol.data["snr_db"]
+        ray = snr[snr.shape[0] // 2:, snr.shape[1] // 2]
+        mono = bool(np.all(np.diff(ray[np.isfinite(ray)]) <= 1e-9))
+        out.append(ck.truth("echo weakens with distance", ck.EM, mono,
+                            "SNR falls monotonically along the boresight away from the "
+                            "receiver (when the transmitter is behind it)"
+                            if mono else "SNR rises somewhere along the boresight",
+                            warn=not mono))
+        horizon = sol.qoi["radio_horizon"][0] * 1e3
+        out.append(ck.truth("model validity: line of sight", ck.MATH, p.required_range < horizon,
+                            f"required range {p.required_range / 1e3:.3g} km vs radio horizon "
+                            f"{horizon / 1e3:.3g} km for a {p.target_altitude:.0f} m target",
+                            warn=True))
+        far = 2 * 0.5 ** 2 / lam
+        out.append(ck.truth("model validity: far field", ck.MATH, far < 0.1 * p.required_range,
+                            f"antenna far-field distance ~{far:.1f} m, well inside the "
+                            "detection range", warn=True))
+        return out
+
+    def symmetry_checks(self, sol):
+        b = math.degrees(self.p.tx_bearing) % 180.0
+        if min(b, 180.0 - b) > 1e-9:
+            return [ck.skip("symmetry", ck.MATH, "transmitter is off the antenna axis")]
+        s = np.nan_to_num(sol.data["snr_db"], posinf=0.0)
+        return [ck.symmetry("symmetry about the antenna axis", s, s[:, ::-1], 1e-9,
+                            "transmitter on the axis: the map is mirror-symmetric")]
+
+
+# -- sealed enclosure in the sun ---------------------------------------------------
+@register
+class EnclosureThermal(Simulation):
+    name = "enclosure_thermal"
+    title = "Sealed electronics enclosure in sun and wind"
+    domain = DOMAIN
+    description = """Steady temperature inside a closed outdoor box: the
+    electronics' heat and absorbed sunlight leave by convection and
+    radiation from the outside, after crossing the wall and the still air
+    inside.  Lumped (one surface temperature, one air temperature)."""
+    params = [
+        Param("size_x", "260 mm", "m", "box size", lo=0.02, hi=2),
+        Param("size_y", "200 mm", "m", "box size", lo=0.02, hi=2),
+        Param("size_z", "120 mm", "m", "box size (height)", lo=0.02, hi=2),
+        Param("wall", "3 mm", "m", "wall thickness", lo=0.0005, hi=0.03),
+        Param("wall_conductivity", "0.2 W/(m*K)", "W/(m*K)", "wall material conductivity"),
+        Param("internal_power", "13 W", "W", "heat dissipated inside", lo=0, hi=500),
+        Param("irradiance", "1000 W/m^2", "W/m^2", "sunlight", lo=0, hi=1200),
+        Param("sun_elevation", "60 deg", "rad", "sun height above the horizon"),
+        Param("absorptivity", 0.5, None, "solar absorptivity of the outside (white 0.25, grey 0.5, black 0.95)"),
+        Param("emissivity", 0.9, None, "infrared emissivity of the outside"),
+        Param("wind", "1 m/s", "m/s", "wind speed", lo=0, hi=30),
+        Param("h_inside", "4 W/(m^2*K)", "W/(m^2*K)", "still-air coefficient inside"),
+        Param("ambient_temperature", "35 degC", "K", "air temperature"),
+        Param("sky_temperature", "20 degC", "K", "effective sky temperature (clear sky is colder)"),
+    ]
+    primary = ()
+    no_mesh_reason = "lumped energy balance: no grid to refine"
+
+    def validate(self):
+        p = self.p
+        if 2 * p.wall >= min(p.size_x, p.size_y, p.size_z):
+            raise ParamError("the wall is thicker than half the box")
+        for key in ("absorptivity", "emissivity"):
+            if not 0 <= getattr(p, key) <= 1:
+                raise ParamError(f"{key} must be between 0 and 1")
+
+    def _numbers(self, radiation=True):
+        p = self.p
+        area = 2 * (p.size_x * p.size_y + p.size_x * p.size_z + p.size_y * p.size_z)
+        top, side = p.size_x * p.size_y, max(p.size_x, p.size_y) * p.size_z
+        sun_area = top * math.sin(p.sun_elevation) + side * math.cos(p.sun_elevation)
+        q_sun = p.absorptivity * p.irradiance * sun_area
+        h_o = 5.7 + 3.8 * p.wind
+        u_wall = 1.0 / (1.0 / p.h_inside + p.wall / p.wall_conductivity)
+        eps = p.emissivity if radiation else 0.0
+        return area, q_sun, h_o, u_wall, eps
+
+    def _surface(self, radiation=True):
+        """Newton solve of the outside balance; returns (Ts, residual)."""
+        p = self.p
+        area, q_sun, h_o, _, eps = self._numbers(radiation)
+        ta, tsky, q_in = p.ambient_temperature, p.sky_temperature, p.internal_power + q_sun
+
+        def loss(t):
+            rad = eps * SIGMA * area * (0.5 * (t ** 4 - tsky ** 4) + 0.5 * (t ** 4 - ta ** 4))
+            return h_o * area * (t - ta) + rad
+
+        t = ta + q_in / (h_o * area)
+        for _ in range(100):
+            f = loss(t) - q_in
+            df = h_o * area + eps * SIGMA * area * 4 * t ** 3
+            step = f / df
+            t -= step
+            if abs(step) < 1e-12 * t:
+                break
+        return t, abs(loss(t) - q_in) / max(q_in, 1e-300)
+
+    def equations(self):
+        dT = Q(1, "K")
+        a = self.q("size_x") * self.q("size_y")
+        return {"surface energy balance": {
+            "internal power": self.q("internal_power"),
+            "absorbed sun alpha G A": self.q("irradiance") * a,
+            "convection h A dT": Q(5.7, "W/(m^2*K)") * a * dT,
+            "radiation eps sigma A T^4": Q(SIGMA, "W/(m^2*K^4)") * a * Q(1, "K") ** 4,
+            "wall conduction k A dT / t": self.q("wall_conductivity") * a * dT / self.q("wall")}}
+
+    def dimensionless(self):
+        return {"wall Biot number h t / k": self.q("h_inside") * self.q("wall")
+                / self.q("wall_conductivity")}
+
+    def well_posed(self):
+        area, _, h_o, _, eps = self._numbers()
+        return [ck.truth("heat has a way out", ck.MATH, h_o > 0 or eps > 0,
+                         "convection and radiation carry heat away from the outside")]
+
+    def solve(self, n):
+        p = self.p
+        area, q_sun, h_o, u_wall, eps = self._numbers()
+        ts, res = self._surface()
+        t_in = ts + p.internal_power / (u_wall * area)
+        conv = h_o * area * (ts - p.ambient_temperature)
+        rad = p.internal_power + q_sun - conv
+        qoi = {"internal_temperature": (to_c(t_in), "degC"),
+               "surface_temperature": (to_c(ts), "degC"),
+               "absorbed_sun": (q_sun, "W"),
+               "heat_by_convection": (conv, "W"),
+               "heat_by_radiation": (rad, "W"),
+               "rise_over_ambient": (t_in - p.ambient_temperature, "K")}
+        winds = np.linspace(0, 10, 41)
+        temps = []
+        for w in winds:
+            sub = EnclosureThermal(**{**self.given, "wind": f"{w} m/s"})
+            t_s, _ = sub._surface()
+            a, _, _, u, _ = sub._numbers()
+            temps.append(to_c(t_s + p.internal_power / (u * a)))
+        fields = [Field("inside temperature vs wind", winds, np.array(temps), unit="degC",
+                        xlabel="wind [m/s]", ylabel="inside [degC]")]
+        return Solution(qoi, fields, res, residual_note="Newton iteration: energy imbalance "
+                        "/ heat throughput", residual_limit=1e-10,
+                        data={"ts": ts, "t_in": t_in, "conv": conv, "rad": rad})
+
+    def known_solution(self, sol):
+        p = self.p
+        area, q_sun, h_o, _, _ = self._numbers(False)
+        ts, _ = self._surface(radiation=False)
+        exact = p.ambient_temperature + (p.internal_power + q_sun) / (h_o * area)
+        return [ck.close("known solution: convection-only balance", ck.UNIVERSAL, ts, exact,
+                         1e-10, detail="same Newton solver with radiation off vs the exact "
+                         "linear result", unit="K")]
+
+    def domain_checks(self, sol):
+        p, d = self.p, sol.data
+        area, q_sun, h_o, _, _ = self._numbers()
+        q_in = p.internal_power + q_sun
+        out = [ck.small("energy balance (in = out)", ck.HEAT,
+                        (q_in - d["conv"] - d["rad"]) / max(q_in, 1e-300), 1e-9,
+                        f"electronics {p.internal_power:.3g} W + sun {q_sun:.3g} W = convection "
+                        f"{d['conv']:.3g} W + radiation {d['rad']:.3g} W; relative mismatch")]
+        hi = p.ambient_temperature + q_in / (h_o * area)
+        out.append(ck.bounds("temperature bounds", ck.HEAT,
+                             min(p.ambient_temperature, p.sky_temperature), hi + q_in,
+                             d["ts"], d["ts"], unit="K",
+                             detail="outside surface between the coldest surroundings and the "
+                                    "no-radiation limit"))
+        out.append(ck.truth("heat flows from hot to cold (second law)", ck.HEAT,
+                            d["t_in"] >= d["ts"] - 1e-9 or p.internal_power <= 0,
+                            f"inside {to_c(d['t_in']):.1f} degC >= outside surface "
+                            f"{to_c(d['ts']):.1f} degC, so the electronics' heat flows out"))
+        bound = to_c(hi + p.internal_power / (self._numbers()[3] * area))
+        out.append(ck.truth("back-of-envelope R-network bound", ck.HEAT,
+                            sol.qoi["internal_temperature"][0] <= bound + 1e-9,
+                            f"inside {sol.qoi['internal_temperature'][0]:.1f} degC is below the "
+                            f"convection-only series network {bound:.1f} degC (radiation only "
+                            "helps)"))
+        return out
+
+
+# -- solar + battery endurance -------------------------------------------------------
+@register
+class SolarBattery(Simulation):
+    name = "solar_battery"
+    title = "Solar panel and battery endurance (multi-day energy balance)"
+    domain = DOMAIN
+    description = """Will an off-grid device stay on?  Marches the battery's
+    state of charge through several days of a daily sun cycle with a constant
+    load, charging losses and a full battery that has to throw away extra
+    sun.  Reports the lowest charge, the energy that could not be supplied and
+    how long the battery alone lasts."""
+    params = [
+        Param("panel_power", "100 W", "W", "panel rating at 1000 W/m^2", lo=1, hi=5000),
+        Param("peak_irradiance", "500 W/m^2", "W/m^2", "noon sunlight on the panel", lo=0, hi=1100),
+        Param("day_length", "10 h", "s", "hours of daylight", lo=3600, hi=86400),
+        Param("weather_factor", 0.35, None, "fraction of clear-sky sun (overcast 0.1-0.4)"),
+        Param("days", 3, None, "number of days to simulate"),
+        Param("battery_capacity", "640 Wh", "J", "battery energy when full", lo=3600, hi=1e9),
+        Param("usable_fraction", 0.9, None, "fraction of the capacity that may be used"),
+        Param("start_charge", 1.0, None, "starting state of charge (0-1)"),
+        Param("load", "13 W", "W", "constant electrical load", lo=0, hi=5000),
+        Param("system_efficiency", 0.85, None, "panel-to-battery efficiency (controller, wiring)"),
+        Param("charge_efficiency", 0.95, None, "battery round-trip efficiency"),
+    ]
+    default_resolution = 12
+    min_resolution = 2
+    primary = ("lowest_charge",)
+    resolution_doc = "time steps per hour"
+
+    def validate(self):
+        p = self.p
+        if p.days < 1:
+            raise ParamError("days must be at least 1")
+        for key in ("weather_factor", "usable_fraction", "start_charge", "system_efficiency",
+                    "charge_efficiency"):
+            if not 0 <= getattr(p, key) <= 1:
+                raise ParamError(f"{key} must be between 0 and 1")
+
+    def _sun(self, t):
+        """Panel output [W] at time t (s), midpoint of a step; noon at 12 h."""
+        p = self.p
+        tod = np.mod(t, 86400.0)
+        rise = 43200.0 - p.day_length / 2
+        frac = (tod - rise) / p.day_length
+        shape = np.where((frac > 0) & (frac < 1), np.sin(np.pi * np.clip(frac, 0, 1)), 0.0)
+        return (p.panel_power * p.peak_irradiance / 1000.0 * p.weather_factor
+                * p.system_efficiency * shape)
+
+    def _march(self, n, sun_on=True):
+        p = self.p
+        dt = 3600.0 / n
+        steps = int(p.days * 24 * n)
+        cap = p.battery_capacity
+        floor = cap * (1 - p.usable_fraction)
+        e = cap * p.start_charge
+        tot = dict(harvest=0.0, charged=0.0, direct=0.0, discharged=0.0, curtailed=0.0,
+                   unserved=0.0, load=0.0)
+        soc, ts, first_out = [e / cap], [0.0], None
+        for k in range(steps):
+            t_mid = (k + 0.5) * dt
+            pv = float(self._sun(t_mid)) if sun_on else 0.0
+            harvest, load = pv * dt, p.load * dt
+            tot["harvest"] += harvest
+            tot["load"] += load
+            if harvest >= load:
+                surplus = harvest - load
+                room = (cap - e) / p.charge_efficiency
+                take = min(surplus, room)
+                e += take * p.charge_efficiency
+                tot["direct"] += load
+                tot["charged"] += take
+                tot["curtailed"] += surplus - take
+            else:
+                deficit = load - harvest
+                avail = e - floor
+                give = min(deficit, max(avail, 0.0))
+                e -= give
+                tot["direct"] += harvest
+                tot["discharged"] += give
+                tot["unserved"] += deficit - give
+                if deficit - give > 1e-9 and first_out is None:
+                    first_out = (k + (give / deficit if deficit else 0.0)) * dt
+            soc.append(e / cap)
+            ts.append((k + 1) * dt)
+        tot["stored"] = e - cap * p.start_charge
+        return np.array(ts), np.array(soc), tot, first_out
+
+    def equations(self):
+        return {"battery energy balance": {
+            "stored energy": self.q("battery_capacity"),
+            "load x time": self.q("load") * self.q("day_length"),
+            "panel x time": self.q("panel_power") * self.q("day_length")}}
+
+    def dimensionless(self):
+        return {"daily harvest / daily load": self.q("panel_power") * self.q("day_length")
+                / (self.q("load") * Q(86400, "s"))}
+
+    def well_posed(self):
+        return [ck.truth("initial-value problem complete", ck.MATH, True,
+                         "starting charge, sun profile and load are all defined")]
+
+    def solve(self, n):
+        p = self.p
+        ts, soc, tot, first_out = self._march(n)
+        usable = p.battery_capacity * p.usable_fraction
+        qoi = {"lowest_charge": (float(soc.min()), ""),
+               "ends_with_charge": (float(soc[-1]), ""),
+               "energy_not_supplied": (tot["unserved"] / 3600.0, "Wh"),
+               "stays_on": (1.0 if tot["unserved"] <= 1e-6 else 0.0, ""),
+               "battery_only_runtime": (usable / p.load / 3600.0 if p.load else math.inf, "h"),
+               "harvest_per_day": (tot["harvest"] / p.days / 3600.0, "Wh"),
+               "load_per_day": (p.load * 86400.0 / 3600.0, "Wh")}
+        fields = [Field("battery charge", ts / 3600.0, soc * 100.0, unit="%",
+                        xlabel="time [h]", ylabel="charge [%]"),
+                  Field("solar power", ts / 3600.0, self._sun(ts), unit="W",
+                        xlabel="time [h]", ylabel="panel [W]")]
+        gross = max(tot["harvest"] + tot["discharged"], 1e-300)
+        res = abs(tot["stored"] - (tot["charged"] * p.charge_efficiency
+                                   - tot["discharged"])) / max(p.battery_capacity, 1e-300)
+        return Solution(qoi, fields, res, residual_note="battery bookkeeping: change in stored "
+                        "energy vs charge in minus charge out", residual_limit=1e-9,
+                        cfl=(0.0, 1.0, "explicit energy bookkeeping has no stability limit; "
+                             f"step {3600 / n:.0f} s sets accuracy only"),
+                        data={"tot": tot, "soc": soc, "gross": gross})
+
+    def known_solution(self, sol):
+        p = self.p
+        _, soc, tot, first_out = self._march(max(4, self.default_resolution), sun_on=False)
+        usable = p.battery_capacity * (p.start_charge - (1 - p.usable_fraction))
+        exact = usable / p.load if p.load > 0 else math.inf
+        if not math.isfinite(exact) or exact > p.days * 86400:
+            return [ck.skip("known solution: battery-only runtime", ck.UNIVERSAL,
+                            "the battery alone outlasts the simulated days")]
+        return [ck.close("known solution: battery-only runtime", ck.UNIVERSAL,
+                         first_out / 3600.0, exact / 3600.0, 1e-6,
+                         detail="same march with the sun off vs usable energy / load",
+                         unit="h")]
+
+    def domain_checks(self, sol):
+        tot = sol.data["tot"]
+        p = self.p
+        lhs = tot["harvest"]
+        rhs = tot["direct"] + tot["charged"] + tot["curtailed"]
+        out = [ck.small("energy balance: sun = used directly + charged + thrown away",
+                        ck.HEAT, (lhs - rhs) / max(lhs, 1e-300), 1e-9,
+                        f"harvest {lhs / 3600:.4g} Wh; relative mismatch"),
+               ck.small("energy balance: load = direct + from battery + not supplied",
+                        ck.HEAT, (tot["load"] - tot["direct"] - tot["discharged"]
+                                  - tot["unserved"]) / max(tot["load"], 1e-300), 1e-9,
+                        f"load {tot['load'] / 3600:.4g} Wh; relative mismatch")]
+        soc = sol.data["soc"]
+        out.append(ck.bounds("charge bounds", ck.HEAT, 1 - p.usable_fraction, 1.0,
+                             float(soc.min()), float(soc.max()),
+                             detail="never below the reserve, never above full"))
+        return out
