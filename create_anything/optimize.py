@@ -242,6 +242,7 @@ def optimise(design: dict, max_rounds: int = 12, slim: bool = True) -> dict:
             break
         steps.append({"change": best[3], "reason": worst["headline"], "kind": "fix",
                       "mass_g": [score[2] * 1e3, best[0][2] * 1e3],
+                      "load": [ev.get("load"), best[1].get("load")],
                       "tests": _statuses(best[1])})
         score, ev, current = best[0], best[1], best[2]
 
@@ -255,7 +256,7 @@ def optimise(design: dict, max_rounds: int = 12, slim: bool = True) -> dict:
                     tested[(sc["part"], label)] = targets
         for (pid, label), targets in tested.items():
             start = _get(part_by_id(current, pid), *targets[0])
-            mass0 = score[2]
+            mass0, load0 = score[2], ev.get("load")
             for f in SHRINK:
                 for _ in range(8):
                     made = _scaled(current, original, pid, label, targets, f)
@@ -271,7 +272,7 @@ def optimise(design: dict, max_rounds: int = 12, slim: bool = True) -> dict:
                 steps.append({"change": f"{name}: {label} {start:.3g} -> {end:.3g} mm",
                               "reason": "every test still passes with less material",
                               "kind": "trim", "mass_g": [mass0 * 1e3, score[2] * 1e3],
-                              "tests": _statuses(ev)})
+                              "load": [load0, ev.get("load")], "tests": _statuses(ev)})
 
     after = evaluate(current, verify=True, detail=True)
     m0, m1 = total_mass_kg(original) * 1e3, total_mass_kg(current) * 1e3

@@ -77,7 +77,7 @@ def test_web_api_roundtrip():
     try:
         cat = json.load(urllib.request.urlopen(base + "/api/catalog"))
         assert len(cat["simulations"]) == len(NAMES)
-        assert b"Simulate Anything" in urllib.request.urlopen(base + "/").read()
+        assert b"Plimsoll Lab" in urllib.request.urlopen(base + "/").read()
         req = urllib.request.Request(
             base + "/api/run", method="POST",
             data=json.dumps({"name": "heat_sink_fin", "params": {"h": "40 W/(m^2*K)"}}).encode())

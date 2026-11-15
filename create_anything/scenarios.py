@@ -52,10 +52,44 @@ def _has_unit(value) -> bool:
     return bool(m and m.group(2).strip())
 
 
-def _metric(label, value, unit, limit, kind):
+MAX_LOAD = 99.0          # cap so a load is always a finite JSON number
+
+
+def load_of(value, limit, kind, base=0.0):
+    """How much of its allowance a result uses: 1 means exactly at the limit (the
+    load line), 0.5 half of it, 2 twice over.  None when it has no meaning.
+
+    A maximum is measured from ``base`` (for a temperature, the ambient it rises
+    from: 70 degC against an 80 degC limit in 25 degC air is 82 %, not 88 %).
+    A minimum such as a safety factor or a natural frequency is required/actual:
+    a safety factor of 4 where 2 is required uses half the allowance."""
+    if not all(math.isfinite(v) for v in (value, limit, base)):
+        return None
+    if kind == "min":
+        if value <= 0 or limit <= 0:
+            return None
+        out = limit / value
+    else:
+        span = limit - base
+        if span <= 0:
+            return None
+        out = max(0.0, (value - base) / span)
+    return float(min(out, MAX_LOAD))
+
+
+def _metric(label, value, unit, limit, kind, base=0.0):
     ok = value >= limit if kind == "min" else value <= limit
     return {"label": label, "value": float(value), "unit": unit, "limit": float(limit),
-            "kind": kind, "ok": bool(ok)}
+            "kind": kind, "ok": bool(ok), "base": float(base),
+            "load": load_of(float(value), float(limit), kind, float(base))}
+
+
+def load_of_test(t: dict):
+    """The load of a test: its most loaded metric (None if it has no trusted number)."""
+    if t.get("status") not in ("pass", "fail"):
+        return None
+    loads = [m["load"] for m in t.get("metrics", []) if m.get("load") is not None]
+    return max(loads) if loads else None
 
 
 def _violation(metrics) -> float:
@@ -248,7 +282,7 @@ def test_heat(design, part, sc, verify):
             notes.append(f"heat removed differs from the source by {100 * closure:.2g}%")
         notes.append("only the fins are counted; the bare base between them adds a little")
         metrics = [_metric("temperature at the heat source", t_base - 273.15, "degC",
-                           limit - 273.15, "max")]
+                           limit - 273.15, "max", ambient - 273.15)]
         head = (f"{power:.3g} W into the {part['name'].lower()}: the source sits at "
                 f"{t_base - 273.15:.0f} degC (limit {limit - 273.15:.0f} degC), thermal "
                 f"resistance {res.value('thermal_resistance'):.2f} K/W")
@@ -288,7 +322,8 @@ def test_heat(design, part, sc, verify):
         raise ScenarioError(f"a {part['shape']} cannot be tested as a rod heated at one end")
     res = _run("heat_sink_fin", params, verify)
     tip = res.value("tip_temperature")
-    metrics = [_metric("temperature at the far end", tip, "degC", limit - 273.15, "max")]
+    metrics = [_metric("temperature at the far end", tip, "degC", limit - 273.15, "max",
+                       ambient - 273.15)]
     head = (f"One end of the {part['name'].lower()} at {hot - 273.15:.0f} degC: the far end "
             f"reaches {tip:.0f} degC (limit {limit - 273.15:.0f} degC)")
     return res, metrics, head, notes, f"Heat: {hot - 273.15:.0f} degC at one end"
@@ -309,7 +344,8 @@ def test_fire(design, part, sc, verify):
         "ambient_temperature": f"{ambient} K", "critical_temperature": f"{crit_c} degC",
         "duration": f"{duration} s"}, verify)
     peak = crit_c - res.value("margin_to_critical")
-    metrics = [_metric("hottest surface temperature", peak, "degC", crit_c, "max")]
+    metrics = [_metric("hottest surface temperature", peak, "degC", crit_c, "max",
+                       ambient - 273.15)]
     if res.value("reaches_critical"):
         head = (f"{flux / 1e3:.3g} kW/m^2 on the {part['name'].lower()}: {mat['name']} {what} "
                 f"({crit_c:.0f} degC) after {res.value('time_to_critical'):.0f} s")
@@ -348,7 +384,8 @@ def test_current(design, part, sc, verify):
         "conductivity": f"{mat['conductivity']} W/(m*K)", "h": sc.get("h", "12 W/(m^2*K)"),
         "ambient_temperature": f"{ambient} K", "terminal_temperature": f"{ambient} K"}, verify)
     t_max, drop = res.value("max_temperature"), res.value("voltage_drop")
-    metrics = [_metric("hottest point", t_max, "degC", limit - 273.15, "max")]
+    metrics = [_metric("hottest point", t_max, "degC", limit - 273.15, "max",
+                       ambient - 273.15)]
     if sc.get("max_voltage_drop") is not None:
         metrics.append(_metric("voltage drop", drop, "V",
                                _q(sc, "max_voltage_drop", "V"), "max"))
@@ -445,6 +482,38 @@ def bound_value(design: dict, part: dict, source: str):
     return int(value) if key == "n_fins" else f"{value} mm"
 
 
+AMBIENT_HINTS = ("ambient", "inlet", "coolant", "outside", "air_temperature",
+                 "fluid_temperature", "initial_temperature")
+
+
+def _is_temperature(unit: str) -> bool:
+    try:
+        convert("300 K", unit)
+        return bool(unit)
+    except (DimensionError, ValueError, TypeError):
+        return False
+
+
+def _base_for(req: dict, unit: str, params: dict):
+    """Where a temperature's load is measured from: the requirement's 'from', else the
+    run's ambient-like input, else 25 degC (said in a note).  Other units: zero."""
+    if not unit or not _is_temperature(unit):
+        return 0.0, None
+    if req.get("from") is not None:
+        try:
+            return convert(req["from"], unit), None
+        except (DimensionError, ValueError, TypeError) as exc:
+            raise ScenarioError(f"requirement 'from': {exc}") from None
+    for key, value in params.items():
+        if any(h in key for h in AMBIENT_HINTS):
+            try:
+                return convert(value, unit), None
+            except (DimensionError, ValueError, TypeError):
+                continue
+    return convert("25 degC", unit), ("temperature load measured as the rise above 25 degC "
+                                      "(give the requirement a 'from' to change it)")
+
+
 def test_simulation(design, part, sc, verify):
     name = sc.get("simulation")
     try:
@@ -474,7 +543,7 @@ def test_simulation(design, part, sc, verify):
     if not res.qoi:
         failed = "; ".join(f"{c.name}: {c.detail}" for c in res.report.failed()[:3])
         raise ScenarioError(f"'{name}' rejected this setup before solving ({failed})")
-    metrics = []
+    metrics, extra_notes = [], []
     for r in reqs:
         q = r.get("qoi") if isinstance(r, dict) else None
         if q not in res.qoi:
@@ -493,16 +562,19 @@ def test_simulation(design, part, sc, verify):
         except (DimensionError, TypeError, ValueError) as exc:
             raise ScenarioError(f"requirement on '{q}' (reported in '{unit or 'no unit'}'): "
                                 f"{exc}") from None
+        base, note = _base_for(r, unit, params)
+        if note and note not in extra_notes:
+            extra_notes.append(note)
         metrics.append(_metric(r.get("label") or q.replace("_", " "), value, unit, limit,
-                               kinds[0]))
+                               kinds[0], base))
     title = sc.get("title") or cls.schema()["title"]
     shown = "; ".join(f"{m['label']} {m['value']:.4g} {m['unit']}".rstrip() +
                       f" ({'needs' if not m['ok'] else 'limit'} "
                       f"{'>=' if m['kind'] == 'min' else '<='} {m['limit']:.4g})"
                       for m in metrics)
     head = f"{cls.schema()['title']} on the {part['name'].lower()}: {shown}"
-    notes = [f"bound to the design: " + ", ".join(f"{k} = {v}" for k, v in bind.items())]
-    return res, metrics, head, notes, title
+    notes = ["bound to the design: " + ", ".join(f"{k} = {v}" for k, v in bind.items())]
+    return res, metrics, head, notes + extra_notes, title
 
 
 TESTS = {"load": test_load, "drop": test_drop, "vibration": test_vibration,
@@ -529,8 +601,9 @@ DESCRIPTIONS = {
     "simulation": "any simulation in the Simulate Anything catalogue, for situations the "
                   "types above do not cover: needs simulation (template name), bind "
                   "({param: source} - at least one, tying the run to this part; sources: "
-                  + SOURCES_HELP + "), require ([{qoi, min | max (with unit)}]); optional "
-                  "params (other inputs with units), title",
+                  + SOURCES_HELP + "), require ([{qoi, min | max (with unit), optional "
+                  "from: the ambient a temperature rises from}]); optional params (other "
+                  "inputs with units), title",
 }
 
 
@@ -575,6 +648,12 @@ def evaluate(design: dict, verify: bool = True, detail: bool = True) -> dict:
     tests = [run_scenario(design, sc, verify, detail) for sc in design["scenarios"]]
     counts = {s: sum(t["status"] == s for t in tests)
               for s in ("pass", "fail", "unverified", "error")}
+    for t in tests:
+        t["load"] = load_of_test(t)
+    loaded = [t for t in tests if t["load"] is not None]
+    worst = max(loaded, key=lambda t: t["load"]) if loaded else None
     return {"tests": tests, "counts": counts,
             "all_pass": bool(tests) and counts["pass"] == len(tests),
-            "violation": sum(t["violation"] for t in tests)}
+            "violation": sum(t["violation"] for t in tests),
+            "load": worst["load"] if worst else None,
+            "limiting": worst["id"] if worst else None}

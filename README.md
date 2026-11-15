@@ -1,137 +1,68 @@
-# Simulate Anything
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo-dark.svg">
+    <img src="docs/brand/logo-light.svg" alt="plimsoll" width="340">
+  </picture>
+</p>
 
-Describe a physical problem. Get back a numerical simulation of it, together
-with a report of how that simulation checked itself.
+<p align="center"><b>Every design gets a load line.</b></p>
 
-```console
-$ simulate-anything run heat_sink_fin -p fin_length="40 mm" -p h="40 W/(m^2*K)"
+Describe something physical. Plimsoll designs it, loads it with the real world
+in simulations that check themselves, and shows how close it runs to its limits.
 
-Results
-  heat_per_fin                     8.06751 W
-  tip_temperature                  69.6967 degC
-  fin_efficiency                   0.874148
+![Plimsoll: a sensor enclosure at 73 % of its load line, its two real-world tests, and the design on a blueprint bench](docs/brand/screenshot.jpg)
 
-Self-checks
-  [every simulation]
-    PASS  dimensional analysis: fin equation: all terms share one dimension: ...
-    PASS  mesh convergence: heat_per_fin: n=16=8.06555, n=32=8.06712, n=64=8.06751;
-          observed order 2.00, est. discretisation error 0.00161% (limit 2%)
-    PASS  known solution: fin heat rate: got 8.06751 W, expected 8.06764 W
-    PASS  solver residual: 1.03522e-16 (limit 1e-08)
-  [heat & thermodynamics]
-    PASS  energy balance (in = out + stored): relative imbalance 4.57888e-14
-    PASS  temperature bounds (maximum principle): [342.849, 352.986] K within [298.15, 353.15] K
-    PASS  entropy generation >= 0: 0.004214 W/K
-    PASS  back-of-envelope R-network bounds: 8.068 W lies between 6.424 W and 9.229 W
-  [math sanity]
-    PASS  boundary conditions complete
-    skip  time-step (CFL) condition: not applicable: steady-state problem
-  VERIFIED: 15 passed, 0 warnings, 0 failed, 2 not applicable
-```
+## The name
 
-(Output shortened; every line carries its numbers.)
+In the 1870s Samuel Plimsoll campaigned for a mark on the side of every cargo
+ship: a ring with a line through it, painted where the water may come up to
+when the ship is fully loaded. Ships had been sent out overloaded and sunk;
+the Plimsoll line made the limit visible to anyone standing on the quay. It is
+still on every merchant ship.
 
-![The web app: inputs with sliders on the left, results, plots and the check report on the right](docs/screenshot.png)
+Plimsoll does the same for anything you design. Every part is loaded with the
+situations it will meet (a weight, a drop, a flame, a current, a flow), and
+every result is shown against its own line.
 
-A wrong input is caught instead of computed:
+## Reading the screen
 
-```console
-$ simulate-anything run heat_sink_fin -p h="40 W/(m*K)"
-    FAIL  dimensional analysis: parameter 'h': '40 W/(m*K)' has dimension
-          [m·kg/(s^3·K)] but [kg/(s^3·K)] (W/(m^2*K)) is required
-```
+One object appears everywhere: **the load ring**, the Plimsoll mark itself. The
+line through the middle is the limit; the water is how much of it a result uses.
+
+| | |
+|---|---|
+| **Load** | The share of a limit a result uses. 100 % is exactly at the line. A temperature is measured as its rise above the ambient; a minimum (a safety factor, a natural frequency) as required ÷ actual. |
+| **Colour** | Colour means load and nothing else: deep sea (no load), ocean, glacier, sand, **signal orange at the line**, ember, crimson (twice over). Parts in 3D, the page's atmosphere and the contour landscape all take the colour of the design's most loaded test. |
+| **Bands** | Ample margin (up to 50 %), comfortable (to 80 %), close to the line (to 100 %), over the line. |
+| **Trust** | A hatched ring with a dashed rim is *untrusted*: the simulation failed its own checks, so its number is not shown as a result. |
+| **Progress** | While the designer works, a track shows where it is (reading, drafting, testing, improving, proving) and a trend plots every version's load against the line. Any version can be reopened. |
+
+The palette is generated in OKLCH so equal steps in load look like equal steps
+in colour; `docs/brand/make_brand.py` draws the mark, icon and wordmark.
 
 ## Install
-
-```bash
-pip install -e .
-```
-
-Python 3.10+, NumPy and SciPy. For plain-language mode add the agent extra:
 
 ```bash
 pip install -e ".[agent]"
 ```
 
-## Three ways to use it
+Python 3.10+, NumPy and SciPy. The `agent` extra (the Anthropic SDK) is only
+needed for designing from a description and for plain-language questions.
 
-**1. Interactive web app.** Pick a simulation, drag a slider, and the result,
-the plots and the whole checklist update.
+## Design anything
 
-```bash
-simulate-anything serve
-```
-
-Then open http://127.0.0.1:8000.
-
-**2. Command line.**
-
-```bash
-simulate-anything list
-```
-
-```bash
-simulate-anything describe pcb_thermal
-```
-
-```bash
-simulate-anything run pcb_thermal -p h="25 W/(m^2*K)" --html report.html
-```
-
-`--json` gives machine-readable output; the exit code is non-zero when a check
-fails, so it can gate a script or CI job.
-
-**3. Plain language.** With an `ANTHROPIC_API_KEY` set, describe the problem
-and the agent picks the model, fills in the parameters, runs it and reads the
-check report. A failed check sends it back to fix the setup.
-
-```bash
-simulate-anything ask "A 20 mm steel cantilever, 300 mm long, 5 mm thick, carries 40 N at the tip. How far does it bend and is it safe?"
-```
-
-From Python:
-
-```python
-import simulate_anything as sa
-
-result = sa.run("beam", {"support": "cantilever", "length": "300 mm", "width": "20 mm",
-                         "height": "5 mm", "point_load": "40 N", "load_position": 1.0})
-print(result.value("max_deflection"), result.report.verdict)
-```
-
-## Where it applies
-
-| Area | Problems | Simulations |
-|---|---|---|
-| Electronics | chip and PCB heat, heat sinks, battery packs | `pcb_thermal`, `heat_sink_fin`, `battery_pack` |
-| Mechanical | stress and deflection in brackets, beams and 3D prints; vibration modes | `beam`, `plate_stress`, `beam_vibration` |
-| Fluids | airflow, pipe flow, drag, cooling channels | `channel_flow`, `lid_driven_cavity`, `pipe_flow`, `projectile_drag`, `cooling_channel` |
-| Electromagnetics | antennas, coils, capacitors, EMI shielding | `antenna_array`, `magnetostatics`, `capacitor`, `em_shield` |
-| Aerospace | CubeSat temperatures, re-entry heating, structural loads | `cubesat_thermal`, `reentry_heating`, `beam` |
-| Bio and medicine | drug diffusion in tissue, blood flow, heat from implants | `drug_diffusion`, `pipe_flow`, `implant_heating` |
-| Climate and energy | groundwater, building heat loss, solar panels, reactor cooling | `groundwater_well`, `wall_heat_loss`, `solar_panel`, `fuel_pin` |
-| Chemistry | reaction-diffusion, mass transfer in reactors | `reaction_diffusion`, `plug_flow_reactor` |
-| Product safety | a part on fire, a wire carrying current, a product dropped on the floor | `flame_exposure`, `wire_heating`, `drop_impact` |
-| Education | any textbook problem as an interactive simulation | `conduction_2d`, `projectile_drag`, and every template above in the web app |
-
-Not in the catalogue? A new simulation is one class; see
-[docs/extending.md](docs/extending.md) and
-[examples/custom_simulation.py](examples/custom_simulation.py).
-
-## Create Anything: describe a thing, get a tested design
-
-`create_anything` sits on top of the simulations. Describe something physical
+The designer (the `create_anything` package) sits on top of the simulations. Describe something physical
 and the design agent writes a design document: parts (shape, dimensions in mm,
 material, process), assembly steps, and the real-world tests it has to survive.
 Each test runs as a verified simulation on the part's real dimensions and
 material, and the agent revises the design until the tests pass.
 
 ```bash
-create-anything serve
+plimsoll serve
 ```
 
 Open http://127.0.0.1:8001 and describe what you want to make. The design
-appears in 3D as it is tested, coloured by result, and every version the agent
+appears in 3D as it is tested, coloured by its load, and every version the agent
 tried can be reopened from the activity log. Ask for changes ("use aluminium
 instead", "make it lighter") and the agent edits the current design rather than
 starting over. You can also change materials, edit the JSON, run the tests and
@@ -139,7 +70,7 @@ optimise by hand. Describing needs `ANTHROPIC_API_KEY` set where the server
 runs; the key never reaches the page. The same agent runs from the command line:
 
 ```bash
-create-anything design "A water-cooled copper cold plate for a 60 W laser diode; the diode base must stay under 45 degC" -o cold_plate.json
+plimsoll design "A water-cooled copper cold plate for a 60 W laser diode; the diode base must stay under 45 degC" -o cold_plate.json
 ```
 
 ### Tests: built-in types, or any simulation
@@ -188,7 +119,7 @@ assembly.
 ### The optimiser
 
 ```console
-$ create-anything optimise create_anything/examples/shelf_bracket.json -o fixed.json
+$ plimsoll optimise create_anything/examples/shelf_bracket.json -o fixed.json
 Wall shelf bracket: 48.1 g -> 99.6 g
   fix   Arm: thickness 4 -> 8 mm
   fix   Arm: thickness 8 -> 16 mm
@@ -214,8 +145,9 @@ and `material_options` limits which materials a part may switch to. The final
 design is re-run with full verification, and any new overlaps or gaps caused by
 resizing are reported.
 
-Other commands: `create-anything check FILE` (exits non-zero unless every test
-passes), `create-anything materials`, `create-anything tests`. The example
+Other commands: `plimsoll check FILE` (exits non-zero unless every test
+passes), `plimsoll materials`, `plimsoll tests`. The same commands are also
+installed as `create-anything`. The example
 designs are in `create_anything/examples/`.
 
 ### Limits
@@ -227,13 +159,122 @@ which idealisation was used. Physics that interacts across parts (a whole
 assembly in one 3-D solve) is checked one piece at a time. Joints, fatigue,
 buckling and stress concentrations are not modelled, and there is no CAD import.
 
-## How it checks itself
+## Plimsoll Lab: simulations that check themselves
+
+Underneath the designer is a catalogue of simulations that check themselves.
+They work on their own too: describe a physical problem, get back a numerical
+simulation of it, together with a report of how that simulation checked itself.
+
+```console
+$ simulate-anything run heat_sink_fin -p fin_length="40 mm" -p h="40 W/(m^2*K)"
+
+Results
+  heat_per_fin                     8.06751 W
+  tip_temperature                  69.6967 degC
+  fin_efficiency                   0.874148
+
+Self-checks
+  [every simulation]
+    PASS  dimensional analysis: fin equation: all terms share one dimension: ...
+    PASS  mesh convergence: heat_per_fin: n=16=8.06555, n=32=8.06712, n=64=8.06751;
+          observed order 2.00, est. discretisation error 0.00161% (limit 2%)
+    PASS  known solution: fin heat rate: got 8.06751 W, expected 8.06764 W
+    PASS  solver residual: 1.03522e-16 (limit 1e-08)
+  [heat & thermodynamics]
+    PASS  energy balance (in = out + stored): relative imbalance 4.57888e-14
+    PASS  temperature bounds (maximum principle): [342.849, 352.986] K within [298.15, 353.15] K
+    PASS  entropy generation >= 0: 0.004214 W/K
+    PASS  back-of-envelope R-network bounds: 8.068 W lies between 6.424 W and 9.229 W
+  [math sanity]
+    PASS  boundary conditions complete
+    skip  time-step (CFL) condition: not applicable: steady-state problem
+  VERIFIED: 15 passed, 0 warnings, 0 failed, 2 not applicable
+```
+
+(Output shortened; every line carries its numbers.)
+
+![Plimsoll Lab: inputs with sliders on the left, results, the board temperature map and the check report on the right](docs/brand/lab.jpg)
+
+A wrong input is caught instead of computed:
+
+```console
+$ simulate-anything run heat_sink_fin -p h="40 W/(m*K)"
+    FAIL  dimensional analysis: parameter 'h': '40 W/(m*K)' has dimension
+          [m·kg/(s^3·K)] but [kg/(s^3·K)] (W/(m^2*K)) is required
+```
+
+### Three ways to use it
+
+**1. Plimsoll Lab, the web app.** Pick a simulation, drag a slider, and the result,
+the plots and the whole checklist update.
+
+```bash
+simulate-anything serve
+```
+
+Then open http://127.0.0.1:8000.
+
+**2. Command line.**
+
+```bash
+simulate-anything list
+```
+
+```bash
+simulate-anything describe pcb_thermal
+```
+
+```bash
+simulate-anything run pcb_thermal -p h="25 W/(m^2*K)" --html report.html
+```
+
+`--json` gives machine-readable output; the exit code is non-zero when a check
+fails, so it can gate a script or CI job.
+
+**3. Plain language.** With an `ANTHROPIC_API_KEY` set, describe the problem
+and the agent picks the model, fills in the parameters, runs it and reads the
+check report. A failed check sends it back to fix the setup.
+
+```bash
+simulate-anything ask "A 20 mm steel cantilever, 300 mm long, 5 mm thick, carries 40 N at the tip. How far does it bend and is it safe?"
+```
+
+From Python:
+
+```python
+import simulate_anything as sa
+
+result = sa.run("beam", {"support": "cantilever", "length": "300 mm", "width": "20 mm",
+                         "height": "5 mm", "point_load": "40 N", "load_position": 1.0})
+print(result.value("max_deflection"), result.report.verdict)
+```
+
+### Where it applies
+
+| Area | Problems | Simulations |
+|---|---|---|
+| Electronics | chip and PCB heat, heat sinks, battery packs | `pcb_thermal`, `heat_sink_fin`, `battery_pack` |
+| Mechanical | stress and deflection in brackets, beams and 3D prints; vibration modes | `beam`, `plate_stress`, `beam_vibration` |
+| Fluids | airflow, pipe flow, drag, cooling channels | `channel_flow`, `lid_driven_cavity`, `pipe_flow`, `projectile_drag`, `cooling_channel` |
+| Electromagnetics | antennas, coils, capacitors, EMI shielding | `antenna_array`, `magnetostatics`, `capacitor`, `em_shield` |
+| Aerospace | CubeSat temperatures, re-entry heating, structural loads | `cubesat_thermal`, `reentry_heating`, `beam` |
+| Bio and medicine | drug diffusion in tissue, blood flow, heat from implants | `drug_diffusion`, `pipe_flow`, `implant_heating` |
+| Climate and energy | groundwater, building heat loss, solar panels, reactor cooling | `groundwater_well`, `wall_heat_loss`, `solar_panel`, `fuel_pin` |
+| Chemistry | reaction-diffusion, mass transfer in reactors | `reaction_diffusion`, `plug_flow_reactor` |
+| Product safety | a part on fire, a wire carrying current, a product dropped on the floor | `flame_exposure`, `wire_heating`, `drop_impact` |
+| Education | any textbook problem as an interactive simulation | `conduction_2d`, `projectile_drag`, and every template above in the web app |
+
+Not in the catalogue? A new simulation is one class; see
+[docs/extending.md](docs/extending.md) and
+[examples/custom_simulation.py](examples/custom_simulation.py).
+
+### How it checks itself
 
 Every run produces a report. Each line is `PASS`, `WARN`, `FAIL` or `skip`,
 with the numbers behind it. A check that does not apply is listed as skipped
 with the reason; it is never left out.
 
-### Every simulation
+#### Every simulation
 
 | Check | What actually happens |
 |---|---|
@@ -242,7 +283,7 @@ with the reason; it is never left out.
 | **Known solutions** | The result is compared with the exact answer where one exists (fin equation, beam formulas, Hagen-Poiseuille, Fresnel slab, layered cylinder...). Where the setup has no closed form, the same solver is run on a benchmark that does. |
 | **Residuals** | The relative residual of the discrete equations must be below tolerance (1e-8 for linear solves). |
 
-### By physics
+#### By physics
 
 | Physics | Checks |
 |---|---|
@@ -251,7 +292,7 @@ with the reason; it is never left out.
 | **Fluids** | Mass in = mass out. The Reynolds number is compared with the regime the model assumes, and a laminar model at a turbulent Reynolds number is flagged. Pressure drop matches Hagen-Poiseuille (laminar) or the Moody chart via Colebrook (turbulent). |
 | **Electromagnetism** | Div B = 0. Charge is conserved. Gauss's law holds over nested closed surfaces. Energy flow adds up: Poynting flux in = out + absorbed. |
 
-### Math sanity
+#### Math sanity
 
 | Check | What actually happens |
 |---|---|
@@ -263,7 +304,7 @@ The checks are tested the same way as the solvers: the test suite injects
 wrong units, unstable time steps, missing supports and wrong physics, and
 requires the matching check to fail.
 
-## How the agent uses the checks
+### How the agent uses the checks
 
 `simulate-anything ask` runs a tool-using language model that never does the
 arithmetic itself. It can list the simulations, read a parameter schema, and
@@ -279,7 +320,7 @@ failure is something it has to deal with:
 It is instructed not to present numbers from a run with failed checks as an
 answer, and to say plainly when no template fits the problem.
 
-## Limits
+### Limits
 
 - Geometry is parametric: rectangles, layers, cylinders and spheres on
   structured 1-D and 2-D grids. There is no CAD import and no 3-D solver.
@@ -293,7 +334,7 @@ answer, and to say plainly when no template fits the problem.
 ## Layout
 
 ```
-simulate_anything/
+simulate_anything/   the simulation engine (Plimsoll Lab)
   units.py        quantities that carry dimensions
   checks.py       the check vocabulary and report
   core.py         Simulation base class: runs the protocol
@@ -301,7 +342,7 @@ simulate_anything/
   sims/           the simulation templates, by area
   agent.py        plain-language agent
   cli.py, server.py, report.py, web/
-create_anything/
+create_anything/     the designer (Plimsoll)
   materials.py    material library
   design.py       the design document, mass and cost, geometry checks
   scenarios.py    real-world tests mapped onto verified simulations
@@ -310,6 +351,7 @@ create_anything/
   cli.py, server.py (background jobs), web/ (three.js viewer), examples/
 tests/            solver, template, protocol and app tests
 docs/extending.md
+docs/brand/       logo, mark, icon, screenshots and the script that draws them
 examples/
 ```
 

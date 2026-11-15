@@ -1,4 +1,4 @@
-"""Local web app: describe a thing, watch it get designed and tested, refine it.
+"""Plimsoll web app: describe a thing, watch it get designed and tested, refine it.
 
 Pure standard library.  Binds to localhost by default.  The API key is read from
 the server's environment only; the page never sees it.  Static files are served
@@ -164,7 +164,7 @@ def api_example(name: str) -> dict:
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "CreateAnything"
+    server_version = "Plimsoll"
 
     def log_message(self, fmt, *args):   # quiet unless asked
         if os.environ.get("SIMULATE_ANYTHING_LOG"):
@@ -224,7 +224,7 @@ class Handler(BaseHTTPRequestHandler):
 def serve(host: str = "127.0.0.1", port: int = 8001) -> None:
     sa.load_all()
     httpd = ThreadingHTTPServer((host, port), Handler)
-    print(f"Create Anything is running at http://{host}:{port}  (Ctrl+C to stop)")
+    print(f"Plimsoll is running at http://{host}:{port}  (Ctrl+C to stop)")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

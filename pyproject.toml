@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "simulate-anything"
 version = "0.1.0"
-description = "Turn a physics problem into a simulation that checks itself"
+description = "Plimsoll: design anything and test it against the real world with simulations that check themselves"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Eddy Ma" }]
@@ -17,6 +17,7 @@ dev = ["pytest>=7"]
 
 [project.scripts]
 simulate-anything = "simulate_anything.cli:main"
+plimsoll = "create_anything.cli:main"
 create-anything = "create_anything.cli:main"
 
 [tool.setuptools.packages.find]

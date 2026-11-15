@@ -493,3 +493,75 @@ def test_server_accepts_only_json_posts(server):
     with pytest.raises(urllib.error.HTTPError) as exc:
         urllib.request.urlopen(req)
     assert exc.value.code == 415
+
+
+# -- load: how much of its limit a result uses ----------------------------------------
+from create_anything.scenarios import MAX_LOAD, load_of
+
+
+@pytest.mark.parametrize("value, limit, kind, base, expected", [
+    (4.0, 2.0, "min", 0.0, 0.5),          # safety factor 4 where 2 is required
+    (1.0, 2.0, "min", 0.0, 2.0),          # half the required safety factor: twice over
+    (285.0, 180.0, "min", 0.0, 180 / 285),
+    (2.0, 4.0, "max", 0.0, 0.5),
+    (70.0, 80.0, "max", 25.0, 45 / 55),   # a temperature rise, not 70/80
+    (20.0, 80.0, "max", 25.0, 0.0),       # below ambient: nothing used
+    (0.0, 2.0, "min", 0.0, None),         # no meaning
+    (5.0, 5.0, "max", 5.0, None),         # no allowance to measure against
+    (1e9, 1.0, "max", 0.0, MAX_LOAD),     # capped, always a finite JSON number
+])
+def test_load_of(value, limit, kind, base, expected):
+    got = load_of(value, limit, kind, base)
+    assert got == (None if expected is None else pytest.approx(expected))
+
+
+def test_design_load_is_its_most_loaded_test_and_json_safe():
+    report = ca.check(ca.load(ca.example_path("sensor_enclosure")))
+    ev = report["tests"]
+    fire = next(t for t in ev["tests"] if t["id"] == "fire")
+    m = fire["metrics"][0]
+    assert m["base"] == pytest.approx(25.0)
+    assert m["load"] == pytest.approx((m["value"] - 25) / (m["limit"] - 25))
+    assert ev["load"] == max(t["load"] for t in ev["tests"]) and ev["limiting"] == "fire"
+    json.dumps(report, allow_nan=False)
+
+
+def test_untrusted_tests_carry_no_load(monkeypatch):
+    from create_anything import scenarios
+    real = scenarios._run
+
+    def broken(name, params, verify):
+        res = real(name, params, verify)
+        res.report.checks[0].status = "fail"
+        return res
+    monkeypatch.setattr(scenarios, "_run", broken)
+    ev = evaluate(bar(type="load", force="5 N"), detail=False)
+    assert ev["tests"][0]["status"] == "unverified"
+    assert ev["tests"][0]["load"] is None and ev["load"] is None
+
+
+def test_optimiser_steps_show_the_load_falling_below_the_line():
+    out = optimise(ca.load(ca.example_path("shelf_bracket")))
+    fixes = [s for s in out["steps"] if s["kind"] == "fix"]
+    assert fixes[0]["load"][0] > 1 and fixes[-1]["load"][1] <= 1
+    assert all(s["load"][1] <= s["load"][0] for s in fixes)          # every fix helps
+    assert out["after"]["load"] <= 1
+
+
+def test_generic_temperature_load_uses_the_runs_ambient():
+    sc = dict(spreader()["scenarios"][0])
+    t = one(spreader())
+    assert t["metrics"][0]["base"] == pytest.approx(25.0)
+    assert any("rise above 25 degC" in n for n in t["notes"])
+    warm = spreader(params=dict(sc["params"], ambient_temperature="35 degC"))
+    t = one(warm)
+    assert t["metrics"][0]["base"] == pytest.approx(35.0)
+    assert not any("rise above 25" in n for n in t["notes"])
+    given = spreader(require=[{"qoi": "max_temperature", "max": "70 degC", "from": "40 degC"}])
+    assert one(given)["metrics"][0]["base"] == pytest.approx(40.0)
+
+
+def test_cli_reports_load(capsys):
+    assert cli.main(["check", str(ca.example_path("sensor_enclosure"))]) == 0
+    out = capsys.readouterr().out
+    assert "loaded to 73% of the load line (limit: fire)" in out

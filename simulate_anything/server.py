@@ -84,7 +84,7 @@ class Handler(BaseHTTPRequestHandler):
 def serve(host: str = "127.0.0.1", port: int = 8000) -> None:
     sa.load_all()
     httpd = ThreadingHTTPServer((host, port), Handler)
-    print(f"Simulate Anything is running at http://{host}:{port}  (Ctrl+C to stop)")
+    print(f"Plimsoll Lab is running at http://{host}:{port}  (Ctrl+C to stop)")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

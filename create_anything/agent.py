@@ -24,7 +24,7 @@ from .scenarios import DESCRIPTIONS, evaluate
 
 DEFAULT_MODEL = "claude-opus-5-5"
 
-SYSTEM = """You are Create Anything, a design engineer. People describe a physical thing \
+SYSTEM = """You are Plimsoll, a design engineer. People describe a physical thing \
 they want made - anything: a shelf bracket, a lamp, a drone arm, an enclosure, a bus bar, a \
 heat spreader, a pipe run, a CubeSat panel - and you turn it into a design document and \
 prove, with verified simulations, that it survives the real world it will live in.
@@ -47,7 +47,8 @@ physics matches, and bind its inputs to the part ("bind": {"thickness": "size.2"
 "conductivity": "material.conductivity"}) so the result depends on the design and the \
 optimiser can change it. Give every other input in "params" with units, and state the \
 requirement in "require" with units.
-4. Call check_design. Read every test and geometry issue. "error" means the scenario \
+4. Call check_design. Each test reports a load: the share of its allowance it uses, \
+where 100 % is exactly at the limit. Read every test and geometry issue. "error" means the scenario \
 does not fit the part or the simulation rejected the setup - read the message and fix \
 it. "unverified" means the simulation failed its own checks; do not trust that number.
 5. If tests fail, either change the design yourself (a better idea beats a thicker part) \
@@ -117,8 +118,8 @@ SHAPES_HELP = {
 
 
 def _brief_tests(ev: dict) -> list:
-    return [{k: t.get(k) for k in ("id", "type", "part", "status", "headline", "metrics",
-                                   "notes", "checks")} for t in ev["tests"]]
+    return [{k: t.get(k) for k in ("id", "type", "part", "status", "load", "headline",
+                                   "metrics", "notes", "checks")} for t in ev["tests"]]
 
 
 @dataclass

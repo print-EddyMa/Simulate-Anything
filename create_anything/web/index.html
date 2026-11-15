@@ -3,238 +3,409 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Create Anything</title>
+<title>Plimsoll</title>
+<meta name="description" content="Describe a physical thing. Plimsoll designs it, loads it with the real world in verified simulations, and shows how close it runs to its limits.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Cdefs%3E%3CclipPath id=%22c%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2215.2%22/%3E%3C/clipPath%3E%3ClinearGradient id=%22w%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%231aa1c9%22/%3E%3Cstop offset=%221%22 stop-color=%22%233464a0%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2264%22 height=%2264%22 rx=%2215%22 fill=%22%230b0e0e%22/%3E%3Cpath clip-path=%22url(%23c)%22 d=%22M10 38.6 C15.5 36.4 21 36.4 26.5 38.6 S37.5 40.8 43 38.6 S54 36.4 59.5 38.6 V54 H10 Z%22 fill=%22url(%23w)%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2217%22 fill=%22none%22 stroke=%22%23eeefe9%22 stroke-width=%224.2%22/%3E%3Cpath d=%22M9.5 32 H54.5%22 stroke=%22%23fe8c2c%22 stroke-width=%224.2%22 stroke-linecap=%22round%22/%3E%3C/svg%3E">
 <style>
+/* Plimsoll.  One object everywhere: the load ring, a ring with the load line through
+   it and water inside.  The water level and its colour are the load: how much of a
+   limit a result uses.  Colours mean load and nothing else; chrome stays neutral. */
+@property --mood { syntax: "<color>"; inherits: true; initial-value: #1aa1c9; }
 :root {
-  color-scheme: light;
-  --page: #f4f4f1; --surface: #fcfcfb; --sunken: #efeeea; --border: #e0dfd9;
-  --text: #0b0b0b; --text-2: #52514e; --text-3: #7d7c74; --grid: #e6e5df;
-  --accent: #2a78d6; --accent-ink: #ffffff;
-  --good: #0ca30c; --warning: #b07800; --critical: #d03b3b; --neutral: #a3a299;
-  --viewer: #eceae4;
+  color-scheme: dark;
+  /* graphite night */
+  --page: #0b0e0e; --surface: #131818; --surface-2: #1a2020;
+  --hair: rgba(238, 239, 233, 0.08); --hair-2: rgba(238, 239, 233, 0.15);
+  --text: #eeefe9; --text-2: #b6bdb8; --text-3: #7d8681;
+  --ring: #eeefe9; --edge: #eeefe9; --fog: #6f7773;
+  --bench: #0c151c; --grid: #78afdc;
+  --flute-hi: rgba(255, 255, 255, 0.045); --flute-lo: rgba(0, 0, 0, 0.12);
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.035) inset, 0 22px 44px -26px rgba(0, 0, 0, 0.85),
+            0 4px 14px -8px rgba(0, 0, 0, 0.55);
+  --grain: 0.075;
+  /* the load scale: deep sea (0) - ocean - glacier - sand - signal (the line) - ember - crimson (2x) */
+  --sea: #3464a0; --ocean: #1aa1c9; --glacier: #5fceb3; --sand: #e5c95e;
+  --signal: #fe8c2c; --ember: #f05136; --crimson: #d31e43;
+  --scale: linear-gradient(90deg, #3464a0 0%, #1aa1c9 33.3%, #5fceb3 50%, #e5c95e 60%,
+           #fe8c2c 66.7%, #f05136 83.3%, #d31e43 100%);
+  --mood: #1aa1c9;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-num: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, sans-serif;
+  transition: --mood 1.4s ease;
 }
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    color-scheme: dark;
-    --page: #121211; --surface: #1a1a19; --sunken: #232321; --border: #34342f;
-    --text: #f0efec; --text-2: #c3c2b7; --text-3: #8f8e85; --grid: #2b2b28;
-    --accent: #3987e5; --accent-ink: #0b0b0b;
-    --good: #2fbf2f; --warning: #e0a526; --critical: #e66767; --neutral: #6f6e66;
-    --viewer: #1e1e1c;
+    color-scheme: light;
+    /* drafting vellum */
+    --page: #f0ede4; --surface: #fbfaf6; --surface-2: #f3f1eb;
+    --hair: rgba(18, 23, 26, 0.09); --hair-2: rgba(18, 23, 26, 0.17);
+    --text: #12171a; --text-2: #4b5357; --text-3: #7b8387;
+    --ring: #12171a; --edge: #12171a; --fog: #a3a8a6;
+    --bench: #e7ecef; --grid: #285f96;
+    --flute-hi: rgba(255, 255, 255, 0.5); --flute-lo: rgba(18, 23, 26, 0.035);
+    --shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 22px 44px -28px rgba(60, 50, 30, 0.4),
+              0 3px 10px -6px rgba(60, 50, 30, 0.22);
+    --grain: 0.11;
   }
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
-body { background: var(--page); color: var(--text);
-  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+body {
+  min-height: 100vh; color: var(--text); background-color: var(--page);
+  background-image:
+    radial-gradient(1000px 640px at 88% -12%, color-mix(in oklab, var(--mood) 20%, transparent), transparent 70%),
+    radial-gradient(760px 560px at -12% 112%, color-mix(in oklab, var(--mood) 12%, transparent), transparent 70%),
+    var(--speckle, none);
+  background-attachment: fixed;
+  font: 14px/1.5 var(--font); -webkit-font-smoothing: antialiased;
+}
+/* grainy finish over everything */
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: var(--grain);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+#land { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.55) 55%, rgba(0, 0, 0, 0.25) 100%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.55) 55%, rgba(0, 0, 0, 0.25) 100%); }
 button, input, select, textarea { font: inherit; color: inherit; }
-header { display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-  padding: 12px 20px; border-bottom: 1px solid var(--border); background: var(--surface); }
-.brand { font-weight: 700; font-size: 16px; letter-spacing: -.01em; }
-.tagline { color: var(--text-3); font-size: 12px; }
-header .spacer { flex: 1; }
-main { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 18px;
-  padding: 18px 20px 60px; max-width: 1500px; margin: 0 auto; }
-main.start { grid-template-columns: minmax(0, 1fr); max-width: 860px; }
-@media (max-width: 900px) { main { grid-template-columns: minmax(0, 1fr); padding: 14px 16px 40px; } }
-.col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-  padding: 16px; min-width: 0; }
-h1 { font-size: 20px; margin: 0 0 2px; letter-spacing: -.015em; }
-h2 { font-size: 12px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: .06em;
-  color: var(--text-3); font-weight: 600; }
-.lead { color: var(--text-2); margin: 0; }
-.btn { border: 1px solid var(--border); background: var(--surface); padding: 7px 13px;
-  border-radius: 8px; cursor: pointer; white-space: nowrap; }
-.btn.primary { background: var(--accent); border-color: var(--accent);
-  color: var(--accent-ink); font-weight: 600; }
-.btn:disabled { opacity: .5; cursor: default; }
-select, input[type=text] { padding: 6px 9px; border: 1px solid var(--border);
-  border-radius: 7px; background: var(--page); }
-.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.hint { color: var(--text-3); font-size: 12px; }
-#viewer { position: relative; height: 440px; border-radius: 12px; overflow: hidden;
-  background: var(--viewer); border: 1px solid var(--border); }
-#viewer canvas { display: block; }
-#viewer .overlay { position: absolute; left: 10px; bottom: 8px; font-size: 12px;
-  color: var(--text-3); pointer-events: none; }
-#viewer .legend { position: absolute; right: 10px; top: 8px; display: flex; gap: 10px;
-  font-size: 12px; color: var(--text-2); }
-.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%;
-  margin-right: 4px; vertical-align: -1px; }
-@media (max-width: 900px) { #viewer { height: 320px; } }
-.verdict { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.verdict .big { font-size: 18px; font-weight: 700; }
-.pass { color: var(--good); } .fail { color: var(--critical); }
-.unverified, .error, .warn { color: var(--warning); }
-.test { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
-  margin-top: 10px; cursor: pointer; background: var(--page); }
-.test[aria-pressed="true"] { border-color: var(--accent); }
-.test .top { display: flex; gap: 8px; align-items: baseline; }
-.test .badge { font-size: 11px; font-weight: 700; letter-spacing: .05em; min-width: 82px; }
-.test .title { font-weight: 600; }
-.test .head { color: var(--text-2); margin-top: 3px; }
-.meter { margin-top: 8px; }
-.meter .lab { display: flex; justify-content: space-between; font-size: 12px;
-  color: var(--text-2); gap: 8px; }
-.bar { position: relative; height: 6px; border-radius: 3px; background: var(--sunken);
-  margin-top: 3px; overflow: hidden; }
-.bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
-.bar b { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--text-2); }
-.note { font-size: 12px; color: var(--text-3); margin-top: 4px; }
-.checks { font-size: 12px; color: var(--text-3); margin-top: 6px; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { text-align: left; font-weight: 600; color: var(--text-3); font-size: 12px;
-  border-bottom: 1px solid var(--border); padding: 5px 6px; }
-td { border-bottom: 1px solid var(--grid); padding: 5px 6px; vertical-align: top; }
-td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
-tr.sel td { background: var(--sunken); }
-#parts td:first-child { min-width: 130px; }
-.table-wrap { overflow-x: auto; }
-ol { margin: 0; padding-left: 20px; color: var(--text-2); }
-ol li { margin: 3px 0; }
-textarea#json { width: 100%; min-height: 260px; padding: 10px; border: 1px solid var(--border);
-  border-radius: 8px; background: var(--page);
-  font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; resize: vertical; }
-.tabs { display: flex; gap: 4px; margin-bottom: 10px; }
-.tab { border: 0; background: none; padding: 5px 10px; border-radius: 6px; cursor: pointer;
-  color: var(--text-2); }
-.tab[aria-selected="true"] { background: var(--sunken); color: var(--text); font-weight: 600; }
-.issue { color: var(--warning); font-size: 13px; margin: 4px 0; }
-.step { padding: 6px 0; border-bottom: 1px solid var(--grid); }
-.step:last-child { border-bottom: 0; }
-.step .kind { font-size: 11px; font-weight: 700; letter-spacing: .05em; color: var(--text-3);
-  margin-right: 6px; }
-.step .why { font-size: 12px; color: var(--text-3); }
-.error-box { color: var(--critical); white-space: pre-wrap; }
-.md { color: var(--text-2); }
-.md h3, .md h4 { font-size: 14px; color: var(--text); margin: 14px 0 6px; }
-.md p { margin: 6px 0; }
-.md ul, .md ol { margin: 4px 0; padding-left: 20px; }
-.md li { margin: 2px 0; }
-.md table { margin: 6px 0; }
-.md code { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--sunken);
-  padding: 1px 4px; border-radius: 4px; }
-.md strong { color: var(--text); }
-.busy { color: var(--text-3); font-size: 13px; }
-#ask input { flex: 1; min-width: 0; }
-#ask textarea { width: 100%; min-height: 64px; padding: 10px 12px; border: 1px solid var(--border);
-  border-radius: 8px; background: var(--page); resize: vertical; }
-#ask .row { margin-top: 8px; }
-.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-.seg label { padding: 5px 10px; cursor: pointer; color: var(--text-2); font-size: 13px; }
-.seg input { position: absolute; opacity: 0; pointer-events: none; }
-.seg label:has(input:checked) { background: var(--sunken); color: var(--text); font-weight: 600; }
-#log { list-style: none; margin: 0; padding: 0; font-size: 13px; color: var(--text-2);
-  max-height: 260px; overflow-y: auto; }
-#log li { padding: 3px 0; display: flex; gap: 8px; }
-#log .t { color: var(--text-3); font-variant-numeric: tabular-nums; min-width: 42px; }
-#log button.cand { border: 0; background: none; padding: 0; cursor: pointer; text-align: left;
-  text-decoration: underline dotted; text-underline-offset: 3px; }
-#log li.viewing button.cand { text-decoration-style: solid; font-weight: 600; }
-.empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 10px; color: var(--text-3); text-align: center; padding: 20px; }
-.linkish { border: 0; background: none; color: var(--accent); cursor: pointer; padding: 0; }
+:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; border-radius: 6px; }
 [hidden] { display: none !important; }
+
+/* fluted-glass bar */
+.bar {
+  position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 10px;
+  flex-wrap: wrap; padding: 12px 22px; border-bottom: 1px solid var(--hair);
+  background:
+    repeating-linear-gradient(90deg, var(--flute-hi) 0 1px, transparent 1px 6px, var(--flute-lo) 6px 7px, transparent 7px 11px),
+    color-mix(in oklab, var(--page) 60%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3); backdrop-filter: blur(18px) saturate(1.3);
+}
+.brand { display: inline-flex; color: var(--text); text-decoration: none; }
+.brand svg { height: 26px; width: auto; display: block; }
+.crumb { color: var(--text-3); font-size: 13px; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; max-width: 40vw; }
+.crumb:not(:empty)::before { content: "/"; margin: 0 10px 0 4px; opacity: 0.5; }
+.spacer { flex: 1; }
+.btn { border: 1px solid var(--hair-2); background: transparent; padding: 7px 14px;
+  border-radius: 999px; cursor: pointer; white-space: nowrap; color: var(--text);
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s; }
+.btn:hover:not(:disabled) { background: var(--hair); }
+.btn.primary { background: var(--text); color: var(--page); border-color: var(--text); font-weight: 600; }
+.btn.primary:hover:not(:disabled) { background: color-mix(in oklab, var(--text) 86%, var(--page)); }
+.btn:disabled { opacity: 0.38; cursor: default; }
+
+main { position: relative; z-index: 1; padding: 22px 22px 80px; max-width: 1480px; margin: 0 auto; }
+main.start { max-width: 860px; }
+.card { position: relative; background: color-mix(in oklab, var(--surface) 88%, transparent);
+  border: 1px solid var(--hair); border-radius: 20px; padding: 18px; box-shadow: var(--shadow);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); min-width: 0; }
+h1 { font: 650 22px/1.2 var(--font); letter-spacing: -0.02em; margin: 0; }
+h2 { font-size: 11px; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.09em;
+  color: var(--text-3); font-weight: 650; }
+.hint { color: var(--text-3); font-size: 12.5px; }
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+/* the load ring */
+.ring { display: block; overflow: visible; }
+.ring .rim { stroke: var(--ring); opacity: 0.92; }
+.ring .line { stroke: var(--signal); }
+.ring.error .line, .ring.unverified .line { opacity: 0.55; }
+.ring .slosh { animation: slosh 3.4s linear infinite; }
+body.working .ring .slosh { animation-duration: 1.3s; }
+@keyframes slosh { to { transform: translateX(-25px); } }
+
+/* welcome */
+.welcome { text-align: center; padding: 34px 10px 26px; }
+.welcome .ringwrap { width: 168px; height: 168px; margin: 0 auto 22px; position: relative; }
+.welcome h1 { font-size: clamp(28px, 4.4vw, 40px); letter-spacing: -0.03em; }
+.welcome p { color: var(--text-2); max-width: 54ch; margin: 10px auto 0; font-size: 15.5px; }
+.legend-chips { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+.chip { display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 6px;
+  border: 1px solid var(--hair); border-radius: 999px; font-size: 12.5px; color: var(--text-2);
+  background: color-mix(in oklab, var(--surface) 70%, transparent); }
+.chip .ring { width: 20px; height: 20px; }
+
+/* prompt */
+#ask textarea { width: 100%; min-height: 70px; padding: 12px 14px; border: 1px solid var(--hair-2);
+  border-radius: 14px; background: color-mix(in oklab, var(--page) 70%, transparent); resize: vertical;
+  font-size: 15px; line-height: 1.45; }
+#ask textarea::placeholder { color: var(--text-3); }
+.ask-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+.seg { display: inline-flex; border: 1px solid var(--hair-2); border-radius: 999px; padding: 2px; }
+.seg label { padding: 4px 12px; cursor: pointer; color: var(--text-2); font-size: 13px; border-radius: 999px; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label:has(input:checked) { background: var(--hair-2); color: var(--text); font-weight: 600; }
+.examples { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.examples button { border: 1px dashed var(--hair-2); background: none; color: var(--text-2);
+  padding: 4px 11px; border-radius: 999px; cursor: pointer; font-size: 12.5px; }
+.examples button:hover { color: var(--text); border-style: solid; }
+
+/* voyage: where the designer is, what each version weighed against the line */
+.voyage-head { display: flex; align-items: baseline; gap: 12px; }
+.voyage-head h2 { margin: 0; }
+.clock { margin-left: auto; color: var(--text-3); }
+.track { position: relative; height: 54px; margin: 16px 12px 4px; }
+.rail { position: absolute; left: 0; right: 0; top: 13px; height: 3px; border-radius: 3px; background: var(--hair-2); }
+.rail i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; width: 0;
+  background: var(--text-3); transition: width 0.9s cubic-bezier(.3, .7, .2, 1), background 0.9s; }
+.stops { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
+.stops li { position: absolute; top: 0; transform: translateX(-50%); text-align: center;
+  font-size: 11.5px; color: var(--text-3); white-space: nowrap; }
+.stops li::before { content: ""; display: block; width: 9px; height: 9px; margin: 10px auto 8px;
+  border-radius: 50%; background: var(--page); border: 2px solid var(--hair-2); }
+.stops li.done { color: var(--text-2); }
+.stops li.done::before { border-color: var(--text-2); background: var(--text-2); }
+.stops li.now { color: var(--text); font-weight: 600; }
+.traveler { position: absolute; top: -1px; width: 30px; height: 30px; transform: translateX(-50%);
+  transition: left 0.9s cubic-bezier(.3, .7, .2, 1); filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35)); }
+.voyage-line { color: var(--text-2); margin: 6px 0 2px; min-height: 21px; }
+.trend { width: 100%; height: 78px; display: block; margin-top: 8px; overflow: visible; }
+.trend .pt { cursor: pointer; }
+.trend .pt:hover circle { stroke: var(--text); }
+details.steps { margin-top: 10px; }
+details.steps summary { cursor: pointer; color: var(--text-3); font-size: 12.5px; }
+#log { list-style: none; margin: 8px 0 0; padding: 0; font-size: 13px; color: var(--text-2);
+  max-height: 240px; overflow-y: auto; }
+#log li { padding: 3px 0; display: flex; gap: 10px; align-items: baseline; }
+#log .t { color: var(--text-3); min-width: 40px; }
+#log .cand { border: 0; background: none; padding: 0; color: inherit; cursor: pointer; text-align: left;
+  text-decoration: underline dotted; text-underline-offset: 3px; }
+#log li.viewing .cand { text-decoration-style: solid; color: var(--text); }
+#log .warn { color: var(--sand); }
+
+/* the work: hero, bench, details | tests, optimiser, report */
+.work { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 18px; margin-top: 18px; }
+.col { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+@media (max-width: 980px) {
+  .work { grid-template-columns: minmax(0, 1fr); }
+  main { padding: 16px 16px 60px; }
+}
+.hero-top { display: flex; gap: 22px; align-items: center; }
+.hero-ring { position: relative; width: 124px; height: 124px; flex: none; }
+.ripple { position: absolute; inset: 6%; border-radius: 50%; border: 2px solid; pointer-events: none;
+  animation: ripple 1.7s cubic-bezier(.2, .6, .3, 1) forwards; }
+@keyframes ripple { from { transform: scale(0.92); opacity: 0.75; } to { transform: scale(2.2); opacity: 0; } }
+.hero-num { font: 600 54px/1 var(--font-num); letter-spacing: -0.04em; font-variant-numeric: tabular-nums;
+  transition: color 1s; }
+.hero-num small { font-size: 22px; letter-spacing: 0; margin-left: 2px; opacity: 0.8; }
+.hero-band { font-weight: 650; margin-top: 6px; transition: color 1s; }
+.hero-sub { color: var(--text-2); margin-top: 2px; }
+.hero-design { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--hair); }
+.hero-design p { color: var(--text-2); margin: 4px 0 0; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 10px;
+  margin: 14px 0 0; padding-top: 14px; border-top: 1px solid var(--hair); }
+.stats div { min-width: 0; }
+.stats dt { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); }
+.stats dd { margin: 2px 0 0; font: 600 19px/1.2 var(--font-num); font-variant-numeric: tabular-nums; }
+
+/* blueprint bench */
+.bench { position: relative; height: 470px; border-radius: 20px; overflow: hidden;
+  border: 1px solid var(--hair); background: var(--bench); box-shadow: var(--shadow); }
+.bench canvas { display: block; }
+.bench .scale { position: absolute; left: 14px; bottom: 12px; width: 190px; font-size: 11px;
+  color: var(--text-3); pointer-events: none; }
+.bench .scale .bar { height: 6px; border-radius: 3px; background: var(--scale); position: relative; margin: 4px 0 3px; }
+.bench .scale .bar b { position: absolute; left: 66.7%; top: -4px; bottom: -4px; width: 2px;
+  background: var(--text); border-radius: 1px; }
+.bench .scale .labels { display: flex; justify-content: space-between; }
+.bench .hint { position: absolute; right: 14px; bottom: 12px; pointer-events: none; font-size: 11.5px; }
+.tip { position: absolute; pointer-events: none; z-index: 2; padding: 7px 10px; border-radius: 10px;
+  background: color-mix(in oklab, var(--surface) 92%, transparent); border: 1px solid var(--hair-2);
+  font-size: 12.5px; box-shadow: var(--shadow); transform: translate(12px, 12px); white-space: nowrap; }
+.tip b { font-weight: 650; }
+@media (max-width: 980px) { .bench { height: 340px; } }
+
+/* tests */
+.verdict-line { color: var(--text-2); margin: -4px 0 6px; }
+.test { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; padding: 12px;
+  margin-top: 8px; border-radius: 16px; border: 1px solid var(--hair); cursor: pointer;
+  background: color-mix(in oklab, var(--page) 35%, transparent); transition: opacity 0.25s, border-color 0.25s; }
+.test:hover { border-color: var(--hair-2); }
+.test[aria-pressed="true"] { border-color: var(--text-2); }
+.test.dim { opacity: 0.42; }
+.t-top { display: flex; gap: 10px; align-items: baseline; }
+.t-title { font-weight: 650; flex: 1; min-width: 0; }
+.t-num { font: 600 21px/1 var(--font-num); font-variant-numeric: tabular-nums; }
+.t-num small { font-size: 12px; margin-left: 1px; }
+.t-sub { font-size: 12.5px; color: var(--text-3); margin-top: 1px; }
+.t-head { color: var(--text-2); margin-top: 6px; font-size: 13.5px; }
+.m { margin-top: 9px; }
+.m-lab { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--text-2); }
+.m-val { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.m-lim { color: var(--text-3); }
+.m-bar { position: relative; height: 5px; border-radius: 3px; background: var(--hair-2); margin-top: 5px; }
+.m-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; transition: width 0.8s, background 0.8s; }
+.m-bar b { position: absolute; left: 66.667%; top: -4px; bottom: -4px; width: 2px; border-radius: 1px; background: var(--signal); }
+.m-bar em { position: absolute; right: -2px; top: -7px; font-style: normal; font-size: 11px; color: var(--crimson); }
+.note { font-size: 12px; color: var(--text-3); margin-top: 5px; }
+.checks { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+.issue { color: var(--sand); font-size: 13px; margin: 8px 0 0; }
+.status-word { font-weight: 650; }
+
+/* parts, assembly, JSON */
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+.tab { border: 0; background: none; padding: 5px 12px; border-radius: 999px; cursor: pointer; color: var(--text-2); }
+.tab[aria-selected="true"] { background: var(--hair-2); color: var(--text); font-weight: 600; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; font-weight: 600; color: var(--text-3); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.07em; border-bottom: 1px solid var(--hair); padding: 6px; }
+td { border-bottom: 1px solid var(--hair); padding: 8px 6px; vertical-align: top; }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+#parts td:first-child { min-width: 150px; }
+#parts tr.sel td { background: var(--hair); }
+#parts .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px;
+  vertical-align: -1px; }
+td select { padding: 4px 8px; border: 1px solid var(--hair-2); border-radius: 8px;
+  background: color-mix(in oklab, var(--page) 70%, transparent); max-width: 170px; }
+.table-wrap { overflow-x: auto; }
+ol.assembly { margin: 0; padding-left: 20px; color: var(--text-2); }
+ol.assembly li { margin: 5px 0; }
+textarea#json { width: 100%; min-height: 280px; padding: 12px; border: 1px solid var(--hair-2);
+  border-radius: 12px; background: color-mix(in oklab, var(--page) 70%, transparent);
+  font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; resize: vertical; }
+
+/* optimiser and report */
+.step { padding: 8px 0; border-bottom: 1px solid var(--hair); display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; }
+.step:last-child { border-bottom: 0; }
+.step .kind { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; color: var(--text-3); }
+.step .why { font-size: 12px; color: var(--text-3); }
+.step .ld { font-size: 12.5px; white-space: nowrap; }
+.md { color: var(--text-2); }
+.md h3 { font-size: 14px; color: var(--text); margin: 16px 0 6px; }
+.md p { margin: 7px 0; }
+.md ul, .md ol { margin: 4px 0; padding-left: 20px; }
+.md li { margin: 3px 0; }
+.md table { margin: 8px 0; }
+.md code { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--hair);
+  padding: 1px 5px; border-radius: 5px; }
+.md strong { color: var(--text); }
+.error-box { color: var(--ember); white-space: pre-wrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ring .slosh, .ripple { animation: none !important; }
+  .rail i, .traveler, .m-bar i { transition: none !important; }
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "/vendor/three.module.min.js" } }
 </script>
 </head>
 <body>
-<header>
-  <div>
-    <div class="brand">Create Anything</div>
-    <div class="tagline">Design a thing, then prove it survives the real world</div>
-  </div>
+<canvas id="land" aria-hidden="true"></canvas>
+<header class="bar">
+  <a class="brand" href="/" aria-label="Plimsoll, start again">
+    <svg viewBox="-4 6 174.8 56" role="img" aria-label="plimsoll"><g fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 35 V56.5"/><circle cx="12" cy="35" r="9"/><path d="M32 13 V44"/><path d="M42.5 27.5 V44"/><circle cx="42.5" cy="17.2" r="3.3" fill="currentColor" stroke="none"/><path d="M53 33.6 V44 M53 33.6 a7.2 7.2 0 0 1 14.4 0 V44 M67.4 33.6 a7.2 7.2 0 0 1 14.4 0 V44"/><path d="M105.5 29.6 C103.9 26.4 94.7 25.6 93.5 30.6 C92.5 34.9 105.9 33.8 106 39.1 C106.1 44.6 95.5 45.2 92.9 40.6"/><circle cx="131.3" cy="35" r="9"/><path d="M117.3 35 H145.3" stroke="#fe8c2c"/><path d="M156.3 13 V44"/><path d="M166.8 13 V44"/></g></svg>
+  </a>
+  <span class="crumb" id="crumb"></span>
   <div class="spacer"></div>
   <button class="btn" id="check" disabled>Run tests</button>
   <button class="btn" id="optimise" disabled>Optimise</button>
-  <button class="btn" id="download" disabled>Download JSON</button>
+  <button class="btn" id="download" disabled>Download</button>
 </header>
 
-<main>
-  <div class="col">
-    <section class="card" id="ask">
-      <h2>What do you want to make?</h2>
-      <form id="ask-form">
-        <textarea id="ask-input" aria-label="Describe what to make"
-          placeholder="Anything physical: a bracket that holds a 5 kg speaker 20 cm off the wall, a heat sink for a 30 W motor driver, a drone arm that survives a 2 m fall, a copper bus bar for 200 A..."></textarea>
-        <div class="row">
-          <span class="seg" id="mode" hidden>
-            <label><input type="radio" name="mode" value="change" checked>Change this design</label>
-            <label><input type="radio" name="mode" value="new">New design</label>
-          </span>
-          <div class="spacer" style="flex:1"></div>
-          <button class="btn primary" type="submit" id="ask-go">Design it</button>
-        </div>
-      </form>
-      <div class="hint" id="ask-hint">The model writes the design and its tests; every number
-        comes from verified simulations.</div>
-    </section>
+<main id="main" class="start">
+  <section class="welcome" id="welcome">
+    <div class="ringwrap" id="welcome-ring"></div>
+    <h1>Every design gets a load line.</h1>
+    <p>Describe something physical. Plimsoll designs it, loads it with the real world in
+      verified simulations, and shows how close it runs to its limits.</p>
+    <div class="legend-chips" id="legend"></div>
+  </section>
 
-    <section class="card" id="activity" hidden>
-      <h2 id="activity-title">Working</h2>
-      <ul id="log"></ul>
-    </section>
+  <section class="card" id="ask">
+    <h2 id="ask-title">What do you want to make?</h2>
+    <form id="ask-form">
+      <textarea id="ask-input" aria-label="Describe what to make"
+        placeholder="A bracket that holds a 5 kg speaker 20 cm off the wall, a heat sink for a 30 W motor driver, a drone arm that survives a 2 m fall, a bus bar for 200 A…"></textarea>
+      <div class="ask-row">
+        <span class="seg" id="mode" hidden>
+          <label><input type="radio" name="mode" value="change" checked>Change this design</label>
+          <label><input type="radio" name="mode" value="new">New design</label>
+        </span>
+        <span class="hint" id="ask-hint">The model writes the design; every number comes from
+          a verified simulation.</span>
+        <div class="spacer"></div>
+        <button class="btn primary" type="submit" id="ask-go">Design it</button>
+      </div>
+    </form>
+    <div class="examples" id="examples"></div>
+  </section>
 
-    <section>
-      <div class="row" style="justify-content: space-between; margin-bottom: 8px;">
-        <div>
-          <h1 id="name">No design yet</h1>
-          <p class="lead" id="description"></p>
-        </div>
-      </div>
-      <div id="viewer">
-        <div class="empty" id="empty">
-          <div>Describe something above and the design appears here as it is tested.</div>
-          <div>Or open an example: <span id="examples"></span></div>
-        </div>
-        <div class="legend">
-          <span><span class="dot" style="background: var(--good)"></span>passes</span>
-          <span><span class="dot" style="background: var(--critical)"></span>fails</span>
-          <span><span class="dot" style="background: var(--neutral)"></span>untested</span>
-        </div>
-        <div class="overlay">Drag to rotate, scroll to zoom, right-drag to pan. Dimensions in mm.</div>
-      </div>
-    </section>
+  <section class="card" id="voyage" hidden style="margin-top:18px">
+    <div class="voyage-head"><h2 id="voyage-title">Designing</h2><span class="clock num" id="clock">0:00</span></div>
+    <div class="track" id="track">
+      <div class="rail"><i id="rail-fill"></i></div>
+      <ol class="stops" id="stops"></ol>
+      <div class="traveler" id="traveler"></div>
+    </div>
+    <div class="voyage-line" id="voyage-line"></div>
+    <svg class="trend" id="trend" role="img" aria-label="Load of each version against the load line"></svg>
+    <details class="steps" id="steps"><summary>Every step</summary><ul id="log"></ul></details>
+  </section>
 
-    <section class="card" id="details" hidden>
-      <div class="tabs" role="tablist">
-        <button class="tab" role="tab" aria-selected="true" data-tab="parts">Parts</button>
-        <button class="tab" role="tab" aria-selected="false" data-tab="assembly">Assembly</button>
-        <button class="tab" role="tab" aria-selected="false" data-tab="edit">Edit JSON</button>
-      </div>
-      <div data-panel="parts">
-        <div class="table-wrap"><table id="parts"></table></div>
-        <div class="hint" id="totals" style="margin-top: 8px;"></div>
-      </div>
-      <div data-panel="assembly" hidden><ol id="assembly"></ol></div>
-      <div data-panel="edit" hidden>
-        <textarea id="json" spellcheck="false" aria-label="Design JSON"></textarea>
-        <div class="row" style="margin-top: 8px;">
-          <button class="btn" id="apply">Apply and run tests</button>
-          <span class="hint">Millimetres, z up, position is the centre of each part's bounding box.</span>
+  <div class="work" id="work" hidden>
+    <div class="col">
+      <section class="card" id="hero" aria-live="polite">
+        <div class="hero-top">
+          <div class="hero-ring" id="hero-ring"></div>
+          <div>
+            <div class="hero-num" id="hero-num"><span id="load-num" class="num">–</span><small>%</small></div>
+            <div class="hero-band" id="hero-band"></div>
+            <div class="hero-sub" id="hero-sub"></div>
+          </div>
         </div>
-      </div>
-    </section>
-  </div>
+        <div class="hero-design"><h1 id="name"></h1><p id="description"></p></div>
+        <dl class="stats" id="stats"></dl>
+      </section>
 
-  <div class="col">
-    <section class="card" id="results" hidden>
-      <h2>Real-world tests</h2>
-      <div id="verdict" class="verdict"></div>
-      <div id="tests"></div>
-      <div id="issues" style="margin-top: 10px;"></div>
-    </section>
-    <section class="card" id="report-card" hidden>
-      <h2>Designer's report</h2>
-      <div class="md" id="answer"></div>
-    </section>
-    <section class="card" id="opt-card" hidden>
-      <h2>Optimisation</h2>
-      <div id="opt"></div>
-    </section>
+      <section class="bench" id="viewer" aria-label="3D view of the design">
+        <div class="tip" id="tip" hidden></div>
+        <div class="scale" aria-hidden="true">Load
+          <div class="bar"><b></b></div>
+          <div class="labels"><span>0</span><span style="margin-left:22%">the line</span><span>2×</span></div>
+        </div>
+        <div class="hint">Drag to turn · scroll to zoom · click a part</div>
+      </section>
+
+      <section class="card" id="details">
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" aria-selected="true" data-tab="parts">Parts</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="assembly">Assembly</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="edit">Edit JSON</button>
+        </div>
+        <div data-panel="parts">
+          <div class="table-wrap"><table id="parts"></table></div>
+          <div class="hint" id="totals" style="margin-top:10px"></div>
+        </div>
+        <div data-panel="assembly" hidden><ol class="assembly" id="assembly"></ol></div>
+        <div data-panel="edit" hidden>
+          <textarea id="json" spellcheck="false" aria-label="Design JSON"></textarea>
+          <div class="ask-row">
+            <button class="btn" id="apply">Apply and run tests</button>
+            <span class="hint">Millimetres, z up; position is the centre of each part's bounding box.</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="card" id="results">
+        <h2>Real-world tests</h2>
+        <div class="verdict-line" id="verdict"></div>
+        <div id="tests"></div>
+        <div id="issues"></div>
+      </section>
+      <section class="card" id="opt-card" hidden>
+        <h2>Optimisation</h2>
+        <div id="opt"></div>
+      </section>
+      <section class="card" id="report-card" hidden>
+        <h2>Designer's report</h2>
+        <div class="md" id="answer"></div>
+      </section>
+    </div>
   </div>
 </main>
 
@@ -249,52 +420,255 @@ const fmt = (v) => Math.abs(v) >= 1000 || (Math.abs(v) < 0.01 && v !== 0)
   ? v.toPrecision(3) : (+v.toPrecision(3)).toString();
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const light = () => matchMedia("(prefers-color-scheme: light)").matches;
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-let info = null, design = null, report = null, selected = null, busy = false;
+let info = null, design = null, report = null, busy = false;
+let sel = { part: null, test: null };
 
 async function api(path, body) {
   const res = await fetch(path, body === undefined ? {} : {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body) });
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || res.statusText);
   return data;
 }
-
-// Poll a background job, handing each new event to onEvent; resolves with its result.
-async function follow(jobId, onEvent) {
+async function follow(jobId, onEvent) {          // poll a background job until it is done
   let since = 0;
   for (;;) {
     const j = await api(`/api/job/${jobId}?since=${since}`);
     for (const e of j.events) onEvent(e);
     since = j.next;
-    if (j.done) {
-      if (j.error) throw new Error(j.error);
-      return j.result;
-    }
-    await sleep(700);
+    if (j.done) { if (j.error) throw new Error(j.error); return j.result; }
+    await sleep(650);
   }
 }
 
-// -- 3D viewer -------------------------------------------------------------------
+// -- the load scale: one meaning for colour everywhere ------------------------------
+// load = share of a limit used.  0 deep sea, 0.5 ocean, 0.75 glacier, 0.9 sand,
+// 1 signal (the load line), 1.25 ember, 2 crimson.  Interpolated in OKLCH.
+const STOPS = [[0, .50, .11, 255], [.5, .66, .12, 225], [.75, .78, .11, 175], [.9, .84, .13, 95],
+               [1, .75, .17, 55], [1.25, .65, .20, 32], [2, .56, .21, 18]];
+function oklch(L, C, H) {
+  const a = C * Math.cos(H * Math.PI / 180), b = C * Math.sin(H * Math.PI / 180);
+  const l = (L + .3963377774 * a + .2158037573 * b) ** 3, m = (L - .1055613458 * a - .0638541728 * b) ** 3,
+        s = (L - .0894841775 * a - 1.2914855480 * b) ** 3;
+  const rgb = [4.0767416621 * l - 3.3077115913 * m + .2309699292 * s,
+               -1.2684380046 * l + 2.6097574011 * m - .3413193965 * s,
+               -.0041960863 * l - .7034186147 * m + 1.7076147010 * s];
+  return "#" + rgb.map((x) => {
+    x = Math.min(1, Math.max(0, x));
+    x = x <= .0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - .055;
+    return Math.round(x * 255).toString(16).padStart(2, "0");
+  }).join("");
+}
+function lch(load) {
+  const x = Math.min(2, Math.max(0, load));
+  for (let i = 1; i < STOPS.length; i++) {
+    if (x <= STOPS[i][0]) {
+      const [x0, l0, c0, h0] = STOPS[i - 1], [x1, l1, c1, h1] = STOPS[i], k = (x - x0) / (x1 - x0);
+      return [l0 + (l1 - l0) * k, c0 + (c1 - c0) * k, h0 + (h1 - h0) * k];
+    }
+  }
+  return STOPS.at(-1).slice(1);
+}
+const loadColor = (load) => load == null ? css("--fog") : oklch(...lch(load));
+function loadInk(load) {                          // readable as text on this theme
+  if (load == null) return css("--text-3");
+  const [L, C, H] = lch(load);
+  return oklch(light() ? Math.min(L, .55) : Math.max(L, .76), C, H);
+}
+function band(load) {
+  if (load == null) return "No trusted number";
+  return load <= .5 ? "Ample margin" : load <= .8 ? "Comfortable" : load <= 1 ? "Close to the line" : "Over the line";
+}
+const pct = (load) => load == null ? "–" : load * 100 >= 999.5 ? ">999" : String(Math.round(load * 100));
+// units as people write them: degC -> °C, m^2 -> m², W/(m*K) -> W/(m·K)
+const nice = (t) => String(t ?? "").replace(/degC/g, "°C").replace(/degF/g, "°F").replace(/\^2/g, "²")
+  .replace(/\^3/g, "³").replace(/(\w)\*(\w)/g, "$1·$2");
+
+// -- the one object: the load ring --------------------------------------------------
+let uid = 0;
+const WAVE = (() => {
+  let d = "M-100 0";
+  for (let x = -100; x < 150; x += 25) d += ` Q${x + 6.25} -3.4 ${x + 12.5} 0 Q${x + 18.75} 3.4 ${x + 25} 0`;
+  return d + " V120 H-100 Z";
+})();
+function ring(load, { size = 40, state = null, wave = true, label = "" } = {}) {
+  const id = "rg" + (++uid);
+  state = state || (load == null ? "empty" : load > 1 ? "fail" : "pass");
+  const x = load == null ? 0.55 : Math.max(0, Math.min(load, 2));
+  const top = 90.5 - (x / 2) * 81;               // inner circle y 9.5..90.5; the line is y = 50
+  const col = load == null ? css("--fog") : loadColor(load);
+  const [L, C, H] = load == null ? [.7, 0, 0] : lch(load);
+  const hi = load == null ? col : oklch(Math.min(L + .09, .95), C * .85, H);
+  const water = state === "empty" || state === "error" ? "" : `
+    <g clip-path="url(#${id}c)"><g transform="translate(0 ${top.toFixed(2)})">
+      <path class="water${wave && !still ? " slosh" : ""}" d="${WAVE}"
+        fill="${state === "unverified" ? `url(#${id}h)` : `url(#${id}w)`}"/></g></g>`;
+  const aria = label || (load == null ? "no load" : `${pct(load)} percent of the load line`);
+  return `<svg class="ring ${state}" viewBox="0 0 100 100" width="${size}" height="${size}" role="img" aria-label="${esc(aria)}">
+    <defs><clipPath id="${id}c"><circle cx="50" cy="50" r="40.6"/></clipPath>
+      <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${hi}"/><stop offset="1" stop-color="${col}"/></linearGradient>
+      <pattern id="${id}h" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="9" height="9" fill="${col}" opacity=".22"/><rect width="3.5" height="9" fill="${col}"/></pattern></defs>
+    ${water}
+    <circle class="rim" cx="50" cy="50" r="44.5" fill="none" stroke-width="8"${state === "error" || state === "unverified" ? ' stroke-dasharray="9 8"' : ""}/>
+    <path class="line" d="M2 50 H98" stroke-width="8" stroke-linecap="round"/>
+  </svg>`;
+}
+
+// -- the landscape: contour lines tinted by how loaded the design is -----------------
+const land = { el: $("land"), t: 0, color: "#1aa1c9", from: null, to: null, k: 1, moving: false, raf: 0 };
+land.ctx = land.el.getContext("2d");
+function hash(x, y) {
+  let h = (x * 374761393 + y * 668265263 + 1013904223) | 0;
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+function vnoise(x, y) {
+  const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+  const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+  const a = hash(xi, yi), b = hash(xi + 1, yi), c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
+  return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+}
+function field(x, y, t) {
+  const wx = x + .32 * Math.sin(t * .5 + y * .9), wy = y + .32 * Math.cos(t * .42 + x * .8);
+  return vnoise(wx, wy) * .58 + vnoise(wx * 2.07 + 5.2, wy * 2.07 + 1.3) * .29 + vnoise(wx * 4.3 + 9.1, wy * 4.3 + 4.7) * .13;
+}
+function drawLand() {
+  const dpr = Math.min(devicePixelRatio || 1, 2), W = innerWidth, H = innerHeight, c = land.ctx;
+  if (land.el.width !== Math.round(W * dpr) || land.el.height !== Math.round(H * dpr)) {
+    land.el.width = Math.round(W * dpr); land.el.height = Math.round(H * dpr);
+  }
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.clearRect(0, 0, W, H);
+  const cell = 15, nx = Math.ceil(W / cell) + 2, ny = Math.ceil(H / cell) + 2, s = 1 / 230;
+  const v = new Float32Array(nx * ny);
+  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) v[j * nx + i] = field(i * cell * s, j * cell * s, land.t);
+  const levels = 18;
+  for (let k = 1; k < levels; k++) {
+    const lv = .12 + (k / levels) * .78, index = k % 4 === 0;
+    c.beginPath();
+    for (let j = 0; j < ny - 1; j++) {
+      for (let i = 0; i < nx - 1; i++) {
+        const a = v[j * nx + i], b = v[j * nx + i + 1], cc = v[(j + 1) * nx + i + 1], d = v[(j + 1) * nx + i];
+        const idx = (a > lv) << 3 | (b > lv) << 2 | (cc > lv) << 1 | (d > lv);
+        if (idx === 0 || idx === 15) continue;
+        const x0 = i * cell, y0 = j * cell;
+        const T = () => [x0 + cell * (lv - a) / (b - a), y0], R = () => [x0 + cell, y0 + cell * (lv - b) / (cc - b)];
+        const B = () => [x0 + cell * (lv - d) / (cc - d), y0 + cell], Lf = () => [x0, y0 + cell * (lv - a) / (d - a)];
+        const seg = (p, q) => { c.moveTo(p[0], p[1]); c.lineTo(q[0], q[1]); };
+        switch (idx) {
+          case 1: case 14: seg(Lf(), B()); break;
+          case 2: case 13: seg(B(), R()); break;
+          case 3: case 12: seg(Lf(), R()); break;
+          case 4: case 11: seg(T(), R()); break;
+          case 6: case 9: seg(T(), B()); break;
+          case 7: case 8: seg(T(), Lf()); break;
+          case 5: seg(T(), R()); seg(Lf(), B()); break;
+          case 10: seg(T(), Lf()); seg(B(), R()); break;
+        }
+      }
+    }
+    c.strokeStyle = land.color;
+    c.globalAlpha = (index ? .26 : .12) * (light() ? .8 : 1);
+    c.lineWidth = index ? 1.15 : .75;
+    c.stroke();
+  }
+  c.globalAlpha = 1;
+}
+function mixHex(a, b, k) {
+  const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const A = p(a), B = p(b);
+  return "#" + A.map((x, i) => Math.round(x + (B[i] - x) * k).toString(16).padStart(2, "0")).join("");
+}
+function landTick() {
+  land.raf = 0;
+  if (land.k < 1) { land.k = Math.min(1, land.k + .06); land.color = mixHex(land.from, land.to, land.k); }
+  if (land.moving && !still) land.t += .022;
+  drawLand();
+  if ((land.moving && !still) || land.k < 1) land.raf = setTimeout(() => requestAnimationFrame(landTick), 70);
+}
+function setMood(load) {
+  const col = load == null ? "#1aa1c9" : loadColor(load);
+  document.documentElement.style.setProperty("--mood", col);
+  const ink = light() ? (load == null ? "#2c5f86" : loadInk(load)) : col;
+  if (ink === land.to) return;
+  land.from = land.color; land.to = ink; land.k = still ? 1 : 0;
+  if (still) land.color = ink;
+  if (!land.raf) landTick();
+}
+function setWorking(on) {
+  document.body.classList.toggle("working", on);
+  land.moving = on;
+  if (on && !land.raf) landTick();
+}
+addEventListener("resize", () => { if (!land.raf) drawLand(); });
+
+// speckled graphite (dark) or paper fibre (light), seeded so it never shimmers
+(function speckle() {
+  let s = 20231115;
+  const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const fill = light() ? "%2312171a" : "%23eeefe9", k = light() ? .35 : 1;
+  let dots = "";
+  for (let i = 0; i < 150; i++)
+    dots += `<circle cx='${(rnd() * 260).toFixed(1)}' cy='${(rnd() * 260).toFixed(1)}' r='${(.3 + rnd() * .8).toFixed(2)}' fill-opacity='${((.08 + rnd() * .3) * k).toFixed(3)}'/>`;
+  document.documentElement.style.setProperty("--speckle",
+    `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><g fill='${fill}'>${dots}</g></svg>")`);
+})();
+
+// -- small animations ---------------------------------------------------------------
+const tweening = new WeakMap();
+function roll(el, to, render) {                   // numbers roll to their new value
+  const from = parseFloat(el.dataset.v);
+  el.dataset.v = to;
+  if (still || !isFinite(from) || !isFinite(to) || from === to) { el.textContent = render(to); return; }
+  const t0 = performance.now(), token = {};
+  tweening.set(el, token);
+  (function step(now) {
+    if (tweening.get(el) !== token) return;
+    const k = Math.min(1, (now - t0) / 750), e = 1 - (1 - k) ** 3;
+    el.textContent = render(from + (to - from) * e);
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+function ripple(load) {
+  if (still) return;
+  const r = document.createElement("span");
+  r.className = "ripple";
+  r.style.borderColor = loadColor(load);
+  $("hero-ring").append(r);
+  setTimeout(() => r.remove(), 1800);
+}
+
+// -- 3D bench -----------------------------------------------------------------------
 const host = $("viewer");
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.VSMShadowMap;           // soft, blurred contact shadows
 host.prepend(renderer.domElement);
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 1e6);
-camera.up.set(0, 0, 1);                       // designs are z-up
+const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 1e6);
+camera.up.set(0, 0, 1);                           // designs are z-up
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-scene.add(new THREE.HemisphereLight(0xffffff, 0x777766, 1.6));
-const sun = new THREE.DirectionalLight(0xffffff, 1.8);
-sun.position.set(1, -1.5, 2);
-scene.add(sun);
-let model = new THREE.Group(), grid = null;
-scene.add(model);
-
+const hemi = new THREE.HemisphereLight(0xffffff, 0x3d4a55, 1.35);
+const sun = new THREE.DirectionalLight(0xffffff, 2.3);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.radius = 14;
+sun.shadow.blurSamples = 24;
+sun.shadow.bias = -0.0002;
+scene.add(hemi, sun, sun.target);
+let model = new THREE.Group(), floor = new THREE.Group();
+scene.add(model, floor);
+function benchTheme() { renderer.setClearColor(new THREE.Color(css("--bench")), 1); }
+benchTheme();
 function resize() {
   const w = host.clientWidth, h = host.clientHeight;
+  if (!w || !h) return;
   renderer.setSize(w, h, false);
   renderer.domElement.style.width = w + "px";
   renderer.domElement.style.height = h + "px";
@@ -304,337 +678,485 @@ function resize() {
 new ResizeObserver(resize).observe(host);
 (function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); })();
 
-function orient(geo, axis) {                  // geometry built along y -> part axis
+function orient(geo, axis) {                      // geometry built along y -> part axis
   if (axis === "x") geo.rotateZ(-Math.PI / 2);
   if (axis === "z") geo.rotateX(Math.PI / 2);
   return geo;
 }
-
-// (u, v, along) -> world axes, as in design.PROFILE_AXES
-const PROFILE = { z: [0, 1, 2], x: [1, 2, 0], y: [2, 0, 1] };
-
+const PROFILE = { z: [0, 1, 2], x: [1, 2, 0], y: [2, 0, 1] };   // as design.PROFILE_AXES
 function extrusion(p) {
-  const pts = p.profile;
-  const us = pts.map((q) => q[0]), vs = pts.map((q) => q[1]);
+  const us = p.profile.map((q) => q[0]), vs = p.profile.map((q) => q[1]);
   const cu = (Math.min(...us) + Math.max(...us)) / 2, cv = (Math.min(...vs) + Math.max(...vs)) / 2;
-  const shape = new THREE.Shape(pts.map(([u, v]) => new THREE.Vector2(u - cu, v - cv)));
+  const shape = new THREE.Shape(p.profile.map(([u, v]) => new THREE.Vector2(u - cu, v - cv)));
   const g = new THREE.ExtrudeGeometry(shape, { depth: p.length, bevelEnabled: false });
-  g.translate(0, 0, -p.length / 2);           // built in (u, v, along)
+  g.translate(0, 0, -p.length / 2);
   const [iu, iv, ia] = PROFILE[p.axis] || PROFILE.z;
-  const m = new THREE.Matrix4();
   const cols = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
-  cols[0][iu] = 1; cols[1][iv] = 1; cols[2][ia] = 1;          // where u, v, along go
-  m.makeBasis(new THREE.Vector3(...cols[0]), new THREE.Vector3(...cols[1]),
-              new THREE.Vector3(...cols[2]));
-  return g.applyMatrix4(m);
+  cols[0][iu] = 1; cols[1][iv] = 1; cols[2][ia] = 1;
+  return g.applyMatrix4(new THREE.Matrix4().makeBasis(new THREE.Vector3(...cols[0]),
+    new THREE.Vector3(...cols[1]), new THREE.Vector3(...cols[2])));
 }
-
 function geometries(p, size) {
   const out = [];
   try {
-    if (p.shape === "box") {
-      out.push(new THREE.BoxGeometry(...p.size));
-    } else if (p.shape === "cylinder") {
-      out.push(orient(new THREE.CylinderGeometry(p.radius, p.radius, p.length, 40), p.axis));
-    } else if (p.shape === "tube") {
+    if (p.shape === "box") out.push(new THREE.BoxGeometry(...p.size));
+    else if (p.shape === "cylinder") out.push(orient(new THREE.CylinderGeometry(p.radius, p.radius, p.length, 48), p.axis));
+    else if (p.shape === "tube") {
       const ring = new THREE.Shape();
       ring.absarc(0, 0, p.radius, 0, Math.PI * 2, false);
       const hole = new THREE.Path();
       hole.absarc(0, 0, p.inner_radius, 0, Math.PI * 2, true);
       ring.holes.push(hole);
-      const g = new THREE.ExtrudeGeometry(ring, { depth: p.length, bevelEnabled: false,
-                                                  curveSegments: 40 });
+      const g = new THREE.ExtrudeGeometry(ring, { depth: p.length, bevelEnabled: false, curveSegments: 48 });
       g.translate(0, 0, -p.length / 2);
       if (p.axis === "x") g.rotateY(Math.PI / 2);
       if (p.axis === "y") g.rotateX(-Math.PI / 2);
       out.push(g);
-    } else if (p.shape === "sphere") {
-      out.push(new THREE.SphereGeometry(p.radius, 40, 24));
-    } else if (p.shape === "heatsink") {
-      const [w, d, t] = p.base, fh = p.fin_height, ft = p.fin_thickness, n = p.n_fins;
-      const z0 = -(t + fh) / 2;
+    } else if (p.shape === "sphere") out.push(new THREE.SphereGeometry(p.radius, 48, 28));
+    else if (p.shape === "heatsink") {
+      const [w, d, t] = p.base, fh = p.fin_height, ft = p.fin_thickness, n = p.n_fins, z0 = -(t + fh) / 2;
       out.push(new THREE.BoxGeometry(w, d, t).translate(0, 0, z0 + t / 2));
       for (let i = 0; i < n; i++) {
         const x = n === 1 ? 0 : -w / 2 + ft / 2 + i * (w - ft) / (n - 1);
         out.push(new THREE.BoxGeometry(ft, d, fh).translate(x, 0, z0 + t + fh / 2));
       }
-    } else if (p.shape === "extrusion") {
-      out.push(extrusion(p));
-    }
+    } else if (p.shape === "extrusion") out.push(extrusion(p));
   } catch (e) { out.length = 0; }
   if (!out.length && size) out.push(new THREE.BoxGeometry(...size));   // any other shape
   return out;
 }
 
-function partStatus(pid) {
-  if (!report) return "untested";
-  const ts = report.tests.tests.filter((t) => t.part === pid);
-  if (!ts.length) return "untested";
-  return ts.every((t) => t.status === "pass") ? "pass" : "fail";
+const testsOf = (pid) => report ? report.tests.tests.filter((t) => t.part === pid) : [];
+function partLoad(pid) {
+  const loads = testsOf(pid).map((t) => t.load).filter((l) => l != null);
+  return loads.length ? Math.max(...loads) : null;
 }
 
 function buildModel(fit) {
   scene.remove(model);
   model = new THREE.Group();
-  $("empty").hidden = !!design;
   if (!design) return;
   const matById = Object.fromEntries(info.materials.map((m) => [m.id, m]));
   const sizes = Object.fromEntries((report?.summary?.parts || []).map((r) => [r.id, r.size_mm]));
+  const edge = new THREE.Color(css("--edge")), fog = new THREE.Color(css("--fog"));
   for (const p of design.parts) {
-    const status = partStatus(p.id);
-    const tint = status === "pass" ? css("--good") : status === "fail" ? css("--critical") : null;
-    const base = new THREE.Color(matById[p.material]?.color || "#cccccc");
-    if (tint) base.lerp(new THREE.Color(tint), 0.45);
-    const hollow = !!p.wall && p.shape === "box";
-    const isSel = selected && selected.part === p.id;
+    const load = partLoad(p.id), tested = testsOf(p.id).length > 0;
+    const color = new THREE.Color(matById[p.material]?.color || "#9aa0a0");
+    if (load != null) color.lerp(new THREE.Color(loadColor(load)), .64);
+    else if (tested) color.lerp(fog, .55);
+    const ghost = sel.part && sel.part !== p.id, hollow = !!p.wall && p.shape === "box";
     const mat = new THREE.MeshStandardMaterial({
-      color: base, roughness: 0.65, metalness: matById[p.material]?.family === "metal" ? 0.35 : 0,
-      transparent: hollow, opacity: hollow ? 0.45 : 1, side: THREE.DoubleSide,
-      emissive: isSel ? new THREE.Color(css("--accent")) : new THREE.Color(0),
-      emissiveIntensity: isSel ? 0.35 : 0 });
+      color, roughness: .6, metalness: matById[p.material]?.family === "metal" ? .32 : .03,
+      transparent: ghost || hollow, opacity: ghost ? .14 : hollow ? .5 : 1, depthWrite: !(ghost || hollow),
+      side: THREE.DoubleSide,
+      emissive: sel.part === p.id ? new THREE.Color(load != null ? loadColor(load) : css("--text")) : new THREE.Color(0),
+      emissiveIntensity: sel.part === p.id ? .2 : 0 });
     const group = new THREE.Group();
     for (const g of geometries(p, sizes[p.id])) {
-      group.add(new THREE.Mesh(g, mat));
-      group.add(new THREE.LineSegments(new THREE.EdgesGeometry(g, 30),
-        new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.25 })));
+      const mesh = new THREE.Mesh(g, mat);
+      mesh.castShadow = !ghost; mesh.receiveShadow = !ghost; mesh.userData.part = p.id;
+      group.add(mesh);
+      group.add(new THREE.LineSegments(new THREE.EdgesGeometry(g, 28),
+        new THREE.LineBasicMaterial({ color: edge, transparent: true, opacity: ghost ? .1 : .32 })));
     }
     group.position.set(...p.position);
     group.rotation.set(...p.rotation.map((a) => a * Math.PI / 180), "XYZ");
     model.add(group);
   }
   scene.add(model);
-  if (!fit) return;
+  if (fit) fitView();
+}
+function fitView() {
   const box = new THREE.Box3().setFromObject(model);
   if (box.isEmpty()) return;
   const size = box.getSize(new THREE.Vector3()), centre = box.getCenter(new THREE.Vector3());
   const r = Math.max(size.length() / 2, 1);
-  if (grid) scene.remove(grid);
-  const step = Math.pow(10, Math.floor(Math.log10(r)));
-  const span = Math.ceil((r * 3) / step) * step;
-  grid = new THREE.GridHelper(span, Math.round(span / step) * 2, css("--neutral"), css("--grid"));
-  grid.rotation.x = Math.PI / 2;              // GridHelper lies in xz; designs are z-up
-  grid.position.set(centre.x, centre.y, box.min.z);
-  scene.add(grid);
+  scene.remove(floor);
+  floor = new THREE.Group();
+  const step = Math.pow(10, Math.floor(Math.log10(r))), span = Math.ceil((r * 5) / step) * step;
+  const grid = new THREE.Color(css("--grid"));
+  for (const [div, op] of [[Math.min(Math.round(span / (step / 5)), 300), light() ? .1 : .07], [Math.round(span / step), light() ? .26 : .2]]) {
+    const g = new THREE.GridHelper(span, div, grid, grid);
+    g.material.transparent = true; g.material.opacity = op; g.material.depthWrite = false;
+    g.rotation.x = Math.PI / 2;                   // GridHelper lies in xz; designs are z-up
+    g.position.set(centre.x, centre.y, box.min.z - r * .004);
+    floor.add(g);
+  }
+  const catcher = new THREE.Mesh(new THREE.PlaneGeometry(span, span),
+    new THREE.ShadowMaterial({ opacity: light() ? .2 : .5 }));
+  catcher.receiveShadow = true;
+  catcher.renderOrder = 2;
+  catcher.position.set(centre.x, centre.y, box.min.z - r * .002);
+  floor.add(catcher);
+  scene.add(floor);
+  sun.position.copy(centre).add(new THREE.Vector3(r * 1.1, -r * 1.5, r * 2.8));
+  sun.target.position.copy(centre);
+  const sc = sun.shadow.camera;
+  sc.left = sc.bottom = -r * 1.8; sc.right = sc.top = r * 1.8; sc.near = r * .05; sc.far = r * 9;
+  sc.updateProjectionMatrix();
   const dist = r / Math.sin((camera.fov * Math.PI / 180) / 2);
-  camera.position.copy(centre).add(new THREE.Vector3(0.9, -1.4, 0.9).normalize().multiplyScalar(dist));
+  camera.position.copy(centre).add(new THREE.Vector3(.95, -1.45, .85).normalize().multiplyScalar(dist));
   camera.near = dist / 100; camera.far = dist * 100;
   camera.updateProjectionMatrix();
   controls.target.copy(centre);
 }
 
-// -- panels ----------------------------------------------------------------------
-function renderDesign() {
-  const summary = report?.summary;
+// pointing at parts: hover names them, a click focuses them
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+function partAt(ev) {
+  const r = renderer.domElement.getBoundingClientRect();
+  ptr.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ptr, camera);
+  const hit = ray.intersectObjects(model.children, true).find((h) => h.object.isMesh);
+  return hit ? hit.object.userData.part : null;
+}
+let hoverFrame = 0, downAt = null;
+renderer.domElement.addEventListener("pointermove", (ev) => {
+  if (hoverFrame) return;
+  hoverFrame = requestAnimationFrame(() => {
+    hoverFrame = 0;
+    const pid = design && partAt(ev), tip = $("tip");
+    renderer.domElement.style.cursor = pid ? "pointer" : "";
+    if (!pid) { tip.hidden = true; return; }
+    const p = design.parts.find((q) => q.id === pid), load = partLoad(pid);
+    const mat = info.materials.find((m) => m.id === p.material);
+    const tests = testsOf(pid);
+    tip.innerHTML = `<b>${esc(p.name)}</b> · ${esc(mat ? mat.name : p.material)}<br>` + (tests.length
+      ? `<span style="color:${loadInk(load)}">${load == null ? "untrusted" : pct(load) + "% loaded"}</span> · ${tests.length} test${tests.length > 1 ? "s" : ""}`
+      : `<span class="hint">not tested</span>`);
+    const r = host.getBoundingClientRect();
+    tip.style.left = (ev.clientX - r.left) + "px"; tip.style.top = (ev.clientY - r.top) + "px";
+    tip.hidden = false;
+  });
+});
+renderer.domElement.addEventListener("pointerleave", () => { $("tip").hidden = true; });
+renderer.domElement.addEventListener("pointerdown", (ev) => { downAt = [ev.clientX, ev.clientY]; });
+renderer.domElement.addEventListener("pointerup", (ev) => {
+  if (!downAt || Math.hypot(ev.clientX - downAt[0], ev.clientY - downAt[1]) > 5 || !design) return;
+  focusPart(partAt(ev));
+});
+function focusPart(pid, testId = null) {
+  sel = !pid || (sel.part === pid && (!testId || sel.test === testId)) ? { part: null, test: null } : { part: pid, test: testId };
+  renderTests(); renderParts(); buildModel(false);
+}
+
+// -- panels -------------------------------------------------------------------------
+function renderAll(fit) {
   const has = !!design;
-  for (const id of ["check", "optimise", "download"]) $(id).disabled = busy || !has;
-  $("details").hidden = !has; $("results").hidden = !has;
-  document.querySelector("main").classList.toggle("start", !has);
+  $("main").classList.toggle("start", !has && $("voyage").hidden);
+  $("welcome").hidden = has || !$("voyage").hidden;
+  $("work").hidden = !has;
   $("mode").hidden = !has;
-  $("ask-go").textContent = has && modeValue() === "change" ? "Change it" : "Design it";
-  if (!has) { $("name").textContent = "No design yet"; $("description").textContent = ""; return; }
+  $("crumb").textContent = has ? design.name : "";
+  $("ask-title").textContent = has ? "Describe a change, or something new" : "What do you want to make?";
+  for (const id of ["check", "optimise", "download"]) $(id).disabled = busy || !has;
+  $("ask-go").textContent = has && mode() === "change" ? "Change it" : "Design it";
+  if (!has) { setMood(null); return; }
+  renderHero(); renderTests(); renderParts();
+  if (fit !== null) buildModel(fit);
+}
+
+function renderHero() {
+  const ev = report?.tests, load = ev ? ev.load : null;
+  $("hero-ring").innerHTML = ring(load, { size: 124, state: ev && load == null && ev.tests.length ? "unverified" : null });
+  roll($("load-num"), load == null ? NaN : Math.min(load * 100, 999.5),
+       (v) => !isFinite(v) ? "–" : v >= 999.5 ? ">999" : String(Math.round(v)));
+  const ink = loadInk(load);
+  $("hero-num").style.color = ink;
+  $("hero-band").style.color = ink;
+  $("hero-band").textContent = !ev ? "Not tested yet" : !ev.tests.length ? "No tests defined" : band(load);
+  let sub = "";
+  if (ev && ev.tests.length) {
+    const c = ev.counts, lim = ev.tests.find((t) => t.id === ev.limiting);
+    const part = lim && design.parts.find((p) => p.id === lim.part);
+    if (lim) sub = `Limit set by ${lim.title.charAt(0).toLowerCase() + lim.title.slice(1)} (${(part ? part.name : lim.part).toLowerCase()})`;
+    const extra = [c.fail > 1 && `${c.fail} tests over the line`, c.unverified && `${c.unverified} untrusted`,
+                   c.error && `${c.error} can't run`].filter(Boolean);
+    if (extra.length) sub += (sub ? " · " : "") + extra.join(" · ");
+  }
+  $("hero-sub").textContent = sub;
   $("name").textContent = design.name;
   $("description").textContent = design.description;
-  const rows = summary ? summary.parts : [];
-  $("parts").innerHTML = `<tr><th>Part</th><th>Material</th><th>Size (mm)</th>
-    <th>Process</th><th class="num">Mass</th><th class="num">Cost</th></tr>` +
-    rows.map((r) => {
-      const opts = info.materials.map((m) =>
-        `<option value="${m.id}" ${m.id === r.material_id ? "selected" : ""}>${esc(m.name)}</option>`).join("");
-      const sel = selected && selected.part === r.id ? "sel" : "";
-      return `<tr class="${sel}"><td><b>${esc(r.name)}</b>${r.quantity > 1 ? ` ×${r.quantity}` : ""}
-        <div class="hint">${esc(r.purpose)}</div></td>
-        <td><select data-part="${esc(r.id)}" aria-label="Material for ${esc(r.name)}">${opts}</select></td>
-        <td>${r.size_mm.map(fmt).join(" × ")}</td><td>${esc(r.process.replace(/_/g, " "))}</td>
-        <td class="num">${fmt(r.mass_g)} g</td><td class="num">$${r.cost.toFixed(2)}</td></tr>`;
-    }).join("");
-  $("totals").textContent = summary ? `Total ${fmt(summary.mass_g)} g, material $${
-    summary.material_cost.toFixed(2)}, overall ${summary.size_mm.map((v) => v.toFixed(0)).join(" × ")} mm` : "";
+  const s = report?.summary;
+  const cells = [];
+  if (ev) cells.push(["Tests passing", `${ev.counts.pass}<span class="hint">/${ev.tests.length}</span>`]);
+  if (s) cells.push(["Mass", `${fmt(s.mass_g)}<span class="hint"> g</span>`],
+                    ["Material", `<span class="hint">$</span>${s.material_cost.toFixed(2)}`],
+                    ["Size", `${s.size_mm.map((v) => Math.round(v)).join("×")}<span class="hint"> mm</span>`]);
+  if (versions.length) cells.push(["Versions", String(versions.length)]);
+  $("stats").innerHTML = cells.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+  setMood(load);
+}
+
+const STATUS = { pass: "Passes", fail: "Over the line", unverified: "Untrusted: the simulation failed its own checks",
+                 error: "Can't run" };
+function metricRow(m) {
+  const w = m.load == null ? 0 : Math.min(m.load, 1.5) / 1.5 * 100, sign = m.kind === "min" ? "≥" : "≤";
+  const u = nice(m.unit), why = m.load == null ? "" : m.kind === "min"
+    ? `load = required ÷ actual = ${fmt(m.limit)} ÷ ${fmt(m.value)}`
+    : m.base ? `load = rise used ÷ rise allowed, measured from ${fmt(m.base)} ${u}`
+    : `load = ${fmt(m.value)} ÷ ${fmt(m.limit)} ${u}`;
+  return `<div class="m"><div class="m-lab"><span>${esc(m.label)}</span>
+      <span class="m-val">${fmt(m.value)} ${esc(u)} <span class="m-lim">needs ${sign} ${fmt(m.limit)} ${esc(u)}</span>
+      <span class="num" title="${esc(why)}" style="color:${loadInk(m.load)}"> · ${pct(m.load)}%</span></span></div>
+    <div class="m-bar"><i style="width:${w}%;background:${loadColor(m.load)}"></i><b></b>${m.load != null && m.load > 1.5 ? "<em>▶</em>" : ""}</div></div>`;
+}
+function renderTests() {
+  const ev = report?.tests;
+  if (!ev) { $("tests").innerHTML = ""; $("verdict").textContent = ""; $("issues").innerHTML = ""; return; }
+  const c = ev.counts, n = ev.tests.length;
+  $("verdict").textContent = !n ? "No tests defined yet." : ev.all_pass
+    ? `All ${n} pass, on verified simulations.`
+    : `${c.pass} of ${n} pass` + (c.fail ? ` · ${c.fail} over the line` : "") +
+      (c.unverified ? ` · ${c.unverified} untrusted` : "") + (c.error ? ` · ${c.error} can't run` : "");
+  $("tests").innerHTML = ev.tests.map((t) => {
+    const part = design.parts.find((p) => p.id === t.part);
+    const trusted = t.status === "pass" || t.status === "fail";
+    const state = trusted ? (t.load == null ? "empty" : null) : t.status;
+    const dim = sel.part && sel.part !== t.part ? " dim" : "";
+    const word = trusted && t.load != null ? band(t.load) : STATUS[t.status];
+    return `<article class="test ${t.status}${dim}" role="button" tabindex="0" data-test="${esc(t.id)}"
+        aria-pressed="${sel.test === t.id}">
+      <div>${ring(t.load, { size: 46, state, wave: false })}</div>
+      <div>
+        <div class="t-top"><span class="t-title">${esc(t.title)}</span>
+          <span class="t-num" style="color:${loadInk(t.load)}">${t.load == null ? "" : pct(t.load) + "<small>%</small>"}</span></div>
+        <div class="t-sub">${esc(part ? part.name : t.part)} · <span class="status-word" style="color:${loadInk(trusted ? t.load : null)}">${esc(word)}</span></div>
+        <div class="t-head">${esc(nice(t.headline))}</div>
+        ${t.metrics.map(metricRow).join("")}
+        ${t.notes.map((x) => `<div class="note">${esc(nice(x))}</div>`).join("")}
+        ${t.checks ? `<div class="checks">${esc(t.simulation)}: ${esc(t.checks.summary)}</div>` : ""}
+      </div></article>`;
+  }).join("");
+  $("issues").innerHTML = report.issues.map((i) => `<div class="issue">⚠ ${esc(i.message)}</div>`).join("");
+}
+
+function renderParts() {
+  const s = report?.summary;
+  const rows = s ? s.parts : [];
+  const matById = Object.fromEntries(info.materials.map((m) => [m.id, m]));
+  $("parts").innerHTML = `<tr><th>Part</th><th>Material</th><th>Size (mm)</th><th>Process</th>
+    <th class="r">Mass</th><th class="r">Cost</th></tr>` + rows.map((r) => {
+    const opts = info.materials.map((m) =>
+      `<option value="${m.id}" ${m.id === r.material_id ? "selected" : ""}>${esc(m.name)}</option>`).join("");
+    const load = partLoad(r.id);
+    return `<tr class="${sel.part === r.id ? "sel" : ""}"><td><span class="swatch" style="background:${
+        load != null ? loadColor(load) : matById[r.material_id]?.color || "#999"}"></span><b>${esc(r.name)}</b>${
+        r.quantity > 1 ? ` ×${r.quantity}` : ""}<div class="hint">${esc(r.purpose)}</div></td>
+      <td><select data-part="${esc(r.id)}" aria-label="Material for ${esc(r.name)}">${opts}</select></td>
+      <td class="num">${r.size_mm.map(fmt).join(" × ")}</td><td>${esc(r.process.replace(/_/g, " "))}</td>
+      <td class="r num">${fmt(r.mass_g)} g</td><td class="r num">$${r.cost.toFixed(2)}</td></tr>`;
+  }).join("");
+  $("totals").textContent = s ? `Total ${fmt(s.mass_g)} g, material $${s.material_cost.toFixed(2)}, overall ${
+    s.size_mm.map((v) => v.toFixed(0)).join(" × ")} mm` : "";
   $("assembly").innerHTML = design.assembly.length
-    ? design.assembly.map((s) => `<li>${esc(s.action)}</li>`).join("")
+    ? design.assembly.map((x) => `<li>${esc(x.action)}</li>`).join("")
     : `<li class="hint">No assembly steps.</li>`;
   $("json").value = JSON.stringify(design, null, 2);
 }
 
-function meter(m) {
-  const lim = m.limit, v = m.value;
-  const top = Math.max(Math.abs(v), Math.abs(lim)) * 1.25 || 1;
-  const pct = Math.max(0, Math.min(100, (v / top) * 100));
-  const lpct = Math.max(0, Math.min(100, (lim / top) * 100));
-  const sign = m.kind === "min" ? "≥" : "≤";
-  return `<div class="meter"><div class="lab"><span>${esc(m.label)}</span>
-    <span>${fmt(v)} ${esc(m.unit)} <span class="hint">(needs ${sign} ${fmt(lim)})</span></span></div>
-    <div class="bar"><i style="width:${pct}%;background:${m.ok ? "var(--good)" : "var(--critical)"}"></i>
-    <b style="left:${lpct}%"></b></div></div>`;
-}
-
-const LABEL = { pass: "PASS", fail: "FAIL", unverified: "UNVERIFIED", error: "CAN'T RUN" };
-
-function renderTests() {
-  if (!report) { $("tests").innerHTML = ""; $("verdict").innerHTML = ""; $("issues").innerHTML = ""; return; }
-  const ev = report.tests, c = ev.counts, n = ev.tests.length;
-  $("verdict").innerHTML = n === 0
-    ? `<span class="big warn">No tests defined</span>`
-    : ev.all_pass
-      ? `<span class="big pass">All ${n} tests pass</span><span class="hint">on verified simulations</span>`
-      : `<span class="big fail">${c.pass} of ${n} pass</span><span class="hint">${
-          [c.fail && `${c.fail} failed`, c.unverified && `${c.unverified} unverified`,
-           c.error && `${c.error} could not run`].filter(Boolean).join(", ")}</span>`;
-  $("tests").innerHTML = ev.tests.map((t) => {
-    const part = design.parts.find((p) => p.id === t.part);
-    return `<div class="test" role="button" tabindex="0" data-test="${esc(t.id)}"
-        aria-pressed="${!!(selected && selected.id === t.id)}">
-      <div class="top"><span class="badge ${t.status}">${LABEL[t.status]}</span>
-        <span class="title">${esc(t.title)}</span>
-        <span class="hint">${esc(part ? part.name : t.part)}</span></div>
-      <div class="head">${esc(t.headline)}</div>
-      ${t.metrics.map(meter).join("")}
-      ${t.notes.map((x) => `<div class="note">${esc(x)}</div>`).join("")}
-      ${t.checks ? `<div class="checks">${esc(t.simulation)}: ${esc(t.checks.summary)}</div>` : ""}
-    </div>`;
-  }).join("");
-  $("issues").innerHTML = report.issues.map((i) =>
-    `<div class="issue">⚠ ${esc(i.message)}</div>`).join("");
-}
-
 function show(rep, fit) {
-  report = rep; design = rep ? rep.design : design;
-  renderDesign(); renderTests(); buildModel(fit);
+  const before = report?.tests?.load;
+  report = rep; design = rep.design;
+  if (sel.part && !design.parts.some((p) => p.id === sel.part)) sel = { part: null, test: null };
+  renderAll(fit);
+  const now = rep.tests?.load;
+  if (now != null && now !== before) ripple(now);
 }
 
-function setBusy(on, label) {
+function setBusy(on) {
   busy = on;
+  setWorking(on);
   for (const id of ["check", "optimise", "download"]) $(id).disabled = on || !design;
-  for (const id of ["apply", "ask-go"]) $(id).disabled = on;
-  if (on && label) $("verdict").innerHTML = `<span class="busy">${esc(label)}</span>`;
+  $("apply").disabled = on;
+  $("ask-go").disabled = on || !info?.agent;
 }
-
 function showError(err) {
-  $("results").hidden = false;
-  document.querySelector("main").classList.remove("start");
+  $("work").hidden = false; $("main").classList.remove("start"); $("welcome").hidden = true;
   $("verdict").innerHTML = `<div class="error-box">${esc(err.message || err)}</div>`;
 }
 
-function viewing(li) {
-  for (const x of $("log").children) x.classList.toggle("viewing", x === li);
+// -- the voyage: where the designer is and what each version weighed -----------------
+const STAGES = ["Reading", "Drafting", "Testing", "Improving", "Proving"];
+let versions = [], stage = -1, startedAt = 0, clockTimer = 0, draftTimer = 0, finished = false;
+function setStage(i) {
+  stage = Math.max(stage, i);
+  renderVoyage();
 }
-
-// activity log: what the designer or optimiser is doing right now
-const TOOL_TEXT = {
-  list_materials: "Reading the material library", list_test_types: "Reading the test types",
-  list_simulations: "Looking through the simulation catalogue",
-  describe_simulation: "Reading the inputs of", check_design: "Testing a version",
-  submit_design: "Re-testing the chosen design",
-  optimise_design: "Optimising sizes and materials" };
-let candidates = [];
-function log(t, text, cls = "", rep = null) {
+function renderVoyage() {
+  const last = versions.at(-1), load = last ? last.load : null, n = STAGES.length - 1;
+  const at = finished ? n : Math.max(0, stage);
+  $("stops").innerHTML = STAGES.map((s, i) => `<li class="${i < at || finished ? "done" : i === at ? "now" : ""}" style="left:${i / n * 100}%">${s}</li>`).join("");
+  $("rail-fill").style.width = `${at / n * 100}%`;
+  $("rail-fill").style.background = load == null ? css("--text-3") : loadColor(load);
+  $("traveler").style.left = `${at / n * 100}%`;
+  $("traveler").innerHTML = ring(load, { size: 30, wave: true });
+  $("voyage-line").innerHTML = last
+    ? `Version ${versions.length}: <span class="num" style="color:${loadInk(load)}">${pct(load)}%</span> of the load line · ${
+        last.report.tests.counts.pass} of ${last.report.tests.tests.length} pass`
+    : stage >= 1 ? "Writing the first version of the design…" : "Reading the materials and simulations it can use…";
+  drawTrend();
+}
+function drawTrend() {
+  const svg = $("trend"), W = svg.clientWidth || 600, H = 78, pad = 16, top = 10, bottom = H - 18;
+  const y = (l) => bottom - Math.min(l, 2) / 2 * (bottom - top);
+  const n = versions.length;
+  if (!n) { svg.innerHTML = ""; return; }
+  const x = (i) => n === 1 ? W / 2 : pad + i * (W - 2 * pad) / (n - 1);
+  const pts = versions.map((v, i) => [x(i), v.load == null ? null : y(v.load)]);
+  const line = pts.filter((p) => p[1] != null).map((p) => p.join(",")).join(" ");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = `
+    <line x1="0" x2="${W}" y1="${y(1)}" y2="${y(1)}" stroke="${css("--signal")}" stroke-width="1.5" stroke-dasharray="4 4" opacity=".85"/>
+    <text x="${W}" y="${y(1) - 5}" text-anchor="end" font-size="10.5" fill="${css("--text-3")}">the load line</text>
+    <polyline points="${line}" fill="none" stroke="${css("--text-3")}" stroke-width="1.5"/>
+    ${pts.map((p, i) => {
+      const v = versions[i], col = loadColor(v.load), known = v.load != null;
+      const cy = known ? p[1] : y(1);                 // no trusted number: an open ring on the line
+      const label = known ? `${pct(v.load)}%` : "–";
+      return `<g class="pt" data-v="${i}"><circle cx="${p[0]}" cy="${cy}" r="${v.kind === "submit" ? 6.5 : 5}"
+          fill="${known ? col : css("--page")}" stroke="${known ? css("--page") : css("--fog")}" stroke-width="2"
+          ${known ? "" : 'stroke-dasharray="2.5 2"'}><title>Version ${i + 1}: ${known ? label + " of the load line" : "no trusted number yet"}</title></circle>
+        ${known && v.load > 2 ? `<text x="${p[0]}" y="${top - 2}" text-anchor="middle" font-size="9" fill="${col}">▲</text>` : ""}
+        <text x="${p[0]}" y="${H - 2}" text-anchor="middle" font-size="10" fill="${css("--text-3")}">${label}</text></g>`;
+    }).join("")}`;
+}
+function tickClock() {
+  const s = Math.floor((Date.now() - startedAt) / 1000);
+  $("clock").textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+}
+function log(t, text, cls = "", vIndex = null) {
   const li = document.createElement("li");
-  const ts = document.createElement("span"); ts.className = "t"; ts.textContent = `${Math.round(t)}s`;
-  const tx = document.createElement(rep ? "button" : "span");
-  tx.textContent = text; tx.className = (cls + (rep ? " cand" : "")).trim();
-  if (rep) {                                   // every checked candidate can be viewed again
-    const i = candidates.push(rep) - 1;
-    tx.title = "Show this version";
-    tx.onclick = () => { viewing(li); selected = null; show(candidates[i], true); };
-  }
+  const ts = document.createElement("span"); ts.className = "t num"; ts.textContent = `${Math.round(t)}s`;
+  const tx = document.createElement(vIndex == null ? "span" : "button");
+  tx.textContent = text;
+  tx.className = (cls + (vIndex == null ? "" : " cand")).trim();
+  if (vIndex != null) tx.onclick = () => viewVersion(vIndex);
   li.append(ts, tx);
+  if (vIndex != null) li.dataset.v = vIndex;
   $("log").append(li);
   $("log").scrollTop = $("log").scrollHeight;
-  return li;
 }
-
-async function runCheck(fit = false) {
-  setBusy(true, "Running every test as a verified simulation…");
-  try { show(await api("/api/check", { design }), fit); }
-  catch (e) { showError(e); } finally { setBusy(false); renderDesign(); }
+function viewVersion(i) {
+  for (const li of $("log").children) li.classList.toggle("viewing", li.dataset.v === String(i));
+  sel = { part: null, test: null };
+  show(versions[i].report, true);
 }
-
-async function runOptimise() {
-  setBusy(true, "Optimising: proposing changes, re-testing each one, keeping what works…");
-  $("opt-card").hidden = true;
-  try {
-    const { job } = await api("/api/optimise", { design });
-    const out = await follow(job, () => {});
-    selected = null;
-    show({ design: out.design, summary: out.summary, issues: out.all_issues, tests: out.after }, true);
-    const [m0, m1] = out.mass_g;
-    $("opt").innerHTML = `<div class="${out.all_pass ? "pass" : "fail"}" style="font-weight:600">
-        ${out.all_pass ? "Every test passes on verified simulations" : "Not every test passes"}</div>
-      <div class="hint">Mass ${fmt(m0)} g → ${fmt(m1)} g</div>
-      ${out.steps.length ? out.steps.map((s) => `<div class="step"><span class="kind">${
-        s.kind.toUpperCase()}</span>${esc(s.change)}<div class="why">${esc(s.reason)}</div></div>`).join("")
-        : `<div class="step">No changes were needed.</div>`}
-      ${out.note ? `<div class="note" style="margin-top:8px">${esc(out.note)}</div>` : ""}`;
-    $("opt-card").hidden = false;
-  } catch (e) { showError(e); } finally { setBusy(false); renderDesign(); }
-}
+const TOOL_TEXT = { list_materials: "Read the material library", list_test_types: "Read the test types",
+  list_simulations: "Looked through the simulation catalogue", describe_simulation: "Read the inputs of",
+  check_design: "Testing a version", submit_design: "Re-testing the chosen design",
+  optimise_design: "Optimising sizes and materials" };
 
 async function runDesign(request) {
-  const change = design && modeValue() === "change";
+  const change = design && mode() === "change";
   setBusy(true);
-  $("report-card").hidden = true; $("log").innerHTML = ""; candidates = []; $("activity").hidden = false;
-  $("activity-title").textContent = change ? "Changing the design" : "Designing";
-  $("opt-card").hidden = true;
-  if (!change) { design = null; report = null; selected = null; renderDesign(); renderTests(); buildModel(false); }
-  let fitted = false;
+  versions = []; stage = -1; finished = false;
+  $("log").innerHTML = ""; $("report-card").hidden = true; $("opt-card").hidden = true;
+  $("voyage").hidden = false; $("welcome").hidden = true; $("main").classList.remove("start");
+  $("voyage-title").textContent = change ? "Changing the design" : "Designing";
+  startedAt = Date.now(); clearInterval(clockTimer); clockTimer = setInterval(tickClock, 1000); tickClock();
+  if (change && report) {
+    versions.push({ report, load: report.tests.load, kind: "start" });
+    log(0, `Starting from the current design: ${pct(report.tests.load)}%`, "", 0);
+  } else { design = null; report = null; sel = { part: null, test: null }; renderAll(false); }
+  setStage(0);
+  let fitted = !!change;
   try {
     const { job } = await api("/api/design", change ? { request, design } : { request });
     const out = await follow(job, (e) => {
+      clearTimeout(draftTimer);
       if (e.kind === "tool") {
         log(e.t, `${TOOL_TEXT[e.name] || e.name}${e.detail ? " " + e.detail : ""}`);
+        if (e.name === "submit_design") setStage(4);
+        else if (e.name === "optimise_design") setStage(3);
+        else if (e.name === "check_design") setStage(versions.length > (change ? 1 : 0) ? 3 : 2);
+        else draftTimer = setTimeout(() => setStage(1), 3500);   // reading done: now it writes
       } else if (e.kind === "check" || e.kind === "submit") {
-        const c = e.report.tests.counts, n = e.report.tests.tests.length;
-        const what = e.kind === "submit" ? "Final design: " : `${e.report.design.name}: `;
-        const li = log(e.t, what + `${c.pass} of ${n} tests pass` +
-          (c.fail ? `, ${c.fail} fail` : "") + (c.error ? `, ${c.error} can't run` : "") +
-          (c.unverified ? `, ${c.unverified} unverified` : ""), c.pass === n && n ? "pass" : "fail",
-          e.report);
-        viewing(li); selected = null;
-        show(e.report, !fitted); fitted = true;              // the design appears as it is tested
+        const c = e.report.tests.counts, n = e.report.tests.tests.length, load = e.report.tests.load;
+        versions.push({ report: e.report, load, kind: e.kind });
+        log(e.t, `${e.kind === "submit" ? "Chosen design" : e.report.design.name}: ${pct(load)}% · ${c.pass} of ${n} pass`,
+            load != null && load <= 1 && c.pass === n ? "" : "warn", versions.length - 1);
+        for (const li of $("log").children) li.classList.toggle("viewing", li.dataset.v === String(versions.length - 1));
+        sel = { part: null, test: null };
+        show(e.report, !fitted); fitted = true;    // the design appears as it is tested
+        renderVoyage();
       } else if (e.kind === "tool_error") {
-        log(e.t, `Rejected, the model will fix it: ${e.error.slice(0, 300)}`, "warn");
+        log(e.t, `Rejected, the model will fix it: ${e.error.slice(0, 280)}`, "warn");
       } else if (e.kind === "optimise") {
-        log(e.t, `Optimiser: ${e.changes.length} change(s)${e.all_pass ? ", all pass" : ""}`);
+        log(e.t, `Optimiser: ${e.changes.length} change${e.changes.length === 1 ? "" : "s"}${e.all_pass ? ", all pass" : ""}`);
       }
     });
-    if (out.design) {
-      show(out, !fitted);
-      viewing([...$("log").children].reverse().find((li) => li.querySelector(".cand")));
-    }
-    if (out.design && !out.submitted)
-      log(0, "The model did not name a final design; showing the last version it tested.", "warn");
-    $("answer").innerHTML = markdown(out.answer);            // escaped inside markdown()
+    finished = true;
+    if (out.design) show(out, !fitted);
+    $("answer").innerHTML = markdown(out.answer);          // escaped inside markdown()
     $("report-card").hidden = false;
-    $("activity-title").textContent = out.all_pass ? "Done: every test passes" : "Done";
+    $("voyage-title").textContent = out.all_pass ? "Proven: every test passes" : "Done, not every test passes";
+    const at = (Date.now() - startedAt) / 1000;
+    if (out.design && !out.submitted) log(at, "The model named no final design; showing the last one tested.", "warn");
     const u = out.usage || {};
-    if (u.output_tokens) log(0, `Model use: ${((u.input_tokens || 0) + (u.cache_read_input_tokens || 0) +
-      (u.cache_creation_input_tokens || 0)).toLocaleString()} input and ${
-      u.output_tokens.toLocaleString()} output tokens`, "hint");
+    if (u.output_tokens) log(at, `Model use: ${((u.input_tokens || 0) + (u.cache_read_input_tokens || 0) +
+      (u.cache_creation_input_tokens || 0)).toLocaleString()} input and ${u.output_tokens.toLocaleString()} output tokens`);
     if (out.stop_reason === "refusal") showError("The model declined this request.");
-  } catch (e) {
-    log(0, e.message, "fail");
-    $("activity-title").textContent = "Stopped";
-  } finally { setBusy(false); renderDesign(); }
+    renderVoyage();
+  } catch (err) {
+    log((Date.now() - startedAt) / 1000, err.message, "warn");
+    $("voyage-title").textContent = "Stopped";
+    $("steps").open = true;
+  } finally {
+    clearInterval(clockTimer); clearTimeout(draftTimer);
+    setBusy(false); renderAll(null);
+  }
+}
+
+async function runCheck(fit = false) {
+  setBusy(true);
+  try { show(await api("/api/check", { design }), fit); }
+  catch (e) { showError(e); }
+  finally { setBusy(false); renderAll(null); }
+}
+
+async function runOptimise() {
+  setBusy(true);
+  $("opt-card").hidden = false;
+  $("opt").innerHTML = `<div class="hint">Trying changes and re-testing each one…</div>`;
+  try {
+    const { job } = await api("/api/optimise", { design });
+    const out = await follow(job, () => {});
+    sel = { part: null, test: null };
+    show({ design: out.design, summary: out.summary, issues: out.all_issues, tests: out.after }, true);
+    const [m0, m1] = out.mass_g, l0 = out.before.load, l1 = out.after.load;
+    const ld = (l) => `<span class="num" style="color:${loadInk(l)}">${pct(l)}%</span>`;
+    $("opt").innerHTML = `<div class="${out.all_pass ? "" : "error-box"}" style="font-weight:650">
+        ${out.all_pass ? "Every test passes on verified simulations" : "Not every test passes"}</div>
+      <div class="hint" style="margin:2px 0 6px">Load ${ld(l0)} → ${ld(l1)} · mass ${fmt(m0)} g → ${fmt(m1)} g</div>
+      ${out.steps.length ? out.steps.map((s) => `<div class="step"><span class="kind">${s.kind.toUpperCase()}</span>
+        <div>${esc(s.change)}<div class="why">${esc(s.reason)}</div></div>
+        <span class="ld">${s.load ? `${ld(s.load[0])} → ${ld(s.load[1])}` : ""}</span></div>`).join("")
+        : `<div class="step"><span></span><div>No changes were needed.</div></div>`}
+      ${out.note ? `<div class="note" style="margin-top:8px">${esc(out.note)}</div>` : ""}`;
+  } catch (e) { showError(e); }
+  finally { setBusy(false); renderAll(null); }
 }
 
 async function loadExample(name) {
-  design = await api(`/api/example/${encodeURIComponent(name)}`);
-  report = null; selected = null; $("opt-card").hidden = true; $("report-card").hidden = true;
-  $("activity").hidden = true;
-  renderDesign(); buildModel(true);
+  const d = await api(`/api/example/${encodeURIComponent(name)}`);
+  design = d; report = null; sel = { part: null, test: null }; versions = [];
+  for (const id of ["opt-card", "report-card", "voyage"]) $(id).hidden = true;
+  renderAll(true);
   await runCheck(true);
 }
 
-// Small Markdown renderer for the designer's report.  Everything is escaped first,
-// so text from the model can never become live HTML.
+// Small Markdown renderer for the designer's report.  Everything is escaped first, so
+// text from the model can never become live HTML.
 function inline(t) {
   return esc(t).replace(/`([^`]+)`/g, "<code>$1</code>")
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/(^|[^*])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>");
 }
 function markdown(src) {
-  const lines = String(src).split("\n"), out = [];
-  let i = 0;
+  const lines = String(src || "").split("\n"), out = [];
   const cells = (l) => l.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim());
+  let i = 0;
   while (i < lines.length) {
     const l = lines[i];
     if (/^\s*$/.test(l)) { i++; continue; }
@@ -643,31 +1165,28 @@ function markdown(src) {
     if (/^\s*\|/.test(l)) {
       const rows = [];
       while (i < lines.length && /^\s*\|/.test(lines[i])) rows.push(lines[i++]);
-      const body = rows.filter((r) => !/^\s*\|?\s*:?-{2,}/.test(r));
-      const [head, ...rest] = body;
+      const [head, ...rest] = rows.filter((r) => !/^\s*\|?\s*:?-{2,}/.test(r));
       out.push(`<div class="table-wrap"><table><tr>${cells(head).map((c) => `<th>${inline(c)}</th>`).join("")}</tr>${
         rest.map((r) => `<tr>${cells(r).map((c) => `<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</table></div>`);
       continue;
     }
     if (/^\s*([-*]|\d+\.)\s+/.test(l)) {
       const ordered = /^\s*\d+\./.test(l), items = [];
-      while (i < lines.length && /^\s*([-*]|\d+\.)\s+/.test(lines[i]))
-        items.push(lines[i++].replace(/^\s*([-*]|\d+\.)\s+/, ""));
+      while (i < lines.length && /^\s*([-*]|\d+\.)\s+/.test(lines[i])) items.push(lines[i++].replace(/^\s*([-*]|\d+\.)\s+/, ""));
       const tag = ordered ? "ol" : "ul";
       out.push(`<${tag}>${items.map((x) => `<li>${inline(x)}</li>`).join("")}</${tag}>`);
       continue;
     }
     const para = [];
-    while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#{1,6}\s|\s*\||\s*([-*]|\d+\.)\s)/.test(lines[i]))
-      para.push(lines[i++]);
+    while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#{1,6}\s|\s*\||\s*([-*]|\d+\.)\s)/.test(lines[i])) para.push(lines[i++]);
     out.push(`<p>${inline(para.join(" "))}</p>`);
   }
   return out.join("");
 }
 
-const modeValue = () => document.querySelector('input[name="mode"]:checked')?.value || "new";
+const mode = () => document.querySelector('input[name="mode"]:checked')?.value || "new";
 
-// -- events ----------------------------------------------------------------------
+// -- events -------------------------------------------------------------------------
 $("check").onclick = () => runCheck();
 $("optimise").onclick = () => runOptimise();
 $("download").onclick = () => {
@@ -688,18 +1207,20 @@ $("parts").onchange = (e) => {
   design.parts.find((p) => p.id === pid).material = e.target.value;
   runCheck();
 };
-$("mode").onchange = () => renderDesign();
-function pick(el) {
-  const id = el.dataset.test;
-  const t = report.tests.tests.find((x) => x.id === id);
-  selected = selected && selected.id === id ? null : t;
-  renderDesign(); renderTests(); buildModel(false);
-}
-$("tests").onclick = (e) => { const el = e.target.closest(".test"); if (el) pick(el); };
+$("mode").onchange = () => renderAll(null);
+$("tests").onclick = (e) => { const el = e.target.closest(".test"); if (el) pickTest(el); };
 $("tests").onkeydown = (e) => {
   const el = e.target.closest(".test");
-  if (el && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); pick(el); }
+  if (el && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); pickTest(el); }
 };
+function pickTest(el) {
+  const t = report.tests.tests.find((x) => x.id === el.dataset.test);
+  if (t) focusPart(t.part, t.id);
+}
+$("trend").addEventListener("click", (e) => {
+  const g = e.target.closest(".pt");
+  if (g) viewVersion(+g.dataset.v);
+});
 for (const tab of document.querySelectorAll(".tab")) {
   tab.onclick = () => {
     for (const t of document.querySelectorAll(".tab")) t.setAttribute("aria-selected", t === tab);
@@ -718,18 +1239,27 @@ $("examples").onclick = (e) => {
   const b = e.target.closest("button[data-example]");
   if (b && !busy) loadExample(b.dataset.example);
 };
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => design && buildModel(true));
+matchMedia("(prefers-color-scheme: light)").addEventListener("change", () => {
+  benchTheme(); land.to = null; setMood(report?.tests?.load ?? null);
+  if (design) { renderAll(null); buildModel(true); }
+});
 
-// -- start -----------------------------------------------------------------------
+// -- start --------------------------------------------------------------------------
+$("welcome-ring").innerHTML = ring(0.55, { size: 168, label: "Plimsoll: a design at 55 percent of its load line" });
+$("legend").innerHTML = [[.3, "Ample margin"], [.7, "Comfortable"], [.95, "Close to the line"], [1.4, "Over the line"]]
+  .map(([l, t]) => `<span class="chip">${ring(l, { size: 20, wave: false })}${t}</span>`).join("") +
+  `<span class="chip">${ring(.6, { size: 20, state: "unverified", wave: false })}Untrusted</span>`;
 info = await api("/api/info");
-$("examples").innerHTML = info.examples.map((n) =>
-  `<button class="linkish" data-example="${esc(n)}">${esc(n.replace(/_/g, " "))}</button>`).join(", ");
+$("examples").innerHTML = `<span class="hint">Or open an example:</span>` + info.examples.map((n) =>
+  `<button data-example="${esc(n)}">${esc(n.replace(/_/g, " "))}</button>`).join("");
 if (!info.agent) {
   $("ask-go").disabled = true; $("ask-input").disabled = true;
-  $("ask-hint").textContent = "Designing from a description needs the anthropic package and " +
-    "ANTHROPIC_API_KEY set where the server runs. You can still open an example or edit a design's JSON.";
+  $("ask-hint").textContent = "Describing needs the anthropic package and ANTHROPIC_API_KEY where the server runs. You can still open an example or edit a design's JSON.";
 }
-renderDesign(); buildModel(false);
+renderAll(false);
+setMood(null);
+const wanted = new URLSearchParams(location.search).get("example");   // ?example=shelf_bracket
+if (wanted && info.examples.includes(wanted)) loadExample(wanted);
 </script>
 </body>
 </html>

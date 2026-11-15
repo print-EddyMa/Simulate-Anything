@@ -1,4 +1,6 @@
-"""Command line: ``create-anything materials | tests | check | optimise | design | serve``.
+"""Command line: ``plimsoll materials | tests | check | optimise | design | serve``.
+
+Installed as ``plimsoll`` and, for older scripts, ``create-anything``.
 
 ``check`` and ``optimise`` exit non-zero unless every test passes on verified
 simulations, so a design file can gate a script or CI job.
@@ -16,9 +18,14 @@ from .scenarios import DESCRIPTIONS, evaluate
 MARK = {"pass": "PASS", "fail": "FAIL", "unverified": "UNVERIFIED", "error": "ERROR"}
 
 
+def _pct(load) -> str:
+    return "  -  " if load is None else (f"{100 * load:4.0f}%" if load < 10 else " >999%")
+
+
 def _print_tests(ev: dict) -> None:
     for t in ev["tests"]:
-        print(f"  {MARK[t['status']]:10} {t['title']}  [{t['id']}, {t['part']}]")
+        print(f"  {MARK[t['status']]:10} {_pct(t.get('load'))}  {t['title']}  "
+              f"[{t['id']}, {t['part']}]")
         print(f"             {t['headline']}")
         for m in t["metrics"]:
             sign = ">=" if m["kind"] == "min" else "<="
@@ -31,6 +38,9 @@ def _print_tests(ev: dict) -> None:
     c = ev["counts"]
     print(f"\n  {c['pass']} passed, {c['fail']} failed, {c['unverified']} unverified, "
           f"{c['error']} could not be run")
+    if ev.get("load") is not None:
+        line = "over the load line" if ev["load"] > 1 else "of the load line"
+        print(f"  loaded to {_pct(ev['load']).strip()} {line} (limit: {ev['limiting']})")
 
 
 def _print_summary(d: dict, s: dict, issues: list) -> None:
@@ -163,8 +173,9 @@ def cmd_serve(args) -> int:
 def main(argv=None) -> int:
     import argparse
     ap = argparse.ArgumentParser(
-        prog="create-anything",
-        description="Design a physical thing and prove it survives the real world.")
+        prog="plimsoll",
+        description="Plimsoll: design anything, load it with the real world, and see how "
+                    "close it runs to its limits.")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     p = sub.add_parser("materials", help="list the material library")
