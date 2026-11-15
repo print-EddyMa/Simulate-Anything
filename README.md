@@ -31,7 +31,7 @@ simulations that check themselves, and improves it until it passes with margin t
 
 <p align="center">
   <a href="docs/media/margin-demo.mp4"><img src="docs/media/margin-demo-poster.jpg" alt="Watch the 2-minute demo" width="720"></a><br>
-  <a href="docs/media/margin-demo.mp4"><b>▶ Watch the 2-minute demo</b></a>
+  <a href="docs/media/margin-demo.mp4"><b>▶ Watch the 2-minute demo</b></a> · <a href="WRITEUP.md"><b>One-page write-up</b></a>
 </p>
 
 ![Margin designing a passive radar node: the request, the live process, the 3D model and five real-world tests](docs/screenshot.png)
