@@ -79,7 +79,8 @@ export function TopBar({ status, examples }: { status: Status | null; examples: 
     if (running) { stopRun(); return; }
     const prompt = text.trim();
     if (!prompt || !status) return;
-    if (!agent) {
+    // offline demo (?mock=1): any typed request replays the recorded run
+    if (!agent && !status.mock) {
       setNote("Designing from your own words needs an Anthropic API key on the server (ANTHROPIC_API_KEY).");
       return;
     }
