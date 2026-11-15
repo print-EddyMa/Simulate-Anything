@@ -12,8 +12,13 @@ all read and edit the same thing:
 Dimensions are millimetres, z is up, ``position`` is the centre of the part's
 bounding box.  Shapes: box (size [x, y, z], optional wall for a hollow shell),
 cylinder (radius, length, axis), tube (radius, inner_radius, length, axis),
-sphere (radius), heatsink (base [w, d, t], fin_height, fin_thickness, n_fins)
-and mesh (an imported triangle mesh).
+sphere (radius), heatsink (base [w, d, t], fin_height, fin_thickness, n_fins),
+extrusion (profile [[u, v], ...] in mm, length, axis, optional wall: any outline
+pushed along an axis) and mesh (an imported triangle mesh).
+
+An extrusion's profile lies in the plane across its axis: for axis z, u is x and
+v is y; for x, u is y and v is z; for y, u is z and v is x.  The profile is
+recentred so the middle of its bounding box sits on the axis.
 
 Everything here is deterministic geometry and bookkeeping.  It is the first
 gate a proposed design has to pass, before any physics is run.
@@ -27,7 +32,9 @@ import numpy as np
 
 from . import materials
 
-SHAPES = ("box", "cylinder", "tube", "sphere", "heatsink", "mesh")
+SHAPES = ("box", "cylinder", "tube", "sphere", "heatsink", "extrusion", "mesh")
+# extrusion profile axes: (u, v, along) world axis indices for each extrusion axis
+PROFILE_AXES = {"z": (0, 1, 2), "x": (1, 2, 0), "y": (2, 0, 1)}
 AXES = {"x": 0, "y": 1, "z": 2}
 FASTENER_HINTS = ("screw", "bolt", "nut", "rivet", "pin", "fastener", "washer")
 
@@ -108,6 +115,27 @@ def normalise(design: dict) -> dict:
             p["n_fins"] = int(_num(p, "n_fins", where))
             if p["n_fins"] * p["fin_thickness"] > p["base"][0]:
                 raise DesignError(f"{where}: the fins do not fit across the base")
+        elif shape == "extrusion":
+            prof = p.get("profile")
+            if not isinstance(prof, list) or len(prof) < 3:
+                raise DesignError(f"{where}: 'profile' needs at least 3 [u, v] points in mm")
+            try:
+                pts = [[float(a), float(b)] for a, b in prof]
+            except (TypeError, ValueError):
+                raise DesignError(f"{where}: every profile point must be two numbers") from None
+            if not all(math.isfinite(v) for pt in pts for v in pt):
+                raise DesignError(f"{where}: profile points must be finite")
+            if abs(_shoelace(pts)) < 1e-9:
+                raise DesignError(f"{where}: the profile encloses no area")
+            if _shoelace(pts) < 0:
+                pts.reverse()                       # keep counter-clockwise
+            p["profile"] = pts
+            p["length"] = _num(p, "length", where)
+            p["axis"] = str(p.get("axis") or "z").lower()
+            if p["axis"] not in AXES:
+                raise DesignError(f"{where}: axis must be x, y or z")
+            if p.get("wall") is not None:
+                p["wall"] = _num(p, "wall", where)
         elif shape == "mesh":
             m = p.get("mesh")
             if not isinstance(m, dict) or "size" not in m or "volume" not in m:
@@ -151,6 +179,42 @@ def normalise(design: dict) -> dict:
 
 
 # -- geometry -------------------------------------------------------------------
+def _shoelace(pts) -> float:
+    n = len(pts)
+    return 0.5 * sum(pts[i][0] * pts[(i + 1) % n][1] - pts[(i + 1) % n][0] * pts[i][1]
+                     for i in range(n))
+
+
+def profile_points(part: dict) -> np.ndarray:
+    """Extrusion profile, recentred on the middle of its bounding box (mm)."""
+    pts = np.array(part["profile"], dtype=float)
+    return pts - (pts.min(axis=0) + pts.max(axis=0)) / 2
+
+
+def profile_extents(part: dict) -> list:
+    pts = np.array(part["profile"], dtype=float)
+    return [float(v) for v in pts.max(axis=0) - pts.min(axis=0)]
+
+
+def profile_section(part: dict) -> dict:
+    """Area, centroid, second moments about the centroid and extreme-fibre
+    distances of an extrusion profile (mm units)."""
+    pts = profile_points(part)
+    x, y = pts[:, 0], pts[:, 1]
+    xn, yn = np.roll(x, -1), np.roll(y, -1)
+    cross = x * yn - xn * y
+    area = cross.sum() / 2
+    cx = ((x + xn) * cross).sum() / (6 * area)
+    cy = ((y + yn) * cross).sum() / (6 * area)
+    iuu = (cross * (y ** 2 + y * yn + yn ** 2)).sum() / 12 - area * cy ** 2   # about u axis
+    ivv = (cross * (x ** 2 + x * xn + xn ** 2)).sum() / 12 - area * cx ** 2   # about v axis
+    return {"area": float(area), "centroid": [float(cx), float(cy)],
+            "I_about_u": float(iuu), "I_about_v": float(ivv),
+            "c_v": float(max(y.max() - cy, cy - y.min())),     # fibre distance along v
+            "c_u": float(max(x.max() - cx, cx - x.min()))}
+
+
+
 def part_by_id(design: dict, pid: str) -> dict:
     for p in design["parts"]:
         if p["id"] == pid:
@@ -172,6 +236,12 @@ def extents(part: dict) -> list:
     if s == "heatsink":
         w, dpt, t = part["base"]
         return [w, dpt, t + part["fin_height"]]
+    if s == "extrusion":
+        out = [0.0] * 3
+        u, v, along = PROFILE_AXES[part["axis"]]
+        out[u], out[v] = profile_extents(part)
+        out[along] = part["length"]
+        return out
     return list(part["mesh"]["size"])
 
 
@@ -190,6 +260,8 @@ def volume_mm3(part: dict) -> float:
     if s == "heatsink":
         w, dpt, t = part["base"]
         return w * dpt * t + part["n_fins"] * part["fin_thickness"] * part["fin_height"] * dpt
+    if s == "extrusion":
+        return abs(_shoelace(part["profile"])) * part["length"]
     return float(part["mesh"]["volume"])
 
 

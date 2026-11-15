@@ -111,11 +111,121 @@ print(result.value("max_deflection"), result.report.verdict)
 | Bio and medicine | drug diffusion in tissue, blood flow, heat from implants | `drug_diffusion`, `pipe_flow`, `implant_heating` |
 | Climate and energy | groundwater, building heat loss, solar panels, reactor cooling | `groundwater_well`, `wall_heat_loss`, `solar_panel`, `fuel_pin` |
 | Chemistry | reaction-diffusion, mass transfer in reactors | `reaction_diffusion`, `plug_flow_reactor` |
+| Product safety | a part on fire, a wire carrying current, a product dropped on the floor | `flame_exposure`, `wire_heating`, `drop_impact` |
 | Education | any textbook problem as an interactive simulation | `conduction_2d`, `projectile_drag`, and every template above in the web app |
 
 Not in the catalogue? A new simulation is one class; see
 [docs/extending.md](docs/extending.md) and
 [examples/custom_simulation.py](examples/custom_simulation.py).
+
+## Create Anything: describe a thing, get a tested design
+
+`create_anything` sits on top of the simulations. Describe something physical
+and the design agent writes a design document: parts (shape, dimensions in mm,
+material, process), assembly steps, and the real-world tests it has to survive.
+Each test runs as a verified simulation on the part's real dimensions and
+material, and the agent revises the design until the tests pass.
+
+```bash
+create-anything serve
+```
+
+Open http://127.0.0.1:8001 and describe what you want to make. The design
+appears in 3D as it is tested, coloured by result, and every version the agent
+tried can be reopened from the activity log. Ask for changes ("use aluminium
+instead", "make it lighter") and the agent edits the current design rather than
+starting over. You can also change materials, edit the JSON, run the tests and
+optimise by hand. Describing needs `ANTHROPIC_API_KEY` set where the server
+runs; the key never reaches the page. The same agent runs from the command line:
+
+```bash
+create-anything design "A water-cooled copper cold plate for a 60 W laser diode; the diode base must stay under 45 degC" -o cold_plate.json
+```
+
+### Tests: built-in types, or any simulation
+
+The built-in test types cover the common situations:
+
+| Test | Situation | Simulation behind it |
+|---|---|---|
+| `load` | a steady force on a part held like a beam | `beam` |
+| `drop` | the product falls and lands on the part | `drop_impact` |
+| `vibration` | a part shaken by a motor or fan | `beam_vibration` |
+| `heat` | a heat sink carrying a power, or a bar hot at one end | `heat_sink_fin` |
+| `fire` | a flame or radiant heat on a wall | `flame_exposure` |
+| `current` | current through a conductor | `wire_heating` |
+| `flow` | liquid or gas through a tube | `pipe_flow` |
+
+For anything else, a `simulation` test runs any template in the catalogue. Its
+inputs are **bound** to the part, so the result depends on the design and the
+optimiser can change it:
+
+```json
+{"type": "simulation", "part": "plate", "simulation": "pcb_thermal",
+ "params": {"h": "10 W/(m^2*K)", "chips": [{"name": "LED", "x": "30 mm", "y": "20 mm",
+            "w": "10 mm", "h": "10 mm", "power": "4 W"}]},
+ "bind": {"board_length": "size.x", "board_width": "size.y", "thickness": "size.z",
+          "conductivity": "material.conductivity"},
+ "require": [{"qoi": "max_temperature", "max": "70 degC"}]}
+```
+
+A test with nothing bound is rejected. So are unknown templates, parameters or
+results, a requirement in the wrong units, and any quantity given without a
+unit. A test counts as passed only when the requirement is met **and** the
+simulation passed its own checks. A failed self-check is reported as
+*unverified*, never as a pass.
+
+### Shapes
+
+`box` (optionally a hollow shell), `cylinder`, `tube`, `sphere`, `heatsink`,
+and `extrusion`: any 2-D outline pushed along an axis, such as an L-angle,
+T-beam, channel or gear blank. An extrusion tested as a beam uses its true
+second moment of area and outer-fibre distance. Before any physics, the
+geometry is checked: parts that touch nothing, parts buried in each other,
+parts too thin to make or in the wrong units, and parts left out of the
+assembly.
+
+### The optimiser
+
+```console
+$ create-anything optimise create_anything/examples/shelf_bracket.json -o fixed.json
+Wall shelf bracket: 48.1 g -> 99.6 g
+  fix   Arm: thickness 4 -> 8 mm
+  fix   Arm: thickness 8 -> 16 mm
+  fix   Arm: PLA -> Polycarbonate
+  trim  Arm: thickness 16 -> 15.2 mm
+  trim  Arm: width 30 -> 27 mm
+  PASS       4 kg of books on the end
+             40 N on the arm: safety factor 10.30 (needs 2), bends 2.39 mm (limit 2.5 mm)
+             simulation beam: PASSED WITH WARNINGS: 12 passed, 1 warnings, 0 failed, 2 not applicable
+```
+
+(Output shortened.) The warning is the beam check noting that the thicker arm is
+now slightly too stubby for simple beam theory (length/depth 9.9, wants 10 or
+more).
+
+It changes the dimensions each failing test depends on (for a `simulation`
+test, the bound ones) and tries other materials. It re-runs every test on every
+candidate and keeps the change that fixes the most for the least added mass.
+Once everything passes, it trims material back off, but never below what the
+manufacturing process can make (1.2 mm for a 3D print, for example). Parts
+marked `"locked": true`, such as screws and circuit boards, are never changed,
+and `material_options` limits which materials a part may switch to. The final
+design is re-run with full verification, and any new overlaps or gaps caused by
+resizing are reported.
+
+Other commands: `create-anything check FILE` (exits non-zero unless every test
+passes), `create-anything materials`, `create-anything tests`. The example
+designs are in `create_anything/examples/`.
+
+### Limits
+
+Parts are idealised to fit the simulations: a bracket arm becomes a beam, a
+round, hollow or extruded section becomes the rectangle with the same stiffness
+and strength, and a wall in a fire becomes a 1-D slab. Each test's notes say
+which idealisation was used. Physics that interacts across parts (a whole
+assembly in one 3-D solve) is checked one piece at a time. Joints, fatigue,
+buckling and stress concentrations are not modelled, and there is no CAD import.
 
 ## How it checks itself
 
@@ -191,6 +301,13 @@ simulate_anything/
   sims/           the simulation templates, by area
   agent.py        plain-language agent
   cli.py, server.py, report.py, web/
+create_anything/
+  materials.py    material library
+  design.py       the design document, mass and cost, geometry checks
+  scenarios.py    real-world tests mapped onto verified simulations
+  optimize.py     propose, re-test, keep; then trim
+  agent.py        plain-language designer
+  cli.py, server.py (background jobs), web/ (three.js viewer), examples/
 tests/            solver, template, protocol and app tests
 docs/extending.md
 examples/

@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create Anything</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f4f4f1; --surface: #fcfcfb; --sunken: #efeeea; --border: #e0dfd9;
+  --text: #0b0b0b; --text-2: #52514e; --text-3: #7d7c74; --grid: #e6e5df;
+  --accent: #2a78d6; --accent-ink: #ffffff;
+  --good: #0ca30c; --warning: #b07800; --critical: #d03b3b; --neutral: #a3a299;
+  --viewer: #eceae4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --page: #121211; --surface: #1a1a19; --sunken: #232321; --border: #34342f;
+    --text: #f0efec; --text-2: #c3c2b7; --text-3: #8f8e85; --grid: #2b2b28;
+    --accent: #3987e5; --accent-ink: #0b0b0b;
+    --good: #2fbf2f; --warning: #e0a526; --critical: #e66767; --neutral: #6f6e66;
+    --viewer: #1e1e1c;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--page); color: var(--text);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+button, input, select, textarea { font: inherit; color: inherit; }
+header { display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 12px 20px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.brand { font-weight: 700; font-size: 16px; letter-spacing: -.01em; }
+.tagline { color: var(--text-3); font-size: 12px; }
+header .spacer { flex: 1; }
+main { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 18px;
+  padding: 18px 20px 60px; max-width: 1500px; margin: 0 auto; }
+main.start { grid-template-columns: minmax(0, 1fr); max-width: 860px; }
+@media (max-width: 900px) { main { grid-template-columns: minmax(0, 1fr); padding: 14px 16px 40px; } }
+.col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px; min-width: 0; }
+h1 { font-size: 20px; margin: 0 0 2px; letter-spacing: -.015em; }
+h2 { font-size: 12px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-3); font-weight: 600; }
+.lead { color: var(--text-2); margin: 0; }
+.btn { border: 1px solid var(--border); background: var(--surface); padding: 7px 13px;
+  border-radius: 8px; cursor: pointer; white-space: nowrap; }
+.btn.primary { background: var(--accent); border-color: var(--accent);
+  color: var(--accent-ink); font-weight: 600; }
+.btn:disabled { opacity: .5; cursor: default; }
+select, input[type=text] { padding: 6px 9px; border: 1px solid var(--border);
+  border-radius: 7px; background: var(--page); }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.hint { color: var(--text-3); font-size: 12px; }
+#viewer { position: relative; height: 440px; border-radius: 12px; overflow: hidden;
+  background: var(--viewer); border: 1px solid var(--border); }
+#viewer canvas { display: block; }
+#viewer .overlay { position: absolute; left: 10px; bottom: 8px; font-size: 12px;
+  color: var(--text-3); pointer-events: none; }
+#viewer .legend { position: absolute; right: 10px; top: 8px; display: flex; gap: 10px;
+  font-size: 12px; color: var(--text-2); }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+  margin-right: 4px; vertical-align: -1px; }
+@media (max-width: 900px) { #viewer { height: 320px; } }
+.verdict { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.verdict .big { font-size: 18px; font-weight: 700; }
+.pass { color: var(--good); } .fail { color: var(--critical); }
+.unverified, .error, .warn { color: var(--warning); }
+.test { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
+  margin-top: 10px; cursor: pointer; background: var(--page); }
+.test[aria-pressed="true"] { border-color: var(--accent); }
+.test .top { display: flex; gap: 8px; align-items: baseline; }
+.test .badge { font-size: 11px; font-weight: 700; letter-spacing: .05em; min-width: 82px; }
+.test .title { font-weight: 600; }
+.test .head { color: var(--text-2); margin-top: 3px; }
+.meter { margin-top: 8px; }
+.meter .lab { display: flex; justify-content: space-between; font-size: 12px;
+  color: var(--text-2); gap: 8px; }
+.bar { position: relative; height: 6px; border-radius: 3px; background: var(--sunken);
+  margin-top: 3px; overflow: hidden; }
+.bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+.bar b { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--text-2); }
+.note { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+.checks { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; font-weight: 600; color: var(--text-3); font-size: 12px;
+  border-bottom: 1px solid var(--border); padding: 5px 6px; }
+td { border-bottom: 1px solid var(--grid); padding: 5px 6px; vertical-align: top; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+tr.sel td { background: var(--sunken); }
+#parts td:first-child { min-width: 130px; }
+.table-wrap { overflow-x: auto; }
+ol { margin: 0; padding-left: 20px; color: var(--text-2); }
+ol li { margin: 3px 0; }
+textarea#json { width: 100%; min-height: 260px; padding: 10px; border: 1px solid var(--border);
+  border-radius: 8px; background: var(--page);
+  font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; resize: vertical; }
+.tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+.tab { border: 0; background: none; padding: 5px 10px; border-radius: 6px; cursor: pointer;
+  color: var(--text-2); }
+.tab[aria-selected="true"] { background: var(--sunken); color: var(--text); font-weight: 600; }
+.issue { color: var(--warning); font-size: 13px; margin: 4px 0; }
+.step { padding: 6px 0; border-bottom: 1px solid var(--grid); }
+.step:last-child { border-bottom: 0; }
+.step .kind { font-size: 11px; font-weight: 700; letter-spacing: .05em; color: var(--text-3);
+  margin-right: 6px; }
+.step .why { font-size: 12px; color: var(--text-3); }
+.error-box { color: var(--critical); white-space: pre-wrap; }
+.md { color: var(--text-2); }
+.md h3, .md h4 { font-size: 14px; color: var(--text); margin: 14px 0 6px; }
+.md p { margin: 6px 0; }
+.md ul, .md ol { margin: 4px 0; padding-left: 20px; }
+.md li { margin: 2px 0; }
+.md table { margin: 6px 0; }
+.md code { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--sunken);
+  padding: 1px 4px; border-radius: 4px; }
+.md strong { color: var(--text); }
+.busy { color: var(--text-3); font-size: 13px; }
+#ask input { flex: 1; min-width: 0; }
+#ask textarea { width: 100%; min-height: 64px; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: 8px; background: var(--page); resize: vertical; }
+#ask .row { margin-top: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.seg label { padding: 5px 10px; cursor: pointer; color: var(--text-2); font-size: 13px; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label:has(input:checked) { background: var(--sunken); color: var(--text); font-weight: 600; }
+#log { list-style: none; margin: 0; padding: 0; font-size: 13px; color: var(--text-2);
+  max-height: 260px; overflow-y: auto; }
+#log li { padding: 3px 0; display: flex; gap: 8px; }
+#log .t { color: var(--text-3); font-variant-numeric: tabular-nums; min-width: 42px; }
+#log button.cand { border: 0; background: none; padding: 0; cursor: pointer; text-align: left;
+  text-decoration: underline dotted; text-underline-offset: 3px; }
+#log li.viewing button.cand { text-decoration-style: solid; font-weight: 600; }
+.empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 10px; color: var(--text-3); text-align: center; padding: 20px; }
+.linkish { border: 0; background: none; color: var(--accent); cursor: pointer; padding: 0; }
+[hidden] { display: none !important; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "/vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">Create Anything</div>
+    <div class="tagline">Design a thing, then prove it survives the real world</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn" id="check" disabled>Run tests</button>
+  <button class="btn" id="optimise" disabled>Optimise</button>
+  <button class="btn" id="download" disabled>Download JSON</button>
+</header>
+
+<main>
+  <div class="col">
+    <section class="card" id="ask">
+      <h2>What do you want to make?</h2>
+      <form id="ask-form">
+        <textarea id="ask-input" aria-label="Describe what to make"
+          placeholder="Anything physical: a bracket that holds a 5 kg speaker 20 cm off the wall, a heat sink for a 30 W motor driver, a drone arm that survives a 2 m fall, a copper bus bar for 200 A..."></textarea>
+        <div class="row">
+          <span class="seg" id="mode" hidden>
+            <label><input type="radio" name="mode" value="change" checked>Change this design</label>
+            <label><input type="radio" name="mode" value="new">New design</label>
+          </span>
+          <div class="spacer" style="flex:1"></div>
+          <button class="btn primary" type="submit" id="ask-go">Design it</button>
+        </div>
+      </form>
+      <div class="hint" id="ask-hint">The model writes the design and its tests; every number
+        comes from verified simulations.</div>
+    </section>
+
+    <section class="card" id="activity" hidden>
+      <h2 id="activity-title">Working</h2>
+      <ul id="log"></ul>
+    </section>
+
+    <section>
+      <div class="row" style="justify-content: space-between; margin-bottom: 8px;">
+        <div>
+          <h1 id="name">No design yet</h1>
+          <p class="lead" id="description"></p>
+        </div>
+      </div>
+      <div id="viewer">
+        <div class="empty" id="empty">
+          <div>Describe something above and the design appears here as it is tested.</div>
+          <div>Or open an example: <span id="examples"></span></div>
+        </div>
+        <div class="legend">
+          <span><span class="dot" style="background: var(--good)"></span>passes</span>
+          <span><span class="dot" style="background: var(--critical)"></span>fails</span>
+          <span><span class="dot" style="background: var(--neutral)"></span>untested</span>
+        </div>
+        <div class="overlay">Drag to rotate, scroll to zoom, right-drag to pan. Dimensions in mm.</div>
+      </div>
+    </section>
+
+    <section class="card" id="details" hidden>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" data-tab="parts">Parts</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="assembly">Assembly</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="edit">Edit JSON</button>
+      </div>
+      <div data-panel="parts">
+        <div class="table-wrap"><table id="parts"></table></div>
+        <div class="hint" id="totals" style="margin-top: 8px;"></div>
+      </div>
+      <div data-panel="assembly" hidden><ol id="assembly"></ol></div>
+      <div data-panel="edit" hidden>
+        <textarea id="json" spellcheck="false" aria-label="Design JSON"></textarea>
+        <div class="row" style="margin-top: 8px;">
+          <button class="btn" id="apply">Apply and run tests</button>
+          <span class="hint">Millimetres, z up, position is the centre of each part's bounding box.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="col">
+    <section class="card" id="results" hidden>
+      <h2>Real-world tests</h2>
+      <div id="verdict" class="verdict"></div>
+      <div id="tests"></div>
+      <div id="issues" style="margin-top: 10px;"></div>
+    </section>
+    <section class="card" id="report-card" hidden>
+      <h2>Designer's report</h2>
+      <div class="md" id="answer"></div>
+    </section>
+    <section class="card" id="opt-card" hidden>
+      <h2>Optimisation</h2>
+      <div id="opt"></div>
+    </section>
+  </div>
+</main>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "/vendor/OrbitControls.js";
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = (v) => Math.abs(v) >= 1000 || (Math.abs(v) < 0.01 && v !== 0)
+  ? v.toPrecision(3) : (+v.toPrecision(3)).toString();
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+let info = null, design = null, report = null, selected = null, busy = false;
+
+async function api(path, body) {
+  const res = await fetch(path, body === undefined ? {} : {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body) });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
+}
+
+// Poll a background job, handing each new event to onEvent; resolves with its result.
+async function follow(jobId, onEvent) {
+  let since = 0;
+  for (;;) {
+    const j = await api(`/api/job/${jobId}?since=${since}`);
+    for (const e of j.events) onEvent(e);
+    since = j.next;
+    if (j.done) {
+      if (j.error) throw new Error(j.error);
+      return j.result;
+    }
+    await sleep(700);
+  }
+}
+
+// -- 3D viewer -------------------------------------------------------------------
+const host = $("viewer");
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+host.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 1e6);
+camera.up.set(0, 0, 1);                       // designs are z-up
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+scene.add(new THREE.HemisphereLight(0xffffff, 0x777766, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 1.8);
+sun.position.set(1, -1.5, 2);
+scene.add(sun);
+let model = new THREE.Group(), grid = null;
+scene.add(model);
+
+function resize() {
+  const w = host.clientWidth, h = host.clientHeight;
+  renderer.setSize(w, h, false);
+  renderer.domElement.style.width = w + "px";
+  renderer.domElement.style.height = h + "px";
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(host);
+(function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); })();
+
+function orient(geo, axis) {                  // geometry built along y -> part axis
+  if (axis === "x") geo.rotateZ(-Math.PI / 2);
+  if (axis === "z") geo.rotateX(Math.PI / 2);
+  return geo;
+}
+
+// (u, v, along) -> world axes, as in design.PROFILE_AXES
+const PROFILE = { z: [0, 1, 2], x: [1, 2, 0], y: [2, 0, 1] };
+
+function extrusion(p) {
+  const pts = p.profile;
+  const us = pts.map((q) => q[0]), vs = pts.map((q) => q[1]);
+  const cu = (Math.min(...us) + Math.max(...us)) / 2, cv = (Math.min(...vs) + Math.max(...vs)) / 2;
+  const shape = new THREE.Shape(pts.map(([u, v]) => new THREE.Vector2(u - cu, v - cv)));
+  const g = new THREE.ExtrudeGeometry(shape, { depth: p.length, bevelEnabled: false });
+  g.translate(0, 0, -p.length / 2);           // built in (u, v, along)
+  const [iu, iv, ia] = PROFILE[p.axis] || PROFILE.z;
+  const m = new THREE.Matrix4();
+  const cols = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+  cols[0][iu] = 1; cols[1][iv] = 1; cols[2][ia] = 1;          // where u, v, along go
+  m.makeBasis(new THREE.Vector3(...cols[0]), new THREE.Vector3(...cols[1]),
+              new THREE.Vector3(...cols[2]));
+  return g.applyMatrix4(m);
+}
+
+function geometries(p, size) {
+  const out = [];
+  try {
+    if (p.shape === "box") {
+      out.push(new THREE.BoxGeometry(...p.size));
+    } else if (p.shape === "cylinder") {
+      out.push(orient(new THREE.CylinderGeometry(p.radius, p.radius, p.length, 40), p.axis));
+    } else if (p.shape === "tube") {
+      const ring = new THREE.Shape();
+      ring.absarc(0, 0, p.radius, 0, Math.PI * 2, false);
+      const hole = new THREE.Path();
+      hole.absarc(0, 0, p.inner_radius, 0, Math.PI * 2, true);
+      ring.holes.push(hole);
+      const g = new THREE.ExtrudeGeometry(ring, { depth: p.length, bevelEnabled: false,
+                                                  curveSegments: 40 });
+      g.translate(0, 0, -p.length / 2);
+      if (p.axis === "x") g.rotateY(Math.PI / 2);
+      if (p.axis === "y") g.rotateX(-Math.PI / 2);
+      out.push(g);
+    } else if (p.shape === "sphere") {
+      out.push(new THREE.SphereGeometry(p.radius, 40, 24));
+    } else if (p.shape === "heatsink") {
+      const [w, d, t] = p.base, fh = p.fin_height, ft = p.fin_thickness, n = p.n_fins;
+      const z0 = -(t + fh) / 2;
+      out.push(new THREE.BoxGeometry(w, d, t).translate(0, 0, z0 + t / 2));
+      for (let i = 0; i < n; i++) {
+        const x = n === 1 ? 0 : -w / 2 + ft / 2 + i * (w - ft) / (n - 1);
+        out.push(new THREE.BoxGeometry(ft, d, fh).translate(x, 0, z0 + t + fh / 2));
+      }
+    } else if (p.shape === "extrusion") {
+      out.push(extrusion(p));
+    }
+  } catch (e) { out.length = 0; }
+  if (!out.length && size) out.push(new THREE.BoxGeometry(...size));   // any other shape
+  return out;
+}
+
+function partStatus(pid) {
+  if (!report) return "untested";
+  const ts = report.tests.tests.filter((t) => t.part === pid);
+  if (!ts.length) return "untested";
+  return ts.every((t) => t.status === "pass") ? "pass" : "fail";
+}
+
+function buildModel(fit) {
+  scene.remove(model);
+  model = new THREE.Group();
+  $("empty").hidden = !!design;
+  if (!design) return;
+  const matById = Object.fromEntries(info.materials.map((m) => [m.id, m]));
+  const sizes = Object.fromEntries((report?.summary?.parts || []).map((r) => [r.id, r.size_mm]));
+  for (const p of design.parts) {
+    const status = partStatus(p.id);
+    const tint = status === "pass" ? css("--good") : status === "fail" ? css("--critical") : null;
+    const base = new THREE.Color(matById[p.material]?.color || "#cccccc");
+    if (tint) base.lerp(new THREE.Color(tint), 0.45);
+    const hollow = !!p.wall && p.shape === "box";
+    const isSel = selected && selected.part === p.id;
+    const mat = new THREE.MeshStandardMaterial({
+      color: base, roughness: 0.65, metalness: matById[p.material]?.family === "metal" ? 0.35 : 0,
+      transparent: hollow, opacity: hollow ? 0.45 : 1, side: THREE.DoubleSide,
+      emissive: isSel ? new THREE.Color(css("--accent")) : new THREE.Color(0),
+      emissiveIntensity: isSel ? 0.35 : 0 });
+    const group = new THREE.Group();
+    for (const g of geometries(p, sizes[p.id])) {
+      group.add(new THREE.Mesh(g, mat));
+      group.add(new THREE.LineSegments(new THREE.EdgesGeometry(g, 30),
+        new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.25 })));
+    }
+    group.position.set(...p.position);
+    group.rotation.set(...p.rotation.map((a) => a * Math.PI / 180), "XYZ");
+    model.add(group);
+  }
+  scene.add(model);
+  if (!fit) return;
+  const box = new THREE.Box3().setFromObject(model);
+  if (box.isEmpty()) return;
+  const size = box.getSize(new THREE.Vector3()), centre = box.getCenter(new THREE.Vector3());
+  const r = Math.max(size.length() / 2, 1);
+  if (grid) scene.remove(grid);
+  const step = Math.pow(10, Math.floor(Math.log10(r)));
+  const span = Math.ceil((r * 3) / step) * step;
+  grid = new THREE.GridHelper(span, Math.round(span / step) * 2, css("--neutral"), css("--grid"));
+  grid.rotation.x = Math.PI / 2;              // GridHelper lies in xz; designs are z-up
+  grid.position.set(centre.x, centre.y, box.min.z);
+  scene.add(grid);
+  const dist = r / Math.sin((camera.fov * Math.PI / 180) / 2);
+  camera.position.copy(centre).add(new THREE.Vector3(0.9, -1.4, 0.9).normalize().multiplyScalar(dist));
+  camera.near = dist / 100; camera.far = dist * 100;
+  camera.updateProjectionMatrix();
+  controls.target.copy(centre);
+}
+
+// -- panels ----------------------------------------------------------------------
+function renderDesign() {
+  const summary = report?.summary;
+  const has = !!design;
+  for (const id of ["check", "optimise", "download"]) $(id).disabled = busy || !has;
+  $("details").hidden = !has; $("results").hidden = !has;
+  document.querySelector("main").classList.toggle("start", !has);
+  $("mode").hidden = !has;
+  $("ask-go").textContent = has && modeValue() === "change" ? "Change it" : "Design it";
+  if (!has) { $("name").textContent = "No design yet"; $("description").textContent = ""; return; }
+  $("name").textContent = design.name;
+  $("description").textContent = design.description;
+  const rows = summary ? summary.parts : [];
+  $("parts").innerHTML = `<tr><th>Part</th><th>Material</th><th>Size (mm)</th>
+    <th>Process</th><th class="num">Mass</th><th class="num">Cost</th></tr>` +
+    rows.map((r) => {
+      const opts = info.materials.map((m) =>
+        `<option value="${m.id}" ${m.id === r.material_id ? "selected" : ""}>${esc(m.name)}</option>`).join("");
+      const sel = selected && selected.part === r.id ? "sel" : "";
+      return `<tr class="${sel}"><td><b>${esc(r.name)}</b>${r.quantity > 1 ? ` ×${r.quantity}` : ""}
+        <div class="hint">${esc(r.purpose)}</div></td>
+        <td><select data-part="${esc(r.id)}" aria-label="Material for ${esc(r.name)}">${opts}</select></td>
+        <td>${r.size_mm.map(fmt).join(" × ")}</td><td>${esc(r.process.replace(/_/g, " "))}</td>
+        <td class="num">${fmt(r.mass_g)} g</td><td class="num">$${r.cost.toFixed(2)}</td></tr>`;
+    }).join("");
+  $("totals").textContent = summary ? `Total ${fmt(summary.mass_g)} g, material $${
+    summary.material_cost.toFixed(2)}, overall ${summary.size_mm.map((v) => v.toFixed(0)).join(" × ")} mm` : "";
+  $("assembly").innerHTML = design.assembly.length
+    ? design.assembly.map((s) => `<li>${esc(s.action)}</li>`).join("")
+    : `<li class="hint">No assembly steps.</li>`;
+  $("json").value = JSON.stringify(design, null, 2);
+}
+
+function meter(m) {
+  const lim = m.limit, v = m.value;
+  const top = Math.max(Math.abs(v), Math.abs(lim)) * 1.25 || 1;
+  const pct = Math.max(0, Math.min(100, (v / top) * 100));
+  const lpct = Math.max(0, Math.min(100, (lim / top) * 100));
+  const sign = m.kind === "min" ? "≥" : "≤";
+  return `<div class="meter"><div class="lab"><span>${esc(m.label)}</span>
+    <span>${fmt(v)} ${esc(m.unit)} <span class="hint">(needs ${sign} ${fmt(lim)})</span></span></div>
+    <div class="bar"><i style="width:${pct}%;background:${m.ok ? "var(--good)" : "var(--critical)"}"></i>
+    <b style="left:${lpct}%"></b></div></div>`;
+}
+
+const LABEL = { pass: "PASS", fail: "FAIL", unverified: "UNVERIFIED", error: "CAN'T RUN" };
+
+function renderTests() {
+  if (!report) { $("tests").innerHTML = ""; $("verdict").innerHTML = ""; $("issues").innerHTML = ""; return; }
+  const ev = report.tests, c = ev.counts, n = ev.tests.length;
+  $("verdict").innerHTML = n === 0
+    ? `<span class="big warn">No tests defined</span>`
+    : ev.all_pass
+      ? `<span class="big pass">All ${n} tests pass</span><span class="hint">on verified simulations</span>`
+      : `<span class="big fail">${c.pass} of ${n} pass</span><span class="hint">${
+          [c.fail && `${c.fail} failed`, c.unverified && `${c.unverified} unverified`,
+           c.error && `${c.error} could not run`].filter(Boolean).join(", ")}</span>`;
+  $("tests").innerHTML = ev.tests.map((t) => {
+    const part = design.parts.find((p) => p.id === t.part);
+    return `<div class="test" role="button" tabindex="0" data-test="${esc(t.id)}"
+        aria-pressed="${!!(selected && selected.id === t.id)}">
+      <div class="top"><span class="badge ${t.status}">${LABEL[t.status]}</span>
+        <span class="title">${esc(t.title)}</span>
+        <span class="hint">${esc(part ? part.name : t.part)}</span></div>
+      <div class="head">${esc(t.headline)}</div>
+      ${t.metrics.map(meter).join("")}
+      ${t.notes.map((x) => `<div class="note">${esc(x)}</div>`).join("")}
+      ${t.checks ? `<div class="checks">${esc(t.simulation)}: ${esc(t.checks.summary)}</div>` : ""}
+    </div>`;
+  }).join("");
+  $("issues").innerHTML = report.issues.map((i) =>
+    `<div class="issue">⚠ ${esc(i.message)}</div>`).join("");
+}
+
+function show(rep, fit) {
+  report = rep; design = rep ? rep.design : design;
+  renderDesign(); renderTests(); buildModel(fit);
+}
+
+function setBusy(on, label) {
+  busy = on;
+  for (const id of ["check", "optimise", "download"]) $(id).disabled = on || !design;
+  for (const id of ["apply", "ask-go"]) $(id).disabled = on;
+  if (on && label) $("verdict").innerHTML = `<span class="busy">${esc(label)}</span>`;
+}
+
+function showError(err) {
+  $("results").hidden = false;
+  document.querySelector("main").classList.remove("start");
+  $("verdict").innerHTML = `<div class="error-box">${esc(err.message || err)}</div>`;
+}
+
+function viewing(li) {
+  for (const x of $("log").children) x.classList.toggle("viewing", x === li);
+}
+
+// activity log: what the designer or optimiser is doing right now
+const TOOL_TEXT = {
+  list_materials: "Reading the material library", list_test_types: "Reading the test types",
+  list_simulations: "Looking through the simulation catalogue",
+  describe_simulation: "Reading the inputs of", check_design: "Testing a version",
+  submit_design: "Re-testing the chosen design",
+  optimise_design: "Optimising sizes and materials" };
+let candidates = [];
+function log(t, text, cls = "", rep = null) {
+  const li = document.createElement("li");
+  const ts = document.createElement("span"); ts.className = "t"; ts.textContent = `${Math.round(t)}s`;
+  const tx = document.createElement(rep ? "button" : "span");
+  tx.textContent = text; tx.className = (cls + (rep ? " cand" : "")).trim();
+  if (rep) {                                   // every checked candidate can be viewed again
+    const i = candidates.push(rep) - 1;
+    tx.title = "Show this version";
+    tx.onclick = () => { viewing(li); selected = null; show(candidates[i], true); };
+  }
+  li.append(ts, tx);
+  $("log").append(li);
+  $("log").scrollTop = $("log").scrollHeight;
+  return li;
+}
+
+async function runCheck(fit = false) {
+  setBusy(true, "Running every test as a verified simulation…");
+  try { show(await api("/api/check", { design }), fit); }
+  catch (e) { showError(e); } finally { setBusy(false); renderDesign(); }
+}
+
+async function runOptimise() {
+  setBusy(true, "Optimising: proposing changes, re-testing each one, keeping what works…");
+  $("opt-card").hidden = true;
+  try {
+    const { job } = await api("/api/optimise", { design });
+    const out = await follow(job, () => {});
+    selected = null;
+    show({ design: out.design, summary: out.summary, issues: out.all_issues, tests: out.after }, true);
+    const [m0, m1] = out.mass_g;
+    $("opt").innerHTML = `<div class="${out.all_pass ? "pass" : "fail"}" style="font-weight:600">
+        ${out.all_pass ? "Every test passes on verified simulations" : "Not every test passes"}</div>
+      <div class="hint">Mass ${fmt(m0)} g → ${fmt(m1)} g</div>
+      ${out.steps.length ? out.steps.map((s) => `<div class="step"><span class="kind">${
+        s.kind.toUpperCase()}</span>${esc(s.change)}<div class="why">${esc(s.reason)}</div></div>`).join("")
+        : `<div class="step">No changes were needed.</div>`}
+      ${out.note ? `<div class="note" style="margin-top:8px">${esc(out.note)}</div>` : ""}`;
+    $("opt-card").hidden = false;
+  } catch (e) { showError(e); } finally { setBusy(false); renderDesign(); }
+}
+
+async function runDesign(request) {
+  const change = design && modeValue() === "change";
+  setBusy(true);
+  $("report-card").hidden = true; $("log").innerHTML = ""; candidates = []; $("activity").hidden = false;
+  $("activity-title").textContent = change ? "Changing the design" : "Designing";
+  $("opt-card").hidden = true;
+  if (!change) { design = null; report = null; selected = null; renderDesign(); renderTests(); buildModel(false); }
+  let fitted = false;
+  try {
+    const { job } = await api("/api/design", change ? { request, design } : { request });
+    const out = await follow(job, (e) => {
+      if (e.kind === "tool") {
+        log(e.t, `${TOOL_TEXT[e.name] || e.name}${e.detail ? " " + e.detail : ""}`);
+      } else if (e.kind === "check" || e.kind === "submit") {
+        const c = e.report.tests.counts, n = e.report.tests.tests.length;
+        const what = e.kind === "submit" ? "Final design: " : `${e.report.design.name}: `;
+        const li = log(e.t, what + `${c.pass} of ${n} tests pass` +
+          (c.fail ? `, ${c.fail} fail` : "") + (c.error ? `, ${c.error} can't run` : "") +
+          (c.unverified ? `, ${c.unverified} unverified` : ""), c.pass === n && n ? "pass" : "fail",
+          e.report);
+        viewing(li); selected = null;
+        show(e.report, !fitted); fitted = true;              // the design appears as it is tested
+      } else if (e.kind === "tool_error") {
+        log(e.t, `Rejected, the model will fix it: ${e.error.slice(0, 300)}`, "warn");
+      } else if (e.kind === "optimise") {
+        log(e.t, `Optimiser: ${e.changes.length} change(s)${e.all_pass ? ", all pass" : ""}`);
+      }
+    });
+    if (out.design) {
+      show(out, !fitted);
+      viewing([...$("log").children].reverse().find((li) => li.querySelector(".cand")));
+    }
+    if (out.design && !out.submitted)
+      log(0, "The model did not name a final design; showing the last version it tested.", "warn");
+    $("answer").innerHTML = markdown(out.answer);            // escaped inside markdown()
+    $("report-card").hidden = false;
+    $("activity-title").textContent = out.all_pass ? "Done: every test passes" : "Done";
+    const u = out.usage || {};
+    if (u.output_tokens) log(0, `Model use: ${((u.input_tokens || 0) + (u.cache_read_input_tokens || 0) +
+      (u.cache_creation_input_tokens || 0)).toLocaleString()} input and ${
+      u.output_tokens.toLocaleString()} output tokens`, "hint");
+    if (out.stop_reason === "refusal") showError("The model declined this request.");
+  } catch (e) {
+    log(0, e.message, "fail");
+    $("activity-title").textContent = "Stopped";
+  } finally { setBusy(false); renderDesign(); }
+}
+
+async function loadExample(name) {
+  design = await api(`/api/example/${encodeURIComponent(name)}`);
+  report = null; selected = null; $("opt-card").hidden = true; $("report-card").hidden = true;
+  $("activity").hidden = true;
+  renderDesign(); buildModel(true);
+  await runCheck(true);
+}
+
+// Small Markdown renderer for the designer's report.  Everything is escaped first,
+// so text from the model can never become live HTML.
+function inline(t) {
+  return esc(t).replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>");
+}
+function markdown(src) {
+  const lines = String(src).split("\n"), out = [];
+  let i = 0;
+  const cells = (l) => l.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim());
+  while (i < lines.length) {
+    const l = lines[i];
+    if (/^\s*$/.test(l)) { i++; continue; }
+    let m;
+    if ((m = l.match(/^(#{1,6})\s+(.*)$/))) { out.push(`<h3>${inline(m[2])}</h3>`); i++; continue; }
+    if (/^\s*\|/.test(l)) {
+      const rows = [];
+      while (i < lines.length && /^\s*\|/.test(lines[i])) rows.push(lines[i++]);
+      const body = rows.filter((r) => !/^\s*\|?\s*:?-{2,}/.test(r));
+      const [head, ...rest] = body;
+      out.push(`<div class="table-wrap"><table><tr>${cells(head).map((c) => `<th>${inline(c)}</th>`).join("")}</tr>${
+        rest.map((r) => `<tr>${cells(r).map((c) => `<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</table></div>`);
+      continue;
+    }
+    if (/^\s*([-*]|\d+\.)\s+/.test(l)) {
+      const ordered = /^\s*\d+\./.test(l), items = [];
+      while (i < lines.length && /^\s*([-*]|\d+\.)\s+/.test(lines[i]))
+        items.push(lines[i++].replace(/^\s*([-*]|\d+\.)\s+/, ""));
+      const tag = ordered ? "ol" : "ul";
+      out.push(`<${tag}>${items.map((x) => `<li>${inline(x)}</li>`).join("")}</${tag}>`);
+      continue;
+    }
+    const para = [];
+    while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#{1,6}\s|\s*\||\s*([-*]|\d+\.)\s)/.test(lines[i]))
+      para.push(lines[i++]);
+    out.push(`<p>${inline(para.join(" "))}</p>`);
+  }
+  return out.join("");
+}
+
+const modeValue = () => document.querySelector('input[name="mode"]:checked')?.value || "new";
+
+// -- events ----------------------------------------------------------------------
+$("check").onclick = () => runCheck();
+$("optimise").onclick = () => runOptimise();
+$("download").onclick = () => {
+  const blob = new Blob([JSON.stringify(design, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = (design.name || "design").toLowerCase().replace(/[^a-z0-9]+/g, "_") + ".json";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+$("apply").onclick = () => {
+  try { design = JSON.parse($("json").value); } catch (e) { return showError("JSON: " + e.message); }
+  runCheck(true);
+};
+$("parts").onchange = (e) => {
+  const pid = e.target.dataset.part;
+  if (!pid) return;
+  design.parts.find((p) => p.id === pid).material = e.target.value;
+  runCheck();
+};
+$("mode").onchange = () => renderDesign();
+function pick(el) {
+  const id = el.dataset.test;
+  const t = report.tests.tests.find((x) => x.id === id);
+  selected = selected && selected.id === id ? null : t;
+  renderDesign(); renderTests(); buildModel(false);
+}
+$("tests").onclick = (e) => { const el = e.target.closest(".test"); if (el) pick(el); };
+$("tests").onkeydown = (e) => {
+  const el = e.target.closest(".test");
+  if (el && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); pick(el); }
+};
+for (const tab of document.querySelectorAll(".tab")) {
+  tab.onclick = () => {
+    for (const t of document.querySelectorAll(".tab")) t.setAttribute("aria-selected", t === tab);
+    for (const p of document.querySelectorAll("[data-panel]")) p.hidden = p.dataset.panel !== tab.dataset.tab;
+  };
+}
+$("ask-form").onsubmit = (e) => {
+  e.preventDefault();
+  const request = $("ask-input").value.trim();
+  if (request && !busy) runDesign(request);
+};
+$("ask-input").onkeydown = (e) => {
+  if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) $("ask-form").requestSubmit();
+};
+$("examples").onclick = (e) => {
+  const b = e.target.closest("button[data-example]");
+  if (b && !busy) loadExample(b.dataset.example);
+};
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => design && buildModel(true));
+
+// -- start -----------------------------------------------------------------------
+info = await api("/api/info");
+$("examples").innerHTML = info.examples.map((n) =>
+  `<button class="linkish" data-example="${esc(n)}">${esc(n.replace(/_/g, " "))}</button>`).join(", ");
+if (!info.agent) {
+  $("ask-go").disabled = true; $("ask-input").disabled = true;
+  $("ask-hint").textContent = "Designing from a description needs the anthropic package and " +
+    "ANTHROPIC_API_KEY set where the server runs. You can still open an example or edit a design's JSON.";
+}
+renderDesign(); buildModel(false);
+</script>
+</body>
+</html>

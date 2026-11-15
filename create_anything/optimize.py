@@ -16,9 +16,11 @@ from __future__ import annotations
 
 import copy
 
+import numpy as np
+
 from . import materials
-from .design import extents, part_by_id, total_mass_kg
-from .scenarios import beam_axes, evaluate
+from .design import extents, geometry_issues, part_by_id, profile_section, total_mass_kg
+from .scenarios import beam_axes, evaluate, parse_source
 
 GROW = (1.15, 1.3, 1.6, 2.0)
 SHRINK = (0.8, 0.9, 0.95)
@@ -26,6 +28,10 @@ MAX_SCALE, MIN_SCALE = 4.0, 0.35
 STRUCTURAL = ("load", "drop", "vibration")
 METALS_FOR_HEAT = ("aluminium", "steel", "stainless", "copper")
 AXIS_NAME = "xyz"
+# thinnest wall or section each process can reliably make, in mm; trims stop here
+MIN_FEATURE = {"3d_print": 1.2, "injection_mould": 1.0, "laser_cut": 1.0, "machine": 1.0,
+               "sheet_metal": 0.5, "extrude": 1.0, "weld": 1.5, "saw": 3.0, "layup": 0.5,
+               "wire": 0.1}
 
 
 def _variables(design: dict, sc: dict) -> list:
@@ -71,12 +77,38 @@ def _variables(design: dict, sc: dict) -> list:
             out += [(f"section {AXIS_NAME[a]}", [("size", a)]) for a in range(3) if a != span]
     elif kind == "flow" and shape == "tube":
         out.append(("bore", [("radius", None), ("inner_radius", None)]))
+    elif kind == "simulation":
+        for source in (sc.get("bind") or {}).values():
+            try:
+                key, idx = parse_source(source)
+            except ValueError:
+                continue
+            if key in ("material", "part", "design") or key not in _SCALABLE.get(shape, ()):
+                continue
+            label = (f"{AXIS_NAME[idx]} size" if key == "size" and isinstance(idx, int)
+                     else source.replace("_", " ").replace(".", " "))
+            if (label, [(key, idx)]) not in out:
+                out.append((label, [(key, idx)]))
+    if shape == "extrusion" and kind in STRUCTURAL + ("current",):
+        out = [("profile width", [("profile", 0)]), ("profile height", [("profile", 1)])]
+        if part.get("wall"):
+            out.append(("wall", [("wall", None)]))
     return out
+
+
+_SCALABLE = {"box": ("size", "wall"), "cylinder": ("radius", "length"),
+             "tube": ("radius", "inner_radius", "length"), "sphere": ("radius",),
+             "heatsink": ("base", "fin_height", "fin_thickness", "n_fins"),
+             "extrusion": ("length", "wall", "profile_u", "profile_v")}
 
 
 def _get(part, key, idx):
     if idx == "wall":
         return part["radius"] - part["inner_radius"]
+    if key in ("profile", "profile_u", "profile_v"):
+        axis = idx if key == "profile" else (0 if key == "profile_u" else 1)
+        pts = [p[axis] for p in part["profile"]]
+        return max(pts) - min(pts)
     return part[key] if idx is None else part[key][idx]
 
 
@@ -93,6 +125,10 @@ def _scaled(design, original, pid, label, targets, factor):
                 return None
         elif idx == "wall":
             part["radius"] = part["inner_radius"] + before * factor
+        elif key in ("profile", "profile_u", "profile_v"):
+            axis = idx if key == "profile" else (0 if key == "profile_u" else 1)
+            part["profile"] = [[c * factor if a == axis else c for a, c in enumerate(pt)]
+                               for pt in part["profile"]]
         elif idx is None:
             part[key] = part[key] * factor
         else:
@@ -100,11 +136,33 @@ def _scaled(design, original, pid, label, targets, factor):
         ratio = _get(part, key, idx) / _get(ref, key, idx)
         if not MIN_SCALE <= ratio <= MAX_SCALE:
             return None
-    if part.get("wall") and 2 * part["wall"] >= min(part["size"]):
+    if part.get("wall") and part["shape"] == "box" and 2 * part["wall"] >= min(part["size"]):
+        return None
+    if part["shape"] == "tube" and part["inner_radius"] >= part["radius"]:
+        return None
+    floor = MIN_FEATURE.get(part["process"], 0.5)
+    if factor < 1 and _thinnest(part) < floor:
         return None
     after = _get(part, *targets[0])
     unit = "" if targets[0][0] == "n_fins" else " mm"
     return new, f"{part['name']}: {label} {before:.3g} -> {after:.3g}{unit}"
+
+
+def _thinnest(part) -> float:
+    """Smallest wall or section of a part in mm (what a process has to make)."""
+    if part.get("wall"):
+        return part["wall"]
+    if part["shape"] == "tube":
+        return part["radius"] - part["inner_radius"]
+    if part["shape"] == "heatsink":
+        return min(part["fin_thickness"], part["base"][2])
+    if part["shape"] == "extrusion":
+        # thin-walled section: 2 x area / perimeter is the wall thickness of an angle,
+        # channel or tube profile, and half the side of a solid square
+        pts = np.array(part["profile"], dtype=float)
+        perim = float(np.sum(np.linalg.norm(np.roll(pts, -1, axis=0) - pts, axis=1)))
+        return 2 * profile_section(part)["area"] / perim
+    return min(extents(part))
 
 
 def _material_options(part: dict, sc: dict) -> list:
@@ -136,7 +194,12 @@ def _candidates(design, original, test) -> list:
         target = part_by_id(new, part["id"])
         old = materials.get(target["material"])["name"]
         target["material"] = key
-        out.append((new, f"{part['name']}: {old} -> {materials.get(key)['name']}"))
+        label = f"{part['name']}: {old} -> {materials.get(key)['name']}"
+        made_by = materials.get(key)["processes"]
+        if target["process"] not in made_by:          # PLA is printed, aluminium is not
+            target["process"] = made_by[0]
+            label += f" (made by {made_by[0].replace('_', ' ')})"
+        out.append((new, label))
     return out
 
 
@@ -219,6 +282,14 @@ def optimise(design: dict, max_rounds: int = 12, slim: bool = True) -> dict:
                     f"{stuck['headline']}. It needs a different design idea.")
         else:
             note = "The final design does not pass every test on verified simulations."
+    # resizing a part does not move it, so a thicker arm can now run into a
+    # neighbour or a thinner one can leave a gap: say so instead of hiding it
+    known = {(i["where"], i["message"]) for i in geometry_issues(original)}
+    new_issues = [i for i in geometry_issues(current) if (i["where"], i["message"]) not in known]
+    if new_issues:
+        extra = (f"The changes left {len(new_issues)} new geometry issue(s); move the "
+                 "affected parts before building it.")
+        note = f"{note} {extra}".strip()
     return {"design": current, "steps": steps, "before": before, "after": after,
             "all_pass": after["all_pass"], "changed": bool(steps),
-            "mass_g": [m0, m1], "note": note}
+            "mass_g": [m0, m1], "note": note, "issues": new_issues}

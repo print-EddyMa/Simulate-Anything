@@ -17,12 +17,14 @@ dev = ["pytest>=7"]
 
 [project.scripts]
 simulate-anything = "simulate_anything.cli:main"
+create-anything = "create_anything.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["simulate_anything*"]
+include = ["simulate_anything*", "create_anything*"]
 
 [tool.setuptools.package-data]
 simulate_anything = ["web/*.html"]
+create_anything = ["web/*.html", "web/vendor/*", "examples/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

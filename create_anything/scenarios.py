@@ -16,10 +16,11 @@ import math
 import numpy as np
 
 import simulate_anything as sa
-from simulate_anything.units import DimensionError, convert
+from simulate_anything.units import _NUM, DimensionError, convert
 
 from . import materials
-from .design import AXES, DesignError, extents, part_by_id, total_mass_kg, volume_mm3
+from .design import (AXES, PROFILE_AXES, DesignError, extents, part_by_id, profile_section,
+                     total_mass_kg, volume_mm3)
 
 G0 = 9.80665
 FLUIDS = {"water": (998.0, 1.0e-3), "air": (1.2, 1.8e-5), "oil": (870.0, 0.1),
@@ -34,10 +35,21 @@ def _q(sc, key, unit, default=None, delta=False):
     value = sc.get(key, default)
     if value is None:
         raise ScenarioError(f"scenario '{sc['id']}' needs '{key}' (for example \"5 {unit}\")")
+    if not _has_unit(value):
+        if value not in (0, "0"):            # a bare number: which unit? never guess
+            raise ScenarioError(f"scenario '{sc['id']}', '{key}': give a unit, for example "
+                                f"\"{value} {unit}\"")
     try:
         return convert(value, unit, delta=delta)
     except DimensionError as exc:
         raise ScenarioError(f"scenario '{sc['id']}', '{key}': {exc}") from None
+
+
+def _has_unit(value) -> bool:
+    if not isinstance(value, str):
+        return False
+    m = _NUM.match(value.strip())
+    return bool(m and m.group(2).strip())
 
 
 def _metric(label, value, unit, limit, kind):
@@ -55,6 +67,28 @@ def _violation(metrics) -> float:
     return max(worst, 0.0)
 
 
+def beam_axes(part: dict, sc: dict):
+    """(span, load, side) axis indices of a box or mesh treated as a beam.
+
+    The span is ``span_axis`` if given, else the longest side.  The load acts
+    along ``load_axis`` if given, else straight down (z), unless the span is
+    vertical, in which case it bends about the thinner of the other two sides."""
+    e = extents(part)
+    if sc.get("span_axis") in AXES:
+        span = AXES[sc["span_axis"]]
+    elif part["shape"] == "extrusion":
+        span = AXES[part["axis"]]
+    else:
+        span = int(np.argmax(e))
+    rest = [a for a in range(3) if a != span]
+    if sc.get("load_axis") in AXES and AXES[sc["load_axis"]] != span:
+        load = AXES[sc["load_axis"]]
+    else:
+        load = 2 if span != 2 else min(rest, key=lambda a: e[a])
+    side = next(a for a in rest if a != load)
+    return span, load, side
+
+
 def section(part: dict, sc: dict):
     """Beam idealisation of a part: (length, width, height) in metres + note.
 
@@ -69,15 +103,22 @@ def section(part: dict, sc: dict):
         inertia = math.pi / 64 * (dia ** 4 - inner ** 4)
         return (part["length"] / 1e3, 12 * inertia / dia ** 3 / 1e3, dia / 1e3,
                 "round section modelled as the rectangle of equal stiffness and strength")
+    if shape == "extrusion":
+        u, v, along = PROFILE_AXES[part["axis"]]
+        span, load, _ = beam_axes(part, sc)
+        if span != along:
+            raise ScenarioError("an extrusion is tested as a beam along its own axis; "
+                                "drop span_axis or set it to the extrusion axis")
+        ps = profile_section(part)
+        inertia, c = ((ps["I_about_u"], ps["c_v"]) if load == v else
+                      (ps["I_about_v"], ps["c_u"]))
+        height = 2 * c                       # same outer-fibre distance -> same stress
+        return (part["length"] / 1e3, 12 * inertia / height ** 3 / 1e3, height / 1e3,
+                "profile modelled as the rectangle with the same second moment of area "
+                "and the same outer-fibre distance from the centroid")
     if shape not in ("box", "mesh"):
         raise ScenarioError(f"a {shape} cannot be tested as a beam")
-    span = AXES[sc["span_axis"]] if sc.get("span_axis") in AXES else int(np.argmax(e))
-    rest = [a for a in range(3) if a != span]
-    if sc.get("load_axis") in AXES and AXES[sc["load_axis"]] != span:
-        load = AXES[sc["load_axis"]]
-    else:
-        load = 2 if span != 2 else min(rest, key=lambda a: e[a])
-    side = next(a for a in rest if a != load)
+    span, load, side = beam_axes(part, sc)
     length, height, width, note = e[span], e[load], e[side], ""
     if shape == "mesh":
         solidity = volume_mm3(part) / max(e[0] * e[1] * e[2], 1e-12)
@@ -100,6 +141,9 @@ def _wall_thickness(part: dict) -> float:
         return (part["radius"] - part["inner_radius"]) / 1e3
     if part["shape"] == "heatsink":
         return part["base"][2] / 1e3
+    if part["shape"] == "extrusion":
+        raise ScenarioError("give the extrusion a 'wall' (its thinnest wall in mm) so heat "
+                            "through it can be modelled")
     return min(extents(part)) / 1e3
 
 
@@ -145,7 +189,8 @@ def test_drop(design, part, sc, verify):
     sf_min = float(sc.get("min_safety_factor", 1.0))
     sf = res.value("safety_factor")
     metrics = [_metric("safety factor at impact", sf, "", sf_min, "min")]
-    head = (f"{mass * 1e3:.3g} g dropped {drop:.2g} m onto the {part['name'].lower()}: peak "
+    weight = f"{mass * 1e3:.3g} g" if mass < 1 else f"{mass:.3g} kg"
+    head = (f"{weight} dropped {drop:.2g} m onto the {part['name'].lower()}: peak "
             f"force {res.value('peak_force'):.3g} N ({res.value('impact_factor'):.0f}x the "
             f"weight), safety factor {sf:.2f} (needs {sf_min:g})")
     return res, metrics, head, [note] if note else [], f"Drop: {drop:.2g} m"
@@ -224,6 +269,16 @@ def test_heat(design, part, sc, verify):
                       fin_width=f"{side} mm", h=f"{h * scale} W/(m^2*K)", tip="adiabatic")
         notes.append("round section modelled as the square bar of equal metal area, with "
                      "the film coefficient scaled so heat loss per length is exact")
+    elif part["shape"] == "extrusion":
+        pts = np.array(part["profile"])
+        area = profile_section(part)["area"]
+        perim = float(np.sum(np.linalg.norm(np.roll(pts, -1, axis=0) - pts, axis=1)))
+        side = math.sqrt(area)
+        params.update(fin_length=f"{part['length']} mm", fin_thickness=f"{side} mm",
+                      fin_width=f"{side} mm", h=f"{h * perim / (4 * side)} W/(m^2*K)",
+                      tip="adiabatic")
+        notes.append("profile modelled as the square bar of equal area, with the film "
+                     "coefficient scaled so heat loss per length is exact")
     elif part["shape"] == "box":
         span = AXES[sc["span_axis"]] if sc.get("span_axis") in AXES else int(np.argmax(e))
         a, b = sorted(e[i] for i in range(3) if i != span)
@@ -278,8 +333,9 @@ def test_current(design, part, sc, verify):
     notes = []
     if part["shape"] == "cylinder":
         length, dia = part["length"] / 1e3, 2 * part["radius"] / 1e3
-    elif part["shape"] in ("box", "tube"):
-        span = (AXES[part["axis"]] if part["shape"] == "tube" else int(np.argmax(e)))
+    elif part["shape"] in ("box", "tube", "extrusion"):
+        span = (AXES[part["axis"]] if part["shape"] in ("tube", "extrusion")
+                else int(np.argmax(e)))
         length = e[span] / 1e3
         area = volume_mm3(part) / e[span] * 1e-6
         dia = math.sqrt(4 * area / math.pi)
@@ -328,8 +384,130 @@ def test_flow(design, part, sc, verify):
     return res, metrics, head, [], f"Flow: {rate * 6e4:.3g} L/min"
 
 
+# -- any simulation in the catalogue ---------------------------------------------------
+MATERIAL_UNITS = {"density": "kg/m^3", "youngs_modulus": "Pa", "strength": "Pa",
+                  "conductivity": "W/(m*K)", "specific_heat": "J/(kg*K)",
+                  "service_temp": "degC", "ignition_temp": "degC", "resistivity": "ohm*m"}
+DIMENSION_KEYS = ("size", "radius", "inner_radius", "length", "wall", "base", "fin_height",
+                  "fin_thickness", "n_fins", "profile_u", "profile_v")
+SOURCES_HELP = ("size.0 | size.1 | size.2 (or size.x/y/z), radius, inner_radius, length, "
+                "wall, base.0-2, fin_height, fin_thickness, n_fins, profile_u, profile_v "
+                "(extrusion profile width/height), part.mass, part.volume, design.mass, "
+                "or material.<" + " | ".join(MATERIAL_UNITS) + ">")
+
+
+def parse_source(source: str):
+    """'size.2' -> ('size', 2); 'wall' -> ('wall', None); 'material.x' -> ('material', 'x')."""
+    src = str(source).strip()
+    key, _, idx = src.partition(".")
+    if key in ("material", "part", "design"):
+        return key, idx
+    if key not in DIMENSION_KEYS:
+        raise ScenarioError(f"unknown binding source '{src}' (use {SOURCES_HELP})")
+    if not idx:
+        return key, None
+    if idx in AXES:
+        return key, AXES[idx]
+    if idx not in ("0", "1", "2"):
+        raise ScenarioError(f"binding source '{src}': index must be 0-2 or x/y/z")
+    return key, int(idx)
+
+
+def bound_value(design: dict, part: dict, source: str):
+    """The value a binding source stands for, as something sa.run accepts."""
+    from .design import profile_extents
+    key, idx = parse_source(source)
+    mat = materials.get(part["material"])
+    if key == "material":
+        if idx not in MATERIAL_UNITS:
+            raise ScenarioError(f"unknown material property '{idx}' "
+                                f"(known: {sorted(MATERIAL_UNITS)})")
+        if mat[idx] is None:
+            raise ScenarioError(f"{mat['name']} has no {idx.replace('_', ' ')}")
+        return f"{mat[idx]} {MATERIAL_UNITS[idx]}"
+    if key == "part":
+        if idx == "mass":
+            return f"{volume_mm3(part) * 1e-9 * mat['density']} kg"
+        if idx == "volume":
+            return f"{volume_mm3(part) * 1e-9} m^3"
+        raise ScenarioError(f"unknown part property '{idx}' (use part.mass or part.volume)")
+    if key == "design":
+        if idx == "mass":
+            return f"{total_mass_kg(design)} kg"
+        raise ScenarioError(f"unknown design property '{idx}' (use design.mass)")
+    if key in ("profile_u", "profile_v"):
+        if part["shape"] != "extrusion":
+            raise ScenarioError(f"'{key}' only applies to an extrusion")
+        return f"{profile_extents(part)[0 if key == 'profile_u' else 1]} mm"
+    if key not in part:
+        raise ScenarioError(f"part '{part['id']}' ({part['shape']}) has no '{key}'")
+    value = part[key] if idx is None else part[key][idx]
+    return int(value) if key == "n_fins" else f"{value} mm"
+
+
+def test_simulation(design, part, sc, verify):
+    name = sc.get("simulation")
+    try:
+        cls = sa.get(str(name))
+    except sa.ParamError:
+        known = sorted(s["name"] for s in sa.catalog())
+        raise ScenarioError(f"unknown simulation '{name}' (known: {known})") from None
+    schema = {p["name"]: p for p in cls.schema()["params"]}
+    params = dict(sc.get("params") or {})
+    bind = sc.get("bind") or {}
+    if not isinstance(bind, dict) or not bind:
+        raise ScenarioError(
+            "a 'simulation' test must bind at least one parameter to the part ('bind': "
+            "{\"param\": \"size.2\" or \"material.conductivity\"...}), otherwise its "
+            "result does not depend on the design")
+    for pname in list(params) + list(bind):
+        if pname not in schema:
+            raise ScenarioError(f"'{name}' has no parameter '{pname}' "
+                                f"(parameters: {sorted(schema)})")
+    for pname, source in bind.items():
+        params[pname] = bound_value(design, part, source)
+    reqs = sc.get("require")
+    if not isinstance(reqs, list) or not reqs:
+        raise ScenarioError("a 'simulation' test needs 'require': [{\"qoi\": name, "
+                            "\"max\" or \"min\": value with unit}]")
+    res = _run(cls.name, params, verify)
+    if not res.qoi:
+        failed = "; ".join(f"{c.name}: {c.detail}" for c in res.report.failed()[:3])
+        raise ScenarioError(f"'{name}' rejected this setup before solving ({failed})")
+    metrics = []
+    for r in reqs:
+        q = r.get("qoi") if isinstance(r, dict) else None
+        if q not in res.qoi:
+            raise ScenarioError(f"'{name}' reports no result '{q}' "
+                                f"(results: {sorted(res.qoi)})")
+        kinds = [k for k in ("min", "max") if r.get(k) is not None]
+        if len(kinds) != 1:
+            raise ScenarioError(f"requirement on '{q}' needs exactly one of min or max")
+        value, unit = res.qoi[q]
+        limit = r[kinds[0]]
+        if unit and not _has_unit(limit):
+            raise ScenarioError(f"requirement on '{q}': give a unit, for example "
+                                f"\"{limit} {unit}\"")
+        try:
+            limit = float(limit) if not unit else convert(limit, unit)
+        except (DimensionError, TypeError, ValueError) as exc:
+            raise ScenarioError(f"requirement on '{q}' (reported in '{unit or 'no unit'}'): "
+                                f"{exc}") from None
+        metrics.append(_metric(r.get("label") or q.replace("_", " "), value, unit, limit,
+                               kinds[0]))
+    title = sc.get("title") or cls.schema()["title"]
+    shown = "; ".join(f"{m['label']} {m['value']:.4g} {m['unit']}".rstrip() +
+                      f" ({'needs' if not m['ok'] else 'limit'} "
+                      f"{'>=' if m['kind'] == 'min' else '<='} {m['limit']:.4g})"
+                      for m in metrics)
+    head = f"{cls.schema()['title']} on the {part['name'].lower()}: {shown}"
+    notes = [f"bound to the design: " + ", ".join(f"{k} = {v}" for k, v in bind.items())]
+    return res, metrics, head, notes, title
+
+
 TESTS = {"load": test_load, "drop": test_drop, "vibration": test_vibration,
-         "heat": test_heat, "fire": test_fire, "current": test_current, "flow": test_flow}
+         "heat": test_heat, "fire": test_fire, "current": test_current, "flow": test_flow,
+         "simulation": test_simulation}
 
 DESCRIPTIONS = {
     "load": "a steady force on a part held like a beam: needs force; optional support "
@@ -348,6 +526,11 @@ DESCRIPTIONS = {
                "max_temperature (70 degC), max_voltage_drop, or voltage + max_drop_percent",
     "flow": "liquid or gas through a tube: needs flow_rate; optional fluid (water | air | "
             "oil | glycol), max_pressure_drop (10 kPa), max_velocity",
+    "simulation": "any simulation in the Simulate Anything catalogue, for situations the "
+                  "types above do not cover: needs simulation (template name), bind "
+                  "({param: source} - at least one, tying the run to this part; sources: "
+                  + SOURCES_HELP + "), require ([{qoi, min | max (with unit)}]); optional "
+                  "params (other inputs with units), title",
 }
 
 
@@ -361,9 +544,13 @@ def run_scenario(design: dict, sc: dict, verify: bool = True, detail: bool = Tru
             raise ScenarioError(f"unknown test type '{sc['type']}' (known: {sorted(TESTS)})")
         part = part_by_id(design, sc["part"])
         res, metrics, head, notes, title = fn(design, part, sc, verify)
-    except (ScenarioError, DesignError, KeyError) as exc:
+    except (ScenarioError, DesignError, KeyError, sa.ParamError, DimensionError) as exc:
         msg = exc.args[0] if exc.args else str(exc)
         out.update(status="error", headline=str(msg), violation=1e3)
+        return out
+    except Exception as exc:          # a solver blew up: report it, never crash the design
+        out.update(status="error", headline=f"the simulation crashed: {type(exc).__name__}: "
+                                            f"{exc}", violation=1e3)
         return out
     out.update(metrics=metrics, headline=head, notes=notes, simulation=res.name,
                title=sc.get("title") or title)

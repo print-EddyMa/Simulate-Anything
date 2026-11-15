@@ -18,7 +18,7 @@ __version__ = "0.1.0"
 
 # Every module of simulation templates.  Importing one registers its classes.
 MODULES = ("electronics", "thermal", "mechanical", "fluids", "electromagnetics",
-           "aerospace", "energy", "bio", "chemistry", "earth")
+           "aerospace", "energy", "bio", "chemistry", "earth", "realworld")
 
 _loaded = False
 

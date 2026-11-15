@@ -1,0 +1,22 @@
+{
+  "name": "Outdoor sensor enclosure",
+  "description": "A small ABS box for an outdoor sensor, mounted on a fence post by a bar.",
+  "parts": [
+    {"id": "shell", "name": "Enclosure", "shape": "box", "size": [100, 70, 40], "wall": 2,
+     "position": [0, 0, 20], "material": "abs", "purpose": "keeps rain and sun off the board"},
+    {"id": "board", "name": "Sensor board", "shape": "box", "size": [80, 50, 1.6],
+     "position": [0, 0, 10], "material": "carbon_fibre", "purpose": "the electronics", "locked": true},
+    {"id": "mount", "name": "Mounting bar", "shape": "box", "size": [120, 20, 3],
+     "position": [0, 0, -1.5], "material": "aluminium", "purpose": "bolts to the post"}
+  ],
+  "assembly": [
+    {"parts": ["board", "shell"], "action": "Clip the board onto the standoffs inside the shell"},
+    {"parts": ["shell", "mount"], "action": "Bolt the bar to the bottom of the shell"}
+  ],
+  "scenarios": [
+    {"id": "fire", "type": "fire", "part": "shell", "heat_flux": "20 kW/m^2", "duration": "60 s",
+     "title": "Grass fire nearby for a minute"},
+    {"id": "fan", "type": "vibration", "part": "mount", "excitation": "25 Hz",
+     "title": "Post shaken by a fan motor at 25 Hz"}
+  ]
+}

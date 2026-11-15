@@ -1,0 +1,18 @@
+{
+  "name": "LED lamp heat sink",
+  "description": "An extruded aluminium heat sink for a 15 W LED module in still air.",
+  "parts": [
+    {"id": "sink", "name": "Heat sink", "shape": "heatsink", "base": [60, 60, 4],
+     "fin_height": 20, "fin_thickness": 1.5, "n_fins": 8, "position": [0, 0, 14],
+     "material": "aluminium", "process": "extrude", "purpose": "spreads and sheds the heat"},
+    {"id": "led", "name": "LED module", "shape": "box", "size": [30, 30, 2],
+     "position": [0, 0, 1], "material": "aluminium", "purpose": "the light source", "locked": true}
+  ],
+  "assembly": [
+    {"parts": ["led", "sink"], "action": "Spread thermal paste on the LED board and screw it to the base"}
+  ],
+  "scenarios": [
+    {"id": "running", "type": "heat", "part": "sink", "power": "15 W", "h": "10 W/(m^2*K)",
+     "max_temperature": "85 degC", "title": "15 W continuous in still air"}
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "name": "Wall shelf bracket",
+  "description": "A 3D-printed L-bracket that holds a small shelf off a wall with two screws.",
+  "parts": [
+    {
+      "id": "wall_plate",
+      "name": "Wall plate",
+      "shape": "box",
+      "size": [
+        6,
+        30,
+        80
+      ],
+      "position": [
+        3,
+        0,
+        40
+      ],
+      "material": "pla",
+      "purpose": "screws flat to the wall"
+    },
+    {
+      "id": "arm",
+      "name": "Arm",
+      "shape": "box",
+      "size": [
+        150,
+        30,
+        4
+      ],
+      "position": [
+        81,
+        0,
+        78
+      ],
+      "material": "pla",
+      "purpose": "carries the shelf",
+      "material_options": [
+        "petg",
+        "abs",
+        "nylon",
+        "polycarbonate"
+      ]
+    },
+    {
+      "id": "screw_top",
+      "name": "Top wall screw",
+      "shape": "cylinder",
+      "radius": 2,
+      "length": 40,
+      "axis": "x",
+      "position": [
+        -14,
+        0,
+        65
+      ],
+      "material": "steel",
+      "process": "fastener",
+      "purpose": "holds the plate to the wall",
+      "locked": true
+    },
+    {
+      "id": "screw_bottom",
+      "name": "Bottom wall screw",
+      "shape": "cylinder",
+      "radius": 2,
+      "length": 40,
+      "axis": "x",
+      "position": [
+        -14,
+        0,
+        15
+      ],
+      "material": "steel",
+      "process": "fastener",
+      "purpose": "holds the plate to the wall",
+      "locked": true
+    }
+  ],
+  "assembly": [
+    {
+      "parts": [
+        "wall_plate",
+        "arm"
+      ],
+      "action": "Print the plate and arm as one L-shaped piece, arm on top"
+    },
+    {
+      "parts": [
+        "wall_plate",
+        "screw_top",
+        "screw_bottom"
+      ],
+      "action": "Screw the plate to a stud with both screws"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "books",
+      "type": "load",
+      "part": "arm",
+      "force": "40 N",
+      "title": "4 kg of books on the end"
+    },
+    {
+      "id": "knock",
+      "type": "drop",
+      "part": "arm",
+      "height": "0.3 m",
+      "mass": "1 kg",
+      "title": "A 1 kg book dropped onto it from 30 cm"
+    }
+  ]
+}
