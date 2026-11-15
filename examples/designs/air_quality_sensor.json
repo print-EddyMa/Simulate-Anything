@@ -1,0 +1,703 @@
+{
+ "name": "Solar street-lamp air quality node",
+ "description": "Self-powered PM2.5/PM10 + NO2/O3 monitor that clamps to a street lamp post with stainless band clamps. A vertical south-facing (+x) 25 W panel sheds snow and suits low winter sun; a 77 Wh LiFePO4 battery and duty-cycled sensors (~0.25 W average) give a week of autonomy. Data via LoRaWAN.",
+ "parts": [
+  {
+   "id": "lamp_post",
+   "name": "Lamp post section (existing)",
+   "shape": "tube",
+   "radius": 70.0,
+   "inner_radius": 65.0,
+   "length": 1600.0,
+   "position": [
+    0.0,
+    0.0,
+    800.0
+   ],
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Existing street lamp column the node clamps to",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "sheet_metal",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "clamp_low",
+   "name": "Lower band clamp",
+   "shape": "tube",
+   "radius": 72.0,
+   "inner_radius": 70.0,
+   "length": 25.0,
+   "position": [
+    0.0,
+    0.0,
+    700.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Stainless band clamp around post, no drilling",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "clamp_high",
+   "name": "Upper band clamp",
+   "shape": "tube",
+   "radius": 72.0,
+   "inner_radius": 70.0,
+   "length": 25.0,
+   "position": [
+    0.0,
+    0.0,
+    1200.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Second clamp to resist overturning moment",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "standoff_low",
+   "name": "Lower standoff bracket",
+   "shape": "box",
+   "size": [
+    49.0,
+    40.0,
+    30.0
+   ],
+   "position": [
+    94.5,
+    0.0,
+    700.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Spaces mast off post, carries band clamp",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "standoff_high",
+   "name": "Upper standoff bracket",
+   "shape": "box",
+   "size": [
+    49.0,
+    40.0,
+    30.0
+   ],
+   "position": [
+    94.5,
+    0.0,
+    1200.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Spaces mast off post",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mast",
+   "name": "Mounting mast",
+   "shape": "tube",
+   "radius": 21.0,
+   "inner_radius": 18.5,
+   "length": 900.0,
+   "position": [
+    140.0,
+    0.0,
+    1000.0
+   ],
+   "material": "aluminium",
+   "group": "mounting",
+   "purpose": "Vertical spine carrying panel, enclosure and sensor shield",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "solar_panel",
+   "name": "25 W mono solar panel (vertical)",
+   "shape": "box",
+   "size": [
+    25.0,
+    350.0,
+    540.0
+   ],
+   "position": [
+    173.5,
+    0.0,
+    1200.0
+   ],
+   "material": "solar_module",
+   "group": "power",
+   "look": "solar",
+   "purpose": "Charges battery; vertical south-facing to shed snow and catch low winter sun",
+   "specs": {
+    "power": "25",
+    "voltage": "18",
+    "efficiency": "0.2"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "enclosure",
+   "name": "IP66 electronics enclosure",
+   "shape": "box",
+   "size": [
+    100.0,
+    180.0,
+    220.0
+   ],
+   "wall": 3.0,
+   "position": [
+    211.0,
+    0.0,
+    800.0
+   ],
+   "material": "polycarbonate",
+   "group": "electronics",
+   "purpose": "Sealed, UV-stabilised housing for battery and electronics",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "battery",
+   "name": "LiFePO4 12.8 V 6 Ah pack",
+   "shape": "box",
+   "size": [
+    65.0,
+    151.0,
+    94.0
+   ],
+   "position": [
+    211.0,
+    0.0,
+    740.0
+   ],
+   "material": "lifepo4",
+   "group": "power",
+   "look": "battery",
+   "purpose": "Energy store for 7-day dark-weather autonomy",
+   "specs": {
+    "capacity_wh": "76.8",
+    "voltage": "12.8"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "controller",
+   "name": "MCU + MPPT charger board",
+   "shape": "box",
+   "size": [
+    60.0,
+    150.0,
+    25.0
+   ],
+   "position": [
+    211.0,
+    0.0,
+    855.0
+   ],
+   "material": "electronics",
+   "group": "electronics",
+   "look": "pcb",
+   "purpose": "Charge control with low-temp charge cutoff, sensor scheduling, logging",
+   "specs": {
+    "power": "0.05"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "radio",
+   "name": "LoRaWAN module",
+   "shape": "box",
+   "size": [
+    30.0,
+    40.0,
+    8.0
+   ],
+   "position": [
+    211.0,
+    60.0,
+    884.0
+   ],
+   "material": "electronics",
+   "group": "electronics",
+   "look": "pcb",
+   "purpose": "Sends readings every 5 min to gateway",
+   "specs": {
+    "power": "0.05"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "antenna",
+   "name": "868 MHz whip antenna",
+   "shape": "cylinder",
+   "radius": 6.0,
+   "length": 200.0,
+   "position": [
+    240.0,
+    60.0,
+    1010.0
+   ],
+   "material": "abs",
+   "group": "electronics",
+   "purpose": "LoRa antenna, above the box and clear of the post",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "sensor_shield",
+   "name": "Louvred sensor shield",
+   "shape": "box",
+   "size": [
+    90.0,
+    120.0,
+    70.0
+   ],
+   "wall": 2.0,
+   "position": [
+    211.0,
+    0.0,
+    655.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Rain/sun shield letting air reach sensors",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pm_sensor",
+   "name": "Laser PM2.5/PM10 sensor",
+   "shape": "box",
+   "size": [
+    41.0,
+    41.0,
+    12.0
+   ],
+   "position": [
+    211.0,
+    -25.0,
+    655.0
+   ],
+   "material": "electronics",
+   "group": "sensing",
+   "look": "pcb",
+   "purpose": "Optical particle counter, runs 30 s in every 2 min",
+   "specs": {
+    "power": "0.12"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "gas_sensors",
+   "name": "NO2/O3 electrochemical board",
+   "shape": "box",
+   "size": [
+    40.0,
+    40.0,
+    15.0
+   ],
+   "position": [
+    211.0,
+    30.0,
+    655.0
+   ],
+   "material": "electronics",
+   "group": "sensing",
+   "look": "pcb",
+   "purpose": "Low-power gas concentration measurement",
+   "specs": {
+    "power": "0.03"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  }
+ ],
+ "assembly": [
+  {
+   "parts": [
+    "lamp_post"
+   ],
+   "action": "Survey existing lamp column: confirm diameter 140 mm and sound galvanising at 3-4.5 m mounting height"
+  },
+  {
+   "parts": [
+    "clamp_low",
+    "clamp_high",
+    "standoff_low",
+    "standoff_high",
+    "mast",
+    "lamp_post"
+   ],
+   "action": "Bolt mast to standoffs, then wrap stainless band clamps around the lamp post and tension to 15 N\u00b7m"
+  },
+  {
+   "parts": [
+    "battery",
+    "controller",
+    "radio",
+    "enclosure"
+   ],
+   "action": "Fit battery on base bracket, controller and radio on DIN plate; seal lid with gasket"
+  },
+  {
+   "parts": [
+    "sensor_shield",
+    "pm_sensor",
+    "gas_sensors"
+   ],
+   "action": "Mount sensors inside louvred shield below the enclosure; route cable via gland"
+  },
+  {
+   "parts": [
+    "enclosure",
+    "sensor_shield",
+    "mast"
+   ],
+   "action": "U-bolt enclosure and shield to the mast"
+  },
+  {
+   "parts": [
+    "solar_panel",
+    "mast"
+   ],
+   "action": "Clamp panel to mast top facing south, vertical"
+  },
+  {
+   "parts": [
+    "antenna",
+    "enclosure"
+   ],
+   "action": "Screw whip antenna into N-type bulkhead on top of the enclosure"
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "winter_week",
+   "type": "power",
+   "part": "battery",
+   "title": "7 overcast winter days",
+   "panel": "solar_panel",
+   "loads": [
+    "controller",
+    "radio",
+    "pm_sensor",
+    "gas_sensors"
+   ],
+   "days": 7,
+   "peak_irradiance": 250,
+   "day_length": 8,
+   "weather_factor": 0.2,
+   "min_charge": 0.2
+  },
+  {
+   "id": "summer_sun",
+   "type": "enclosure",
+   "part": "enclosure",
+   "title": "Summer sun on sealed box (35 degC air)",
+   "irradiance": 1000,
+   "wind": 1,
+   "absorptivity": 0.4
+  },
+  {
+   "id": "storm",
+   "type": "wind",
+   "part": "mast",
+   "title": "35 m/s storm gust",
+   "speed": 35,
+   "direction": "x",
+   "carries": [
+    "solar_panel",
+    "enclosure",
+    "sensor_shield",
+    "antenna"
+   ],
+   "min_safety_factor": 1.5
+  },
+  {
+   "id": "standoff_yank",
+   "type": "load",
+   "part": "standoff_high",
+   "title": "Ice + snow + tug on upper standoff",
+   "force": 400,
+   "support": "cantilever",
+   "position": 1,
+   "span_axis": "x",
+   "load_axis": "z",
+   "min_safety_factor": 2
+  },
+  {
+   "id": "install_drop",
+   "type": "drop",
+   "part": "enclosure",
+   "title": "Dropped from ladder during install",
+   "height": 1.5,
+   "mass": 1.6,
+   "min_safety_factor": 1
+  }
+ ],
+ "diagram": {
+  "nodes": [
+   {
+    "id": "sun",
+    "label": "Winter sun (low, overcast)",
+    "kind": "environment"
+   },
+   {
+    "id": "wind",
+    "label": "Wind gusts / ice",
+    "kind": "environment"
+   },
+   {
+    "id": "air",
+    "label": "Street air (PM, NO2, O3)",
+    "kind": "environment"
+   },
+   {
+    "id": "panel",
+    "label": "25 W solar panel (vertical, south)",
+    "kind": "power",
+    "part": "solar_panel"
+   },
+   {
+    "id": "mppt",
+    "label": "MPPT charger + MCU board",
+    "kind": "component",
+    "part": "controller"
+   },
+   {
+    "id": "batt",
+    "label": "LiFePO4 12.8 V 6 Ah",
+    "kind": "power",
+    "part": "battery"
+   },
+   {
+    "id": "pm",
+    "label": "Laser PM2.5/PM10 sensor",
+    "kind": "component",
+    "part": "pm_sensor"
+   },
+   {
+    "id": "gas",
+    "label": "Electrochemical gas sensors",
+    "kind": "component",
+    "part": "gas_sensors"
+   },
+   {
+    "id": "radio",
+    "label": "LoRaWAN radio + antenna",
+    "kind": "component",
+    "part": "radio"
+   },
+   {
+    "id": "cloud",
+    "label": "Gateway / cloud dashboard",
+    "kind": "software"
+   },
+   {
+    "id": "mount",
+    "label": "Mast + band clamps on lamp post",
+    "kind": "component",
+    "part": "mast"
+   }
+  ],
+  "edges": [
+   {
+    "from": "sun",
+    "to": "panel",
+    "kind": "power",
+    "label": "irradiance"
+   },
+   {
+    "from": "panel",
+    "to": "mppt",
+    "kind": "power",
+    "label": "18 V DC"
+   },
+   {
+    "from": "mppt",
+    "to": "batt",
+    "kind": "power",
+    "label": "charge"
+   },
+   {
+    "from": "batt",
+    "to": "mppt",
+    "kind": "power",
+    "label": "12.8 V"
+   },
+   {
+    "from": "mppt",
+    "to": "pm",
+    "kind": "power",
+    "label": "5 V duty-cycled"
+   },
+   {
+    "from": "mppt",
+    "to": "gas",
+    "kind": "power",
+    "label": "3.3 V"
+   },
+   {
+    "from": "air",
+    "to": "pm",
+    "kind": "data",
+    "label": "sampled air"
+   },
+   {
+    "from": "air",
+    "to": "gas",
+    "kind": "data",
+    "label": "diffusion"
+   },
+   {
+    "from": "pm",
+    "to": "mppt",
+    "kind": "data",
+    "label": "UART"
+   },
+   {
+    "from": "gas",
+    "to": "mppt",
+    "kind": "data",
+    "label": "ADC/I2C"
+   },
+   {
+    "from": "mppt",
+    "to": "radio",
+    "kind": "data",
+    "label": "readings"
+   },
+   {
+    "from": "radio",
+    "to": "cloud",
+    "kind": "rf",
+    "label": "868 MHz LoRa"
+   },
+   {
+    "from": "wind",
+    "to": "mount",
+    "kind": "mechanical",
+    "label": "gust load"
+   },
+   {
+    "from": "sun",
+    "to": "mppt",
+    "kind": "heat",
+    "label": "solar heating of box"
+   }
+  ]
+ }
+}

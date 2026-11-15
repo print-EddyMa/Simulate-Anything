@@ -1,0 +1,779 @@
+{
+ "name": "24 V 20 A Go-Kart Motor Driver",
+ "description": "H-bridge brushed DC motor driver for an electric go-kart. Four low-Rds(on) MOSFETs on a 2 oz PCB with copper bus bars, sealed in a die-cast aluminium box; MOSFETs are clamped through a thermal pad to the lid, which carries an external finned heatsink. Rated 24 V, 20 A continuous at 40 \u00b0C ambient.",
+ "parts": [
+  {
+   "id": "enclosure",
+   "name": "Die-cast enclosure (light grey powder coat)",
+   "shape": "box",
+   "size": [
+    160.0,
+    130.0,
+    80.0
+   ],
+   "wall": 3.0,
+   "position": [
+    0.0,
+    0.0,
+    40.0
+   ],
+   "material": "aluminium",
+   "group": "housing",
+   "purpose": "Sealed IP65 housing; lid conducts MOSFET heat to heatsink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "heatsink",
+   "name": "Finned heatsink",
+   "shape": "heatsink",
+   "base": [
+    120.0,
+    100.0,
+    6.0
+   ],
+   "fin_height": 30.0,
+   "fin_thickness": 1.5,
+   "n_fins": 12,
+   "position": [
+    0.0,
+    0.0,
+    98.0
+   ],
+   "material": "aluminium",
+   "group": "thermal",
+   "purpose": "Rejects MOSFET losses to kart air",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pcb",
+   "name": "Driver PCB (FR4, 2 oz Cu)",
+   "shape": "box",
+   "size": [
+    120.0,
+    90.0,
+    1.6
+   ],
+   "position": [
+    0.0,
+    0.0,
+    70.2
+   ],
+   "material": "electronics",
+   "look": "pcb",
+   "group": "electronics",
+   "purpose": "Carries power stage and control",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "q1",
+   "name": "MOSFET Q1 (40 V, 2 m\u03a9, D2PAK)",
+   "shape": "box",
+   "size": [
+    16.0,
+    20.0,
+    6.0
+   ],
+   "position": [
+    -45.0,
+    -10.0,
+    74.0
+   ],
+   "material": "electronics",
+   "group": "power",
+   "purpose": "High side A",
+   "specs": {
+    "power": "3"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "q2",
+   "name": "MOSFET Q2",
+   "shape": "box",
+   "size": [
+    16.0,
+    20.0,
+    6.0
+   ],
+   "position": [
+    -15.0,
+    -10.0,
+    74.0
+   ],
+   "material": "electronics",
+   "group": "power",
+   "purpose": "Low side A",
+   "specs": {
+    "power": "3"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "q3",
+   "name": "MOSFET Q3",
+   "shape": "box",
+   "size": [
+    16.0,
+    20.0,
+    6.0
+   ],
+   "position": [
+    15.0,
+    -10.0,
+    74.0
+   ],
+   "material": "electronics",
+   "group": "power",
+   "purpose": "High side B",
+   "specs": {
+    "power": "3"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "q4",
+   "name": "MOSFET Q4",
+   "shape": "box",
+   "size": [
+    16.0,
+    20.0,
+    6.0
+   ],
+   "position": [
+    45.0,
+    -10.0,
+    74.0
+   ],
+   "material": "electronics",
+   "group": "power",
+   "purpose": "Low side B",
+   "specs": {
+    "power": "3"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "bus_pos",
+   "name": "+24 V bus bar",
+   "shape": "box",
+   "size": [
+    100.0,
+    8.0,
+    2.0
+   ],
+   "position": [
+    0.0,
+    30.0,
+    72.0
+   ],
+   "material": "copper",
+   "group": "power",
+   "purpose": "Carries 20 A supply to high-side FETs",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "bus_neg",
+   "name": "GND bus bar",
+   "shape": "box",
+   "size": [
+    100.0,
+    8.0,
+    2.0
+   ],
+   "position": [
+    0.0,
+    -35.0,
+    72.0
+   ],
+   "material": "copper",
+   "group": "power",
+   "purpose": "Return path from low-side FETs",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cap1",
+   "name": "DC-link cap 470 \u00b5F 50 V",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 25.0,
+   "position": [
+    -30.0,
+    30.0,
+    56.9
+   ],
+   "material": "electronics",
+   "group": "power",
+   "purpose": "Ripple current buffer",
+   "specs": {
+    "power": "0.3"
+   },
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "cap2",
+   "name": "DC-link cap 470 \u00b5F 50 V",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 25.0,
+   "position": [
+    30.0,
+    30.0,
+    56.9
+   ],
+   "material": "electronics",
+   "group": "power",
+   "purpose": "Ripple current buffer",
+   "specs": {
+    "power": "0.3"
+   },
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "gate_drv",
+   "name": "H-bridge gate driver IC",
+   "shape": "box",
+   "size": [
+    10.0,
+    10.0,
+    1.5
+   ],
+   "position": [
+    0.0,
+    15.0,
+    71.75
+   ],
+   "material": "electronics",
+   "group": "control",
+   "purpose": "Drives MOSFET gates, shoot-through protection",
+   "specs": {
+    "power": "0.5"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "mcu",
+   "name": "Microcontroller",
+   "shape": "box",
+   "size": [
+    7.0,
+    7.0,
+    1.0
+   ],
+   "position": [
+    -30.0,
+    15.0,
+    71.5
+   ],
+   "material": "electronics",
+   "group": "control",
+   "purpose": "PWM generation, current limit, throttle input",
+   "specs": {
+    "power": "0.2"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "term_batt",
+   "name": "Battery terminal block",
+   "shape": "box",
+   "size": [
+    10.0,
+    16.0,
+    6.0
+   ],
+   "position": [
+    55.0,
+    30.0,
+    74.0
+   ],
+   "material": "brass",
+   "group": "power",
+   "purpose": "M5 battery cable lugs",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "term_motor",
+   "name": "Motor terminal block",
+   "shape": "box",
+   "size": [
+    10.0,
+    16.0,
+    6.0
+   ],
+   "position": [
+    -55.0,
+    -35.0,
+    74.0
+   ],
+   "material": "brass",
+   "group": "power",
+   "purpose": "M5 motor cable lugs",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "so1",
+   "name": "Standoff",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 66.4,
+   "position": [
+    -55.0,
+    40.0,
+    36.2
+   ],
+   "material": "nylon",
+   "group": "housing",
+   "purpose": "PCB support",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "so2",
+   "name": "Standoff",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 66.4,
+   "position": [
+    55.0,
+    40.0,
+    36.2
+   ],
+   "material": "nylon",
+   "group": "housing",
+   "purpose": "PCB support",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "so3",
+   "name": "Standoff",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 66.4,
+   "position": [
+    -55.0,
+    -40.0,
+    36.2
+   ],
+   "material": "nylon",
+   "group": "housing",
+   "purpose": "PCB support",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "so4",
+   "name": "Standoff",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 66.4,
+   "position": [
+    55.0,
+    -40.0,
+    36.2
+   ],
+   "material": "nylon",
+   "group": "housing",
+   "purpose": "PCB support",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  }
+ ],
+ "assembly": [
+  {
+   "parts": [
+    "so1",
+    "so2",
+    "so3",
+    "so4",
+    "enclosure"
+   ],
+   "action": "Screw nylon standoffs into enclosure floor bosses"
+  },
+  {
+   "parts": [
+    "q1",
+    "q2",
+    "q3",
+    "q4",
+    "gate_drv",
+    "mcu",
+    "cap1",
+    "cap2",
+    "pcb"
+   ],
+   "action": "Reflow SMD parts, hand-solder DC-link capacitors"
+  },
+  {
+   "parts": [
+    "bus_pos",
+    "bus_neg",
+    "term_batt",
+    "term_motor",
+    "pcb"
+   ],
+   "action": "Solder copper bus bars and terminal blocks onto power pours"
+  },
+  {
+   "parts": [
+    "pcb",
+    "so1",
+    "so2",
+    "so3",
+    "so4"
+   ],
+   "action": "Mount PCB on standoffs"
+  },
+  {
+   "parts": [
+    "heatsink",
+    "enclosure",
+    "q1",
+    "q2",
+    "q3",
+    "q4"
+   ],
+   "action": "Apply 0.5 mm thermal pad on MOSFETs, close lid, bolt heatsink to lid with thermal compound"
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "hs_heat",
+   "title": "Heatsink at 12 W in still kart air (60 \u00b0C at 25 \u00b0C ambient = 75 \u00b0C at 40 \u00b0C)",
+   "type": "heat",
+   "part": "heatsink",
+   "mode": "heatsink",
+   "power": 12,
+   "h": 6,
+   "max_temperature": "60 degC"
+  },
+  {
+   "id": "bus_current",
+   "title": "Bus bar at 25 A (125% rating)",
+   "type": "current",
+   "part": "bus_pos",
+   "current": 25,
+   "voltage": 24,
+   "max_drop_percent": 0.5,
+   "max_temperature": "70 degC"
+  },
+  {
+   "id": "box_heat",
+   "title": "Sealed box inside closed kart, 40 \u00b0C (FET heat exits via lid; 4 W to internal air)",
+   "type": "enclosure",
+   "part": "enclosure",
+   "power": 4,
+   "ambient": "40 degC",
+   "irradiance": 300,
+   "wind": 0.5,
+   "absorptivity": 0.3,
+   "max_temperature": "70 degC"
+  },
+  {
+   "id": "pcb_vib",
+   "title": "PCB vibration from motor/track",
+   "type": "vibration",
+   "part": "pcb",
+   "excitation": 100,
+   "support": "simply_supported"
+  },
+  {
+   "id": "drop",
+   "title": "1 m drop onto enclosure during install",
+   "type": "drop",
+   "part": "enclosure",
+   "height": 1
+  }
+ ],
+ "diagram": {
+  "nodes": [
+   {
+    "id": "batt",
+    "label": "24 V battery",
+    "kind": "power"
+   },
+   {
+    "id": "term_in",
+    "label": "Battery terminal",
+    "kind": "component",
+    "group": "power"
+   },
+   {
+    "id": "bus",
+    "label": "Copper bus bars + DC-link caps",
+    "kind": "component",
+    "group": "power"
+   },
+   {
+    "id": "bridge",
+    "label": "4x MOSFET H-bridge",
+    "kind": "component",
+    "group": "power"
+   },
+   {
+    "id": "drv",
+    "label": "Gate driver",
+    "kind": "component",
+    "group": "control"
+   },
+   {
+    "id": "mcu",
+    "label": "Microcontroller (PWM, current limit)",
+    "kind": "software",
+    "group": "control"
+   },
+   {
+    "id": "throttle",
+    "label": "Throttle pedal",
+    "kind": "signal"
+   },
+   {
+    "id": "term_out",
+    "label": "Motor terminal",
+    "kind": "component",
+    "group": "power"
+   },
+   {
+    "id": "motor",
+    "label": "24 V DC motor",
+    "kind": "component"
+   },
+   {
+    "id": "hs",
+    "label": "Finned heatsink",
+    "kind": "component",
+    "group": "thermal"
+   },
+   {
+    "id": "box",
+    "label": "Sealed aluminium enclosure",
+    "kind": "component",
+    "group": "housing"
+   },
+   {
+    "id": "amb",
+    "label": "40 \u00b0C air in closed kart",
+    "kind": "environment"
+   },
+   {
+    "id": "vib",
+    "label": "Kart vibration",
+    "kind": "environment"
+   }
+  ],
+  "edges": [
+   {
+    "from": "batt",
+    "to": "term_in",
+    "kind": "power",
+    "label": "24 V, 20 A"
+   },
+   {
+    "from": "term_in",
+    "to": "bus",
+    "kind": "power"
+   },
+   {
+    "from": "bus",
+    "to": "bridge",
+    "kind": "power"
+   },
+   {
+    "from": "throttle",
+    "to": "mcu",
+    "kind": "data",
+    "label": "0-5 V"
+   },
+   {
+    "from": "mcu",
+    "to": "drv",
+    "kind": "data",
+    "label": "PWM 20 kHz"
+   },
+   {
+    "from": "drv",
+    "to": "bridge",
+    "kind": "data",
+    "label": "gate drive"
+   },
+   {
+    "from": "bridge",
+    "to": "term_out",
+    "kind": "power"
+   },
+   {
+    "from": "term_out",
+    "to": "motor",
+    "kind": "power",
+    "label": "20 A"
+   },
+   {
+    "from": "bridge",
+    "to": "box",
+    "kind": "heat",
+    "label": "~12 W"
+   },
+   {
+    "from": "box",
+    "to": "hs",
+    "kind": "heat"
+   },
+   {
+    "from": "hs",
+    "to": "amb",
+    "kind": "heat"
+   },
+   {
+    "from": "vib",
+    "to": "box",
+    "kind": "mechanical"
+   }
+  ]
+ }
+}

@@ -1,0 +1,618 @@
+{
+ "name": "Desktop 3-DOF Robot Arm, 1 kg @ 400 mm",
+ "description": "Desktop arm with three joints: base yaw (J1), shoulder pitch (J2) and elbow pitch (J3), plus a parallel gripper. Shoulder-to-elbow is 220 mm and elbow-to-grip-centre is 180 mm, so it reaches 400 mm. Stepper motors with planetary gearboxes. Shown in the worst case: arm level and fully stretched along +x.",
+ "parts": [
+  {
+   "id": "base_plate",
+   "name": "Base plate",
+   "shape": "box",
+   "size": [
+    300.0,
+    300.0,
+    16.0
+   ],
+   "position": [
+    0.0,
+    0.0,
+    8.0
+   ],
+   "material": "aluminium",
+   "group": "base",
+   "purpose": "Footprint and four M6 desk-clamp holes; must be clamped (tips at about 3.2 Nm otherwise)",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "base_housing",
+   "name": "Turntable housing",
+   "shape": "cylinder",
+   "radius": 70.0,
+   "length": 74.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    0.0,
+    53.0
+   ],
+   "material": "aluminium",
+   "group": "base",
+   "purpose": "Holds the J1 slewing bearing and the 5:1 belt pulley",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m1",
+   "name": "J1 yaw stepper NEMA17",
+   "shape": "box",
+   "size": [
+    42.0,
+    42.0,
+    40.0
+   ],
+   "position": [
+    -100.0,
+    0.0,
+    36.0
+   ],
+   "material": "electronics",
+   "group": "base",
+   "purpose": "Drives base yaw through a 5:1 GT2 belt",
+   "specs": {
+    "power": "8",
+    "holding_torque_Nm": "0.45",
+    "gear_ratio": "5"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "ctrl",
+   "name": "Controller + drivers",
+   "shape": "box",
+   "size": [
+    80.0,
+    40.0,
+    10.0
+   ],
+   "position": [
+    0.0,
+    -110.0,
+    21.0
+   ],
+   "material": "electronics",
+   "look": "pcb",
+   "group": "electronics",
+   "purpose": "MCU and four stepper drivers, 24 V",
+   "specs": {
+    "power": "6"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "shoulder_housing",
+   "name": "Shoulder yoke",
+   "shape": "box",
+   "size": [
+    80.0,
+    80.0,
+    80.0
+   ],
+   "position": [
+    0.0,
+    0.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "group": "shoulder",
+   "purpose": "Carries the J2 bearing pair and output flange",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m2",
+   "name": "J2 shoulder NEMA23 + 10:1 planetary",
+   "shape": "box",
+   "size": [
+    57.0,
+    76.0,
+    57.0
+   ],
+   "position": [
+    0.0,
+    78.0,
+    130.0
+   ],
+   "material": "electronics",
+   "group": "shoulder",
+   "purpose": "About 15 Nm geared holding torque against about 7 Nm worst-case gravity torque",
+   "specs": {
+    "power": "20",
+    "holding_torque_Nm": "1.9",
+    "gear_ratio": "10"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "upper_arm",
+   "name": "Upper arm tube",
+   "shape": "tube",
+   "radius": 16.0,
+   "inner_radius": 14.5,
+   "length": 150.0,
+   "axis": "x",
+   "position": [
+    115.0,
+    0.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "group": "links",
+   "purpose": "Link 1, 220 mm axis-to-axis",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "elbow_housing",
+   "name": "Elbow block",
+   "shape": "box",
+   "size": [
+    60.0,
+    60.0,
+    60.0
+   ],
+   "position": [
+    220.0,
+    0.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "group": "elbow",
+   "purpose": "Holds the J3 bearing and gearbox output",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m3",
+   "name": "J3 elbow NEMA17 + 15:1 planetary",
+   "shape": "box",
+   "size": [
+    42.0,
+    40.0,
+    42.0
+   ],
+   "position": [
+    220.0,
+    50.0,
+    130.0
+   ],
+   "material": "electronics",
+   "group": "elbow",
+   "purpose": "About 5 Nm geared torque against about 2.5 Nm needed",
+   "specs": {
+    "power": "8",
+    "holding_torque_Nm": "0.45",
+    "gear_ratio": "15"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "forearm",
+   "name": "Forearm tube",
+   "shape": "tube",
+   "radius": 12.0,
+   "inner_radius": 10.8,
+   "length": 110.0,
+   "axis": "x",
+   "position": [
+    305.0,
+    0.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "group": "links",
+   "purpose": "Link 2, 180 mm from elbow to grip centre",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "gripper_body",
+   "name": "Gripper body + servo",
+   "shape": "box",
+   "size": [
+    40.0,
+    60.0,
+    30.4
+   ],
+   "position": [
+    380.0,
+    0.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "group": "gripper",
+   "purpose": "Rack-and-pinion parallel jaw driven by a 25 kg\u00b7cm servo",
+   "specs": {
+    "power": "5"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "fill": 1.0
+  },
+  {
+   "id": "finger_l",
+   "name": "Finger left",
+   "shape": "box",
+   "size": [
+    50.0,
+    4.0,
+    30.0
+   ],
+   "position": [
+    425.0,
+    22.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "group": "gripper",
+   "purpose": "Jaw with rubber pad; 0 to 60 mm opening",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "finger_r",
+   "name": "Finger right",
+   "shape": "box",
+   "size": [
+    50.0,
+    4.0,
+    30.0
+   ],
+   "position": [
+    425.0,
+    -22.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "group": "gripper",
+   "purpose": "Jaw with rubber pad",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  }
+ ],
+ "assembly": [
+  {
+   "parts": [
+    "base_plate",
+    "base_housing",
+    "m1",
+    "ctrl"
+   ],
+   "action": "Bolt the housing, J1 motor and controller to the steel plate; tension the GT2 belt"
+  },
+  {
+   "parts": [
+    "shoulder_housing",
+    "m2"
+   ],
+   "action": "Mount the shoulder yoke on the slewing bearing; flange the NEMA23 gearbox to the yoke"
+  },
+  {
+   "parts": [
+    "upper_arm",
+    "elbow_housing",
+    "m3"
+   ],
+   "action": "Bond and pin the tube into the shoulder flange and elbow block; mount the J3 motor"
+  },
+  {
+   "parts": [
+    "forearm",
+    "gripper_body",
+    "finger_l",
+    "finger_r"
+   ],
+   "action": "Fit the forearm to the J3 output; attach the gripper and jaws; route cables through the tubes"
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "upper_load",
+   "title": "Upper arm: shoulder moment 10.5 Nm (1 kg @ 400 mm + arm, \u00d71.5) as 70 N at 150 mm",
+   "type": "load",
+   "part": "upper_arm",
+   "force": 70,
+   "support": "cantilever",
+   "position": 1,
+   "load_axis": "z",
+   "min_safety_factor": 3,
+   "max_deflection": 0.3
+  },
+  {
+   "id": "fore_load",
+   "title": "Forearm: elbow moment 3.6 Nm (\u00d71.5) as 33 N at 110 mm",
+   "type": "load",
+   "part": "forearm",
+   "force": 33,
+   "support": "cantilever",
+   "position": 1,
+   "load_axis": "z",
+   "min_safety_factor": 3,
+   "max_deflection": 0.3
+  },
+  {
+   "id": "finger_load",
+   "title": "Jaw grip force 30 N",
+   "type": "load",
+   "part": "finger_l",
+   "force": 30,
+   "support": "cantilever",
+   "position": 1,
+   "load_axis": "y",
+   "min_safety_factor": 2,
+   "max_deflection": 0.5
+  },
+  {
+   "id": "fore_vib",
+   "title": "Forearm with 1.3 kg tip mass vs stepper ripple",
+   "type": "vibration",
+   "part": "forearm",
+   "excitation": 50,
+   "tip_mass": 1.3,
+   "support": "cantilever",
+   "margin": 1.5
+  },
+  {
+   "id": "drop",
+   "title": "Falls off desk onto base, 0.75 m",
+   "type": "drop",
+   "part": "base_plate",
+   "height": 0.75,
+   "min_safety_factor": 1
+  },
+  {
+   "id": "grip_knock",
+   "title": "Gripper knocks down 0.3 m holding the 1 kg part",
+   "type": "drop",
+   "part": "gripper_body",
+   "height": 0.3,
+   "mass": 1.3
+  }
+ ],
+ "diagram": {
+  "nodes": [
+   {
+    "id": "psu",
+    "label": "24 V PSU",
+    "kind": "power"
+   },
+   {
+    "id": "ctrl",
+    "label": "Controller + 4 stepper drivers",
+    "kind": "component",
+    "group": "electronics"
+   },
+   {
+    "id": "host",
+    "label": "PC / USB commands",
+    "kind": "software"
+   },
+   {
+    "id": "m1",
+    "label": "J1 base yaw NEMA17 + belt 5:1",
+    "kind": "component",
+    "group": "base"
+   },
+   {
+    "id": "m2",
+    "label": "J2 shoulder NEMA23 + 10:1 planetary",
+    "kind": "component",
+    "group": "shoulder"
+   },
+   {
+    "id": "m3",
+    "label": "J3 elbow NEMA17 + 15:1 planetary",
+    "kind": "component",
+    "group": "elbow"
+   },
+   {
+    "id": "servo",
+    "label": "Gripper servo",
+    "kind": "component",
+    "group": "gripper"
+   },
+   {
+    "id": "links",
+    "label": "Upper arm + forearm tubes",
+    "kind": "component",
+    "group": "links"
+   },
+   {
+    "id": "payload",
+    "label": "1 kg part at 400 mm",
+    "kind": "environment"
+   },
+   {
+    "id": "desk",
+    "label": "Desk / clamp",
+    "kind": "environment"
+   },
+   {
+    "id": "gravity",
+    "label": "Gravity + accel. loads",
+    "kind": "environment"
+   }
+  ],
+  "edges": [
+   {
+    "from": "psu",
+    "to": "ctrl",
+    "kind": "power",
+    "label": "24 V 5 A"
+   },
+   {
+    "from": "host",
+    "to": "ctrl",
+    "kind": "data",
+    "label": "G-code / joint targets"
+   },
+   {
+    "from": "ctrl",
+    "to": "m1",
+    "kind": "power",
+    "label": "step/dir"
+   },
+   {
+    "from": "ctrl",
+    "to": "m2",
+    "kind": "power",
+    "label": "step/dir"
+   },
+   {
+    "from": "ctrl",
+    "to": "m3",
+    "kind": "power",
+    "label": "step/dir"
+   },
+   {
+    "from": "ctrl",
+    "to": "servo",
+    "kind": "data",
+    "label": "PWM"
+   },
+   {
+    "from": "m1",
+    "to": "m2",
+    "kind": "mechanical",
+    "label": "yaw turntable"
+   },
+   {
+    "from": "m2",
+    "to": "links",
+    "kind": "mechanical",
+    "label": "~7 Nm shoulder"
+   },
+   {
+    "from": "m3",
+    "to": "links",
+    "kind": "mechanical",
+    "label": "~2.5 Nm elbow"
+   },
+   {
+    "from": "servo",
+    "to": "payload",
+    "kind": "mechanical",
+    "label": "grip force 30 N"
+   },
+   {
+    "from": "payload",
+    "to": "links",
+    "kind": "mechanical",
+    "label": "9.8 N at 400 mm"
+   },
+   {
+    "from": "gravity",
+    "to": "links",
+    "kind": "mechanical"
+   },
+   {
+    "from": "m1",
+    "to": "desk",
+    "kind": "mechanical",
+    "label": "tipping moment"
+   },
+   {
+    "from": "m2",
+    "to": "ctrl",
+    "kind": "heat"
+   }
+  ]
+ }
+}

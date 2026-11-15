@@ -1,0 +1,782 @@
+{
+ "name": "Rugged Field Smartwatch",
+ "description": "47 mm grade-titanium rugged smartwatch with a raised bezel protecting the front window, 420 mAh cell, 1 A magnetic pogo-pin fast charge, stainless spring bars and a nylon strap.",
+ "parts": [
+  {
+   "id": "case",
+   "name": "Titanium case (midframe)",
+   "shape": "box",
+   "size": [
+    47.0,
+    47.0,
+    9.0
+   ],
+   "wall": 2.0,
+   "position": [
+    0.0,
+    0.0,
+    4.5
+   ],
+   "material": "titanium",
+   "group": "structure",
+   "purpose": "Lower structural shell holding cell, PCB, pushers and lugs; front ring (bezel) bolts on top",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "bezel",
+   "name": "Titanium front crash ring (bezel)",
+   "shape": "tube",
+   "radius": 23.5,
+   "inner_radius": 19.5,
+   "length": 7.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    0.0,
+    12.5
+   ],
+   "material": "titanium",
+   "group": "structure",
+   "purpose": "7 mm deep structural front ring, stands 0.5 mm proud of the crystal; its volume (~3.8 cm^3) absorbs face-down impacts at low stress and it frames the round display",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "crystal",
+   "name": "Front crystal",
+   "shape": "cylinder",
+   "radius": 19.5,
+   "length": 1.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    0.0,
+    15.0
+   ],
+   "material": "polycarbonate",
+   "look": "glass",
+   "group": "structure",
+   "purpose": "Transparent front window, recessed below bezel",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "display",
+   "name": "Round AMOLED display 1.4 in",
+   "shape": "cylinder",
+   "size": [
+    36.0,
+    36.0,
+    1.2
+   ],
+   "position": [
+    0.0,
+    0.0,
+    13.9
+   ],
+   "material": "electronics",
+   "look": "screen",
+   "group": "display",
+   "purpose": "Always-on round display, seated inside the front ring under the crystal",
+   "specs": {
+    "power": "0.08"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0,
+   "radius": 19.0,
+   "length": 1.2,
+   "axis": "z"
+  },
+  {
+   "id": "pcb",
+   "name": "Main PCB (SoC, GNSS, protection, fuel gauge)",
+   "shape": "box",
+   "size": [
+    36.0,
+    36.0,
+    1.0
+   ],
+   "position": [
+    0.0,
+    0.0,
+    7.75
+   ],
+   "material": "electronics",
+   "look": "pcb",
+   "group": "electronics",
+   "purpose": "Processor, GNSS, sensors, cell protection FET; charger IC lives in the puck. Reports cell temperature to the puck, which derates to 0.3 A above 40 \u00b0C and stops at 45 \u00b0C",
+   "specs": {
+    "power": "0.25"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "battery",
+   "name": "Li-ion cell 420 mAh",
+   "shape": "box",
+   "size": [
+    34.0,
+    34.0,
+    4.5
+   ],
+   "position": [
+    0.0,
+    0.0,
+    4.75
+   ],
+   "material": "lifepo4",
+   "look": "battery",
+   "group": "power",
+   "purpose": "Energy storage; charged at 1 A (~2.4C peak, tapering)",
+   "specs": {
+    "capacity_mAh": "420",
+    "voltage": "3.85",
+    "power": "0.35"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "caseback",
+   "name": "Titanium caseback",
+   "shape": "box",
+   "size": [
+    43.0,
+    43.0,
+    2.0
+   ],
+   "position": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "material": "titanium",
+   "group": "structure",
+   "purpose": "Screwed, O-ring-sealed back carrying HR sensor window and charge pins",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pogo_pos",
+   "name": "Pogo charge pin (+)",
+   "shape": "cylinder",
+   "radius": 0.75,
+   "length": 3.0,
+   "axis": "z",
+   "position": [
+    -3.0,
+    0.0,
+    0.5
+   ],
+   "material": "brass",
+   "group": "power",
+   "purpose": "Gold-plated spring contact carrying regulated 1 A charge current from the puck",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pogo_neg",
+   "name": "Pogo charge pin (-)",
+   "shape": "cylinder",
+   "radius": 0.75,
+   "length": 3.0,
+   "axis": "z",
+   "position": [
+    3.0,
+    0.0,
+    0.5
+   ],
+   "material": "brass",
+   "group": "power",
+   "purpose": "Charge return contact",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "button_top",
+   "name": "Upper pusher",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 3.0,
+   "axis": "x",
+   "position": [
+    25.0,
+    8.0,
+    5.0
+   ],
+   "material": "titanium",
+   "group": "controls",
+   "purpose": "Sealed pusher, guarded by case shoulder",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "button_bot",
+   "name": "Lower pusher",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 3.0,
+   "axis": "x",
+   "position": [
+    25.0,
+    -8.0,
+    5.0
+   ],
+   "material": "titanium",
+   "group": "controls",
+   "purpose": "Sealed pusher",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lug_tl",
+   "name": "Lug top-left",
+   "shape": "box",
+   "size": [
+    3.0,
+    6.0,
+    6.0
+   ],
+   "position": [
+    -12.0,
+    26.5,
+    7.0
+   ],
+   "material": "titanium",
+   "group": "strap",
+   "purpose": "Holds spring bar",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lug_tr",
+   "name": "Lug top-right",
+   "shape": "box",
+   "size": [
+    3.0,
+    6.0,
+    6.0
+   ],
+   "position": [
+    12.0,
+    26.5,
+    7.0
+   ],
+   "material": "titanium",
+   "group": "strap",
+   "purpose": "Holds spring bar",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lug_bl",
+   "name": "Lug bottom-left",
+   "shape": "box",
+   "size": [
+    3.0,
+    6.0,
+    6.0
+   ],
+   "position": [
+    -12.0,
+    -26.5,
+    7.0
+   ],
+   "material": "titanium",
+   "group": "strap",
+   "purpose": "Holds spring bar",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lug_br",
+   "name": "Lug bottom-right",
+   "shape": "box",
+   "size": [
+    3.0,
+    6.0,
+    6.0
+   ],
+   "position": [
+    12.0,
+    -26.5,
+    7.0
+   ],
+   "material": "titanium",
+   "group": "strap",
+   "purpose": "Holds spring bar",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "springbar_t",
+   "name": "Screw bar top (solid)",
+   "shape": "cylinder",
+   "radius": 1.5,
+   "length": 21.0,
+   "axis": "x",
+   "position": [
+    0.0,
+    27.5,
+    6.0
+   ],
+   "material": "titanium",
+   "group": "strap",
+   "purpose": "Solid screw-in bar; resists strap snag",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "springbar_b",
+   "name": "Screw bar bottom (solid)",
+   "shape": "cylinder",
+   "radius": 1.5,
+   "length": 21.0,
+   "axis": "x",
+   "position": [
+    0.0,
+    -27.5,
+    6.0
+   ],
+   "material": "titanium",
+   "group": "strap",
+   "purpose": "Solid screw-in bar",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "strap_t",
+   "name": "Nylon strap (12 o'clock)",
+   "shape": "box",
+   "size": [
+    22.0,
+    70.0,
+    1.5
+   ],
+   "position": [
+    0.0,
+    64.5,
+    6.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "group": "strap",
+   "purpose": "Woven nylon field strap",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "strap_b",
+   "name": "Nylon strap (6 o'clock)",
+   "shape": "box",
+   "size": [
+    22.0,
+    80.0,
+    1.5
+   ],
+   "position": [
+    0.0,
+    -69.5,
+    6.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "group": "strap",
+   "purpose": "Woven nylon strap with buckle",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  }
+ ],
+ "assembly": [
+  {
+   "parts": [
+    "battery",
+    "pcb"
+   ],
+   "action": "Stack cell and PCB on foam spacers in the midframe; connect the cell flex"
+  },
+  {
+   "parts": [
+    "bezel",
+    "display",
+    "crystal"
+   ],
+   "action": "Seat the round display in the front ring, bond the crystal with gasket 0.5 mm below the ring top"
+  },
+  {
+   "parts": [
+    "case",
+    "bezel"
+   ],
+   "action": "Route the display flex through, fit the face O-ring, and screw the front ring onto the midframe"
+  },
+  {
+   "parts": [
+    "caseback",
+    "pogo_pos",
+    "pogo_neg"
+   ],
+   "action": "Fit the pogo pins with sealing grommets; screw the caseback on with the O-ring (4 screws)"
+  },
+  {
+   "parts": [
+    "button_top",
+    "button_bot"
+   ],
+   "action": "Insert the pushers with double O-rings"
+  },
+  {
+   "parts": [
+    "springbar_t",
+    "springbar_b",
+    "strap_t",
+    "strap_b",
+    "lug_tl",
+    "lug_tr",
+    "lug_bl",
+    "lug_br"
+   ],
+   "action": "Thread the straps on and screw the bars into the lugs"
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "drop_case",
+   "title": "1.5 m drop onto concrete, lands on case edge",
+   "type": "drop",
+   "part": "case",
+   "height": 1.5,
+   "min_safety_factor": 1
+  },
+  {
+   "id": "drop_bezel",
+   "title": "1.5 m drop face-down onto concrete (bezel strikes first)",
+   "type": "drop",
+   "part": "bezel",
+   "height": 1.5,
+   "min_safety_factor": 1
+  },
+  {
+   "id": "charge_pin",
+   "title": "1 A fast charge through pogo pin",
+   "type": "current",
+   "part": "pogo_pos",
+   "current": 1.0,
+   "max_temperature": 318.15,
+   "max_voltage_drop": 0.05
+  },
+  {
+   "id": "fast_charge",
+   "title": "1 A direct charge on the desk at 25 \u00b0C (cell must stay < 45 \u00b0C)",
+   "type": "enclosure",
+   "part": "case",
+   "power": 0.25,
+   "ambient": 298.15,
+   "irradiance": 0,
+   "wind": 0.2,
+   "max_temperature": 318.15
+  },
+  {
+   "id": "sun_worn",
+   "title": "Worn in full sun at 35 \u00b0C, GPS on, not charging",
+   "type": "enclosure",
+   "part": "case",
+   "power": 0.15,
+   "ambient": 308.15,
+   "irradiance": 1000,
+   "wind": 1,
+   "absorptivity": 0.6,
+   "max_temperature": 333.15
+  },
+  {
+   "id": "strap_snag",
+   "title": "Strap snag 150 N on screw bar",
+   "type": "load",
+   "part": "springbar_t",
+   "force": 150,
+   "support": "simply_supported",
+   "position": 0.5,
+   "min_safety_factor": 2
+  }
+ ],
+ "diagram": {
+  "nodes": [
+   {
+    "id": "charger",
+    "label": "Charging puck: USB-C in, buck CC/CV charger IC, 1 A out",
+    "kind": "power"
+   },
+   {
+    "id": "pogo",
+    "label": "Pogo charge contacts",
+    "kind": "component",
+    "group": "power"
+   },
+   {
+    "id": "prot",
+    "label": "Cell protection FET + fuel gauge",
+    "kind": "component",
+    "group": "electronics"
+   },
+   {
+    "id": "batt",
+    "label": "Battery 420 mAh (fast-charge rated)",
+    "kind": "power",
+    "group": "power"
+   },
+   {
+    "id": "soc",
+    "label": "Main PCB (SoC, GNSS, sensors)",
+    "kind": "component",
+    "group": "electronics"
+   },
+   {
+    "id": "disp",
+    "label": "AMOLED display",
+    "kind": "component",
+    "group": "display"
+   },
+   {
+    "id": "crystal",
+    "label": "Crystal (recessed 0.5 mm)",
+    "kind": "component",
+    "group": "structure"
+   },
+   {
+    "id": "case",
+    "label": "Titanium case + bezel + caseback",
+    "kind": "component",
+    "group": "structure"
+   },
+   {
+    "id": "strap",
+    "label": "Ti screw bars + nylon strap",
+    "kind": "component",
+    "group": "strap"
+   },
+   {
+    "id": "fw",
+    "label": "Firmware: thermal charge derate",
+    "kind": "software"
+   },
+   {
+    "id": "ground",
+    "label": "Concrete drop impact",
+    "kind": "environment"
+   },
+   {
+    "id": "sun",
+    "label": "Sun / 35 \u00b0C ambient",
+    "kind": "environment"
+   },
+   {
+    "id": "wrist",
+    "label": "Snag loads",
+    "kind": "environment"
+   }
+  ],
+  "edges": [
+   {
+    "from": "charger",
+    "to": "pogo",
+    "kind": "power",
+    "label": "regulated 1 A CC / 4.2 V CV"
+   },
+   {
+    "from": "pogo",
+    "to": "prot",
+    "kind": "power"
+   },
+   {
+    "from": "prot",
+    "to": "batt",
+    "kind": "power"
+   },
+   {
+    "from": "batt",
+    "to": "soc",
+    "kind": "power"
+   },
+   {
+    "from": "soc",
+    "to": "disp",
+    "kind": "data"
+   },
+   {
+    "from": "fw",
+    "to": "charger",
+    "kind": "data",
+    "label": "cell temp \u2192 current limit (1-wire on pin)"
+   },
+   {
+    "from": "batt",
+    "to": "case",
+    "kind": "heat",
+    "label": "I\u00b2R ~0.15 W"
+   },
+   {
+    "from": "soc",
+    "to": "case",
+    "kind": "heat"
+   },
+   {
+    "from": "sun",
+    "to": "case",
+    "kind": "heat"
+   },
+   {
+    "from": "ground",
+    "to": "case",
+    "kind": "mechanical",
+    "label": "1.5 m impact"
+   },
+   {
+    "from": "ground",
+    "to": "crystal",
+    "kind": "mechanical"
+   },
+   {
+    "from": "wrist",
+    "to": "strap",
+    "kind": "mechanical"
+   },
+   {
+    "from": "strap",
+    "to": "case",
+    "kind": "mechanical"
+   }
+  ]
+ }
+}
