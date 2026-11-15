@@ -378,10 +378,11 @@ export default function Viewport() {
   }, [overlayTest]);
 
   const dark = useIsDarkDom();
+  const running = useStore((s) => s.run === "running");
   if (!design) {
     return (
       <div className="relative size-full overflow-hidden bg-viewport">
-        <Hero dark={dark} />
+        <Hero dark={dark} loading={running} />
       </div>
     );
   }
