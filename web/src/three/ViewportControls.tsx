@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { cn } from "@/lib/utils";
 import type { ImageField } from "@/types";
 import { fieldRange } from "./SiteView";
+import { VersionBanner, VersionMenu } from "@/panels/Versions";
 
 function IconToggle({ on, label, onClick, children }: { on: boolean; label: string; onClick: () => void; children: React.ReactNode }) {
   return (
@@ -63,6 +64,10 @@ export function ViewportControls({ hasSite }: { hasSite: boolean }) {
           </>
         )}
       </div>
+      <div className="no-print absolute right-3 top-3 rounded-lg border bg-card/80 p-1 shadow-sm backdrop-blur empty:hidden">
+        <VersionMenu />
+      </div>
+      <VersionBanner />
       {site && <SiteLegend />}
       {!site && s.isolate && (
         <button onClick={() => s.set({ isolate: null, explode: 0 })} className="no-print absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border bg-card/90 px-3 py-1 text-xs shadow backdrop-blur hover:bg-accent">

@@ -8,6 +8,7 @@ import { BorderBeam } from "@/components/ui/border-beam";
 import { StatusIcon } from "./StatusIcon";
 import { ResultCard } from "./ResultCard";
 import { LoadChip } from "./Load";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const PIPELINE: { phase: Phase; label: string }[] = [
   { phase: "understand", label: "Understand" },
@@ -152,7 +153,9 @@ function Row({ item, last, attempt }: { item: FeedItem; last: boolean; attempt: 
 export function ProcessPanel() {
   const feed = useStore((s) => s.feed);
   const run = useStore((s) => s.run);
-  const title = useStore((s) => s.runTitle);
+  const name = useStore((s) => s.design?.name);
+  const request = useStore((s) => s.request);
+  const source = useStore((s) => s.source);
   const end = useRef<HTMLDivElement>(null);
   const box = useRef<HTMLDivElement>(null);
   const stick = useRef(true);
@@ -174,9 +177,16 @@ export function ProcessPanel() {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="border-b px-4 pb-3 pt-4">
-        <div className="mb-3 flex items-baseline justify-between gap-2">
-          <h2 className="text-sm font-semibold">Process</h2>
-          {title && <span className="truncate text-xs text-muted-foreground">{title}</span>}
+        <div className="mb-3 flex items-center gap-2">
+          <h2 className="min-w-0 truncate text-sm font-semibold">{name ?? "Process"}</h2>
+          {(source === "demo" || source === "mock") && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span tabIndex={0} className="ml-auto shrink-0 cursor-default rounded border px-1.5 py-px text-[10px] text-muted-foreground">Offline run</span>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Design steps recorded; every simulation ran live just now.</TooltipContent>
+            </Tooltip>
+          )}
         </div>
         <Pipeline />
       </div>
@@ -190,6 +200,11 @@ export function ProcessPanel() {
         aria-live="polite"
       >
         {run === "idle" && <Intro />}
+        {request && (
+          <blockquote className="mx-1 mb-4 rounded-xl rounded-tr-sm bg-accent/70 px-3.5 py-2.5 text-[13px] leading-relaxed text-foreground">
+            {request}
+          </blockquote>
+        )}
         <ResultCard />
         <AnimatePresence initial={false}>
           {visible.map((item, i) => (

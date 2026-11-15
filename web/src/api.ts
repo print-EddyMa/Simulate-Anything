@@ -10,7 +10,7 @@ export interface Status {
 
 const params = new URLSearchParams(location.search);
 const MOCK = params.has("mock");
-/** Demo pacing: 1 = watchable, 0 = as fast as the engine runs (?pace=0). */
+/** Pacing of recorded runs: 1 = watchable, 0 = as fast as the engine runs (?pace=0). */
 const PACE = Number(params.get("pace") ?? 1);
 
 export async function getStatus(): Promise<Status> {
@@ -26,9 +26,9 @@ export async function getStatus(): Promise<Status> {
 
 export const MOCK_EXAMPLES: Example[] = [
   {
-    id: "ghostlight", title: "Ghostlight field node", icon: "radar",
-    tagline: "A passive radar that sees drones using TV signals",
-    prompt: "Turn our Ghostlight passive-radar prototype into a field node that can stand alone at a substation.",
+    id: "drone_radar", title: "Passive radar node", icon: "radar",
+    tagline: "",
+    prompt: "Design a passive radar that detects small drones around a US military base. Receive-only, using the TV broadcast signals already in the air. It has to run off-grid for days, survive storms and summer heat, and spot a small quadcopter 1.5 km out.",
   },
 
 ];
@@ -98,7 +98,7 @@ const DELAY: Record<string, number> = {
 };
 
 async function replayMock(onEvent: (e: EngineEvent) => void, signal?: AbortSignal) {
-  const events = (await import("./mock/ghostlight.json")).default as EngineEvent[];
+  const events = (await import("./mock/drone_radar.json")).default as EngineEvent[];
   for (const e of events) {
     await wait(DELAY[e.type] ?? 500, signal);
     onEvent(e);
@@ -107,12 +107,15 @@ async function replayMock(onEvent: (e: EngineEvent) => void, signal?: AbortSigna
 
 let current: AbortController | null = null;
 
-export async function runDemo(example: Example, status: Status) {
+/** A suggested prompt: the real agent when a key is set, otherwise the recorded run
+ *  (recorded design steps, every simulation re-run live). */
+export async function runSuggestion(example: Example, status: Status) {
+  if (status.agent && !status.mock) return runCreate(example.prompt, {}, status, false);
   current?.abort();
   const ctrl = new AbortController();
   current = ctrl;
   const { reset, apply } = useStore.getState();
-  reset(example.title, status.mock ? "mock" : "demo");
+  reset(example.prompt, status.mock ? "mock" : "demo", false, example.prompt);
   try {
     if (status.mock) await replayMock(apply, ctrl.signal);
     else await stream(`api/demo/${encodeURIComponent(example.id)}`, { pace: PACE }, apply, ctrl.signal);
@@ -127,7 +130,7 @@ export async function runCreate(prompt: string, attach: { image?: string; mesh?:
   current = ctrl;
   const s = useStore.getState();
   const base = change ? currentDesign() : null;
-  s.reset(prompt.length > 60 ? `${prompt.slice(0, 57)}…` : prompt, "agent", !!base);
+  s.reset(prompt, "agent", !!base, prompt);
   const { apply } = useStore.getState();
   try {
     if (status.mock) await replayMock(apply, ctrl.signal);

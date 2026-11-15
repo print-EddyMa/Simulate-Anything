@@ -11,6 +11,7 @@ import { TestsPanel } from "@/panels/TestsPanel";
 import { PartsPanel } from "@/panels/PartsPanel";
 import { AssemblyPanel } from "@/panels/AssemblyPanel";
 import { PrintReport } from "@/panels/PrintReport";
+import { DesignTools } from "@/panels/DesignTools";
 
 const Viewport = lazy(() => import("@/three/Viewport"));
 const SystemPanel = lazy(() => import("@/panels/SystemPanel"));
@@ -34,7 +35,8 @@ function Results() {
   const failing = useStore((s) => Object.values(s.tests).filter((t) => t.result && t.result.status !== "pass").length);
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div role="tablist" aria-label="Results" className="flex gap-1 border-b px-3">
+      <div className="flex items-center border-b px-3">
+      <div role="tablist" aria-label="Results" className="scrollbar-thin flex gap-1 overflow-x-auto">
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -51,6 +53,8 @@ function Results() {
             )}
           </button>
         ))}
+      </div>
+      <DesignTools />
       </div>
       <div role="tabpanel" className="scrollbar-thin min-h-0 flex-1 overflow-y-auto p-3 sm:p-4">
         {tab === "tests" && <TestsPanel />}

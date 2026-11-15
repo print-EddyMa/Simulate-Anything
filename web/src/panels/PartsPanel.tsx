@@ -22,6 +22,23 @@ export function PartsPanel() {
   const selected = useStore((s) => s.selected);
   const hovered = useStore((s) => s.hovered);
   const set = useStore((s) => s.set);
+  const mats = useStore((s) => s.materials);
+  const busy = useStore((s) => s.run === "running");
+  const stale = useStore((s) => s.stale);
+  const families = useMemo(() => {
+    const g: Record<string, { id: string; name: string }[]> = {};
+    Object.values(mats).forEach((m) => { (g[m.family] ??= []).push({ id: m.id, name: m.name }); });
+    Object.values(g).forEach((l) => l.sort((a, b) => a.name.localeCompare(b.name)));
+    return g;
+  }, [mats]);
+  const setMaterial = (id: string, mat: string) => {
+    const d = useStore.getState().design;
+    if (!d) return;
+    const part = d.parts.find((p) => p.id === id);
+    if (!part || part.material === mat) return;
+    const next = { ...d, parts: d.parts.map((p) => (p.id === id ? { ...p, material: mat } : p)) };
+    useStore.getState().edit(next, `${part.name}: ${mats[part.material]?.name ?? part.material} → ${mats[mat]?.name ?? mat}`);
+  };
   const [sort, setSort] = useState<{ key: Key; asc: boolean }>({ key: "mass_g", asc: false });
   const rows = useMemo(() => {
     const list = [...(summary?.parts ?? [])];
@@ -34,6 +51,7 @@ export function PartsPanel() {
   }, [summary, sort]);
   if (!summary || !design) return <EmptyTab text="Parts appear here once the design takes shape." />;
   const specs = (id: string) => design.parts.find((p) => p.id === id)?.specs;
+  const matOf = (id: string) => design.parts.find((p) => p.id === id)?.material ?? "";
   return (
     <div className="overflow-x-auto rounded-xl border">
       <table className="w-full text-sm">
@@ -70,7 +88,24 @@ export function PartsPanel() {
                   </div>
                 )}
               </td>
-              <td className="px-3 py-2 max-sm:hidden">{r.material}</td>
+              <td className="px-3 py-2 max-sm:hidden" onClick={(e) => e.stopPropagation()}>
+                {Object.keys(mats).length ? (
+                  <select
+                    value={matOf(r.id)}
+                    disabled={busy}
+                    onChange={(e) => setMaterial(r.id, e.target.value)}
+                    aria-label={`Material of ${r.name}`}
+                    className="-ml-1 max-w-48 cursor-pointer rounded-md border border-transparent bg-transparent px-1 py-0.5 text-sm hover:border-border focus-visible:border-ring disabled:cursor-default"
+                  >
+                    {!mats[matOf(r.id)] && <option value={matOf(r.id)}>{r.material}</option>}
+                    {Object.entries(families).map(([fam, list]) => (
+                      <optgroup key={fam} label={fam}>
+                        {list.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+                      </optgroup>
+                    ))}
+                  </select>
+                ) : r.material}
+              </td>
               <td className="px-3 py-2 text-muted-foreground max-md:hidden">{r.process.replace(/_/g, " ")}</td>
               <td className="px-3 py-2 text-right tabular-nums">{r.quantity}</td>
               <td className="px-3 py-2 text-right tabular-nums">{fmtMass(r.mass_g)}</td>
@@ -80,7 +115,7 @@ export function PartsPanel() {
         </tbody>
         <tfoot className="border-t bg-muted/30 text-sm font-semibold">
           <tr>
-            <td className="px-3 py-2">{rows.length} parts</td>
+            <td className="px-3 py-2">{rows.length} parts{stale && <span className="ml-2 text-xs font-normal text-warn">edited: run tests to update mass and results</span>}</td>
             <td className="max-sm:hidden" />
             <td className="max-md:hidden" />
             <td />

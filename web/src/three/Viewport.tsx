@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { CameraControls, ContactShadows, Environment, Grid, Lightformer, Html } from "@react-three/drei";
+import { CameraControls, ContactShadows, Environment, Grid, Lightformer, Html, MeshReflectorMaterial } from "@react-three/drei";
 import { Bloom, EffectComposer, N8AO, Outline, Selection, Select, ToneMapping, Vignette } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import { useStore } from "@/store";
@@ -184,34 +184,43 @@ function Model() {
   );
 }
 
-/** Frame the camera on the design whenever its bounds change noticeably. */
+/** Frame the bounding sphere so the model fills ~70% of the viewport height, from a
+ *  three-quarter view in front of +x (35 deg toward +y, 18 deg up): the side the main
+ *  antenna faces. Re-frames whenever the design's bounds or the explode amount change. */
+const VIEW_AZ = THREE.MathUtils.degToRad(35);
+const VIEW_EL = THREE.MathUtils.degToRad(18);
+
 function AutoFrame({ controls }: { controls: React.RefObject<CameraControls | null> }) {
   const design = useStore((s) => s.design);
   const explode = useStore((s) => s.explode);
   const nonce = useStore((s) => s.frameNonce);
+  const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
+  const aspect = useThree((s) => s.size.width / Math.max(1, s.size.height));
   const last = useRef<string>("");
   const lastNonce = useRef(nonce);
   useEffect(() => {
     if (!design || !controls.current) return;
     const b = new THREE.Box3();
     design.parts.forEach((p) => b.union(aabb(p)));
-    const size = b.getSize(new THREE.Vector3());
-    const key = [size.x, size.y, size.z].map((v) => Math.round(v / 50)).join(",") + `|${explode > 0.3}`;
-    if (key === last.current && nonce === lastNonce.current) return;
-    lastNonce.current = nonce;
-    const first = last.current === "";
-    last.current = key;
-    const pad = 1 + explode * 0.9;
     // z-up mm -> y-up m
     const min = new THREE.Vector3(b.min.x, b.min.z, -b.max.y).multiplyScalar(MM);
     const max = new THREE.Vector3(b.max.x, b.max.z, -b.min.y).multiplyScalar(MM);
-    const c = min.clone().add(max).multiplyScalar(0.5);
-    const half = max.clone().sub(min).multiplyScalar(0.5 * pad);
-    const box = new THREE.Box3(c.clone().sub(half), c.clone().add(half));
-    const ctl = controls.current;
-    if (first) ctl.rotateTo(Math.PI * 0.27, Math.PI * 0.41, false);
-    void ctl.fitToBox(box, !first, { paddingTop: 0.08, paddingBottom: 0.08, paddingLeft: 0.12, paddingRight: 0.12 });
-  }, [design, explode, controls, nonce]);
+    const sphere = new THREE.Box3(min, max).getBoundingSphere(new THREE.Sphere());
+    const key = [sphere.center.x, sphere.center.y, sphere.center.z, sphere.radius].map((v) => Math.round(v * 50)).join(",")
+      + `|${explode.toFixed(2)}|${aspect.toFixed(1)}`;
+    if (key === last.current && nonce === lastNonce.current) return;
+    const first = last.current === "";
+    last.current = key;
+    lastNonce.current = nonce;
+    const r = sphere.radius * (1 + explode * 0.9);
+    const half = THREE.MathUtils.degToRad(camera.fov / 2);
+    const fitH = r / Math.sin(Math.atan(0.7 * Math.tan(half)));
+    const fitW = r / Math.sin(Math.atan(0.85 * Math.tan(half) * aspect));
+    const dist = Math.max(fitH, fitW);
+    const dir = new THREE.Vector3(Math.cos(VIEW_EL) * Math.cos(VIEW_AZ), Math.sin(VIEW_EL), -Math.cos(VIEW_EL) * Math.sin(VIEW_AZ));
+    const pos = sphere.center.clone().add(dir.multiplyScalar(dist));
+    void controls.current.setLookAt(pos.x, pos.y, pos.z, sphere.center.x, sphere.center.y, sphere.center.z, !first);
+  }, [design, explode, controls, nonce, camera, aspect]);
   return null;
 }
 
@@ -235,6 +244,7 @@ function Ground() {
   return (
     <group position={[0, floor - 0.0005, 0]}>
       <Grid
+        position={[0, 0.0002, 0]}
         args={[span * 6, span * 6]}
         cellSize={cell}
         sectionSize={cell * 5}
@@ -246,7 +256,24 @@ function Ground() {
         fadeStrength={1.5}
         infiniteGrid
       />
-      <ContactShadows position={[0, 0.0004, 0]} scale={span * 3} blur={2.4} far={span * 1.2} opacity={dark ? 0.7 : 0.45} resolution={1024} />
+      <ContactShadows position={[0, 0.0006, 0]} scale={span * 3} blur={2.4} far={span * 1.2} opacity={dark ? 0.75 : 0.45} resolution={1024} />
+      {/* a subtle, slightly rough mirror under the grid */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.0004, 0]}>
+        <planeGeometry args={[span * 12, span * 12]} />
+        <MeshReflectorMaterial
+          color={dark ? "#0d1117" : "#e7ebf0"}
+          blur={[400, 120]}
+          resolution={1024}
+          mixBlur={1}
+          mixStrength={dark ? 1.4 : 0.6}
+          mirror={0.35}
+          roughness={0.85}
+          metalness={0.2}
+          depthScale={1}
+          minDepthThreshold={0.6}
+          maxDepthThreshold={1.2}
+        />
+      </mesh>
     </group>
   );
 }
@@ -354,9 +381,12 @@ export default function Viewport() {
       >
         <Suspense fallback={null}>
           <Studio />
-          <hemisphereLight args={["#e8f0ff", "#20242b", 0.55]} />
-          <directionalLight position={[4, 8, 5]} intensity={1.8} castShadow shadow-mapSize={[2048, 2048]} shadow-bias={-0.0001} />
-          <directionalLight position={[-5, 3, -4]} intensity={0.5} color="#cfe0ff" />
+          <hemisphereLight args={["#e8f0ff", "#20242b", 0.6]} />
+          {/* key: high, from the camera side */}
+          <directionalLight position={[6, 8, -2]} intensity={2.4} castShadow shadow-mapSize={[2048, 2048]} shadow-bias={-0.0001} />
+          {/* rim: from behind the model, so metal edges separate from the dark background */}
+          <directionalLight position={[-6, 4, 4]} intensity={1.7} color="#dbeafe" />
+          <directionalLight position={[-2, 2, -6]} intensity={0.45} color="#fff1e0" />
           <Selection>
             <Effects site={site} />
             {site && overlayTest ? <SiteView test={overlayTest} /> : (

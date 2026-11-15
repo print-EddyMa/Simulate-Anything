@@ -164,7 +164,7 @@ function Sub({ title, children }: { title: string; children: React.ReactNode }) 
 export function TestsPanel() {
   const order = useStore((s) => s.testOrder);
   if (!order.length) return <EmptyTab text="Tests appear here as they run." />;
-  return <div className="grid gap-2.5">{order.map((id) => <TestCard key={id} id={id} />)}</div>;
+  return <div className="grid grid-cols-[minmax(0,1fr)] gap-2.5">{order.map((id) => <TestCard key={id} id={id} />)}</div>;
 }
 
 export function EmptyTab({ text }: { text: string }) {

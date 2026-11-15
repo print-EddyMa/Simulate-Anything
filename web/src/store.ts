@@ -32,6 +32,7 @@ export interface Version {
 interface Store {
   run: RunState;
   runTitle: string;
+  request: string | null;   // the user's words for this run
   source: "demo" | "agent" | "mock" | "manual" | null;
   phase: Phase | null;
   phasesSeen: Phase[];
@@ -70,7 +71,7 @@ interface Store {
   frameNonce: number;
   status: { agent: boolean; mock?: boolean } | null;
 
-  reset: (title: string, source: Store["source"], keep?: boolean) => void;
+  reset: (title: string, source: Store["source"], keep?: boolean, request?: string | null) => void;
   apply: (e: EngineEvent) => void;
   set: (patch: Partial<Store>) => void;
   viewVersion: (n: number | null) => void;
@@ -85,6 +86,7 @@ const short = (t: string, n = 56) => (t.length > n ? `${t.slice(0, n - 1).trimEn
 export const useStore = create<Store>((set, get) => ({
   run: "idle",
   runTitle: "",
+  request: null,
   source: null,
   phase: null,
   phasesSeen: [],
@@ -124,11 +126,11 @@ export const useStore = create<Store>((set, get) => ({
 
   set: (patch) => set(patch),
 
-  reset: (title, source, keep = false) => {
+  reset: (title, source, keep = false, request = null) => {
     const s = get();
     const latest = s.versions[s.versions.length - 1];
     set({
-      run: "running", runTitle: title, source, phase: null, phasesSeen: [], feed: [],
+      run: "running", runTitle: title, request, source, phase: null, phasesSeen: [], feed: [],
       added: [], changed: [], tests: {}, testOrder: [], answer: null, verified: null,
       evaluation: null, before: null, error: null, selected: null, hovered: null, isolate: null,
       explode: 0, view: "model", focusTest: null, viewing: null, stale: false,

@@ -1,7 +1,8 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { motion } from "motion/react";
-import { Download, FileJson, Printer } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, Download, FileJson, Printer } from "lucide-react";
 import { useStore } from "@/store";
 import { download } from "@/api";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,8 @@ export function exportReport() {
   });
 }
 
+const MD = "mt-3 text-[13px] leading-relaxed text-foreground/90 [&_li]:ml-4 [&_li]:list-disc [&_p]:my-1.5 [&_strong]:font-semibold [&_em]:text-muted-foreground [&_h2]:mt-3 [&_h2]:font-semibold [&_h3]:mt-3 [&_h3]:font-semibold [&_table]:my-2 [&_table]:w-full [&_table]:text-xs [&_th]:pb-1 [&_th]:text-left [&_th]:font-medium [&_th]:text-muted-foreground [&_td]:border-t [&_td]:py-1.5 [&_td]:pr-2 [&_td]:align-top";
+
 export function ResultCard() {
   const run = useStore((s) => s.run);
   const answer = useStore((s) => s.answer);
@@ -39,7 +42,12 @@ export function ResultCard() {
   const summary = useStore((s) => s.summary);
   const ev = useStore((s) => s.evaluation);
   const limitingTitle = useStore((s) => (s.evaluation?.limiting ? s.tests[s.evaluation.limiting]?.title : undefined));
+  const [more, setMore] = useState(false);
   if (run !== "done" || answer === null) return null;
+  // lead paragraph up front; tables and change lists behind a disclosure
+  const cut = answer.indexOf("\n\n");
+  const lead = cut > 0 ? answer.slice(0, cut) : answer;
+  const rest = cut > 0 ? answer.slice(cut + 2).trim() : "";
   const total = ev?.tests.length ?? 0;
   const passed = ev?.counts.pass ?? 0;
   const ok = verified && ev?.all_pass;
@@ -80,9 +88,17 @@ export function ResultCard() {
           </div>
         ))}
       </div>
-      <div className="prose-sm mt-3 text-[13px] leading-relaxed text-foreground/90 [&_li]:ml-4 [&_li]:list-disc [&_p]:my-1.5 [&_strong]:font-semibold [&_em]:text-muted-foreground">
-        <Markdown remarkPlugins={[remarkGfm]}>{answer}</Markdown>
+      <div className={MD}>
+        <Markdown remarkPlugins={[remarkGfm]}>{lead}</Markdown>
       </div>
+      {rest && (
+        <>
+          <button onClick={() => setMore(!more)} aria-expanded={more} className="mt-1 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+            <ChevronDown className={cn("size-3.5 transition-transform", !more && "-rotate-90")} /> {more ? "Less" : "Details"}
+          </button>
+          {more && <div className={cn(MD, "mt-2")}><Markdown remarkPlugins={[remarkGfm]}>{rest}</Markdown></div>}
+        </>
+      )}
       <div className="mt-3 flex gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

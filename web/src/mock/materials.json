@@ -66,6 +66,39 @@
   "cost_per_kg": 10
  },
  {
+  "id": "electronics",
+  "name": "Electronics (board and parts)",
+  "family": "electronics",
+  "density": 1900,
+  "youngs_modulus": 20000000000.0,
+  "strength": 50000000.0,
+  "conductivity": 0.4,
+  "color": "#1f6f43",
+  "cost_per_kg": 200
+ },
+ {
+  "id": "galvanised_steel",
+  "name": "Galvanised steel",
+  "family": "metal",
+  "density": 7850,
+  "youngs_modulus": 200000000000.0,
+  "strength": 250000000.0,
+  "conductivity": 50,
+  "color": "#a7adb2",
+  "cost_per_kg": 2
+ },
+ {
+  "id": "lifepo4",
+  "name": "LiFePO4 battery",
+  "family": "battery",
+  "density": 1000,
+  "youngs_modulus": 1000000000.0,
+  "strength": 10000000.0,
+  "conductivity": 1.0,
+  "color": "#2b2f33",
+  "cost_per_kg": 25
+ },
+ {
   "id": "nylon",
   "name": "Nylon PA12",
   "family": "plastic",
@@ -130,6 +163,17 @@
   "conductivity": 0.2,
   "color": "#dfeaf0",
   "cost_per_kg": 40
+ },
+ {
+  "id": "solar_module",
+  "name": "Solar module (glass, cells, frame)",
+  "family": "solar",
+  "density": 320,
+  "youngs_modulus": 70000000000.0,
+  "strength": 40000000.0,
+  "conductivity": 1.0,
+  "color": "#1d2a4a",
+  "cost_per_kg": 9
  },
  {
   "id": "stainless",

@@ -1,10 +1,17 @@
 import { useRef, useState } from "react";
 import { ArrowUp, Box, Flame, ImagePlus, Moon, Radar, Ruler, Sparkles, Square, Sun, Thermometer, X } from "lucide-react";
 import { useStore } from "@/store";
-import { fileToDataUrl, importStl, runCreate, runDemo, stopRun, type Status } from "@/api";
+import { fileToDataUrl, importStl, runCreate, runSuggestion, stopRun, type Status } from "@/api";
 import type { Example } from "@/types";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
+/** Short, natural labels for the suggested prompts. */
+const SHORT: Record<string, string> = {
+  drone_radar: "Passive radar to spot drones around a base",
+  bracket: "Shelf bracket for 8 kg of books",
+  heatsink: "Heat sink for a 40 W LED",
+};
 
 const ICONS: Record<string, typeof Radar> = { radar: Radar, ruler: Ruler, bracket: Ruler, flame: Flame, thermometer: Thermometer, box: Box, sparkles: Sparkles };
 
@@ -58,7 +65,7 @@ export function TopBar({ status, examples }: { status: Status | null; examples: 
   const [note, setNote] = useState<string | null>(null);
   const photo = useRef<HTMLInputElement>(null);
   const stl = useRef<HTMLInputElement>(null);
-  const agent = !!status?.agent;
+  const agent = !!status?.agent && !status?.mock;
   const running = run === "running";
 
   const submit = () => {
@@ -66,7 +73,7 @@ export function TopBar({ status, examples }: { status: Status | null; examples: 
     const prompt = text.trim();
     if (!prompt || !status) return;
     if (!agent) {
-      setNote("Live design needs an API key on the server. Try an example: each one runs its simulations live.");
+      setNote("Designing from your own words needs an Anthropic API key on the server (ANTHROPIC_API_KEY).");
       return;
     }
     void runCreate(prompt, { image: image?.url, mesh: mesh?.part }, status, changing);
@@ -139,17 +146,13 @@ export function TopBar({ status, examples }: { status: Status | null; examples: 
             try { setMesh({ name: f.name, part: await importStl(f) }); }
             catch (err) { setNote(String((err as Error).message)); }
           }} />
-          {(note || (status && !agent)) && (
-            <p className="mt-1.5 px-1 text-xs text-muted-foreground">
-              {note ?? "Live design needs an API key. Examples run as live demos: every simulation still runs."}
-            </p>
-          )}
+          {note && <p className="mt-1.5 px-1 text-xs text-muted-foreground" role="status">{note}</p>}
         </form>
         <div className="ml-auto flex items-center gap-1 lg:ml-0">
           <ThemeToggle />
         </div>
       </div>
-      <div className="mx-auto flex max-w-[1800px] gap-2 overflow-x-auto px-4 pb-3 scrollbar-thin" role="list" aria-label="Examples">
+      <div className="mx-auto flex max-w-[1800px] gap-2 overflow-x-auto px-4 pb-3 scrollbar-thin" role="list" aria-label="Suggested prompts">
         {examples.map((ex, i) => {
           const Icon = ICONS[ex.icon ?? ""] ?? Sparkles;
           return (
@@ -157,16 +160,15 @@ export function TopBar({ status, examples }: { status: Status | null; examples: 
               key={ex.id}
               role="listitem"
               disabled={!status}
-              onClick={() => { setText(""); if (status) void runDemo(ex, status); }}
+              onClick={() => { setText(ex.prompt); setNote(null); setMode("new"); if (status) void runSuggestion(ex, status); }}
               className={cn(
                 "group flex shrink-0 items-center gap-2 rounded-full border bg-card px-3 py-1.5 text-left text-xs transition-colors hover:border-ring/60 hover:bg-accent/50",
                 i === 0 && "border-primary/40",
               )}
-              title={ex.tagline}
+              title={ex.prompt}
             >
               <Icon className={cn("size-3.5", i === 0 ? "text-primary" : "text-muted-foreground group-hover:text-foreground")} />
-              <span className="font-medium">{ex.title}</span>
-              <span className="hidden text-muted-foreground xl:inline">· {ex.tagline}</span>
+              <span>{SHORT[ex.id] ?? ex.title}</span>
             </button>
           );
         })}

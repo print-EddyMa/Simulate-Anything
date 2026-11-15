@@ -197,7 +197,7 @@ function Beacon({ reach }: { reach: number }) {
         </mesh>
       ))}
       <Html position={[0, 90, 0]} center zIndexRange={[10, 0]} style={{ pointerEvents: "none" }}>
-        <div className="whitespace-nowrap rounded-md border border-sky-300/30 bg-black/60 px-2 py-0.5 text-[11px] font-medium text-sky-100 backdrop-blur">Ghostlight node</div>
+        <div className="whitespace-nowrap rounded-md border border-sky-300/30 bg-black/60 px-2 py-0.5 text-[11px] font-medium text-sky-100 backdrop-blur">Radar node</div>
       </Html>
     </group>
   );
