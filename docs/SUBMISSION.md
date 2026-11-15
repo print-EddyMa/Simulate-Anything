@@ -43,8 +43,8 @@ YouTube or Vimeo for the form and paste the link here and in the README.
 ## Before submitting
 
 - [x] Demo video rendered and committed (`docs/media/margin-demo.mp4`).
-- [ ] Upload the video to YouTube or Vimeo and add the link to the form and the README.
-- [ ] Rename the repository to `margin` (GitHub, Settings, General, Repository name) and set its description to "Margin: Create anything".
+- [x] Video on YouTube: https://youtu.be/EBDoRH8mcDk
+- [x] Rename the repository to `margin` (GitHub, Settings, General, Repository name) and set its description to "Margin: Create anything".
 - [ ] Set `main` as the default branch (GitHub, Settings, General, Default branch).
 - [ ] Add a repository description and topics (GitHub, About, the gear icon).
 - [ ] Confirm the CI badge is green on the Actions tab.

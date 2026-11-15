@@ -2,7 +2,7 @@
 
 **Track:** Climate  
 **Team:** Eddy Ma  
-**Code:** https://github.com/print-EddyMa/margin  ·  **Demo video:** see the README
+**Code:** https://github.com/print-EddyMa/margin  ·  **Demo video:** https://youtu.be/EBDoRH8mcDk
 
 ## The problem
 
