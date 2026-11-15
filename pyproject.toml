@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "create-anything"
+name = "genie-create-anything"
 version = "0.2.0"
-description = "Design anything and test it against the real world on simulations that check themselves"
+description = "Genie: create anything, tested against the real world on simulations that check themselves"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Eddy Ma" }]
@@ -17,6 +17,7 @@ dev = ["pytest>=7"]
 
 [project.scripts]
 simulate-anything = "simulate_anything.cli:main"
+genie = "create_anything.__main__:main"
 create-anything = "create_anything.__main__:main"
 
 [tool.setuptools.packages.find]

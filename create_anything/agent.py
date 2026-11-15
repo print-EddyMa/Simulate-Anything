@@ -19,7 +19,7 @@ from .scenarios import DESCRIPTIONS
 
 DEFAULT_MODEL = "claude-opus-5-5"
 
-SYSTEM = f"""You are Create Anything, an engineering design agent. People describe \
+SYSTEM = f"""You are Genie, an engineering design agent that can create anything. People describe \
 something they want to build, show a photo of it, or import a part, and you design it: \
 its parts, materials, dimensions and assembly, and the real-world situations it has to \
 survive. Simulations then test it, and an optimiser improves it.
@@ -44,6 +44,10 @@ the wrong layout), change the design yourself and test again. Explain the reason
 sentence first, citing the number that showed it.
 6. When the remaining failures are about size, thickness or material, call optimise. It \
 tries changes and keeps only those the simulations prove.
+When the request comes with a current design, change that design (keep its ids, \
+parts and tests unless asked) rather than starting over: use update_design, then \
+run_tests.
+
 7. Finish with a short summary for an engineer who has not seen the work: what it is, \
 the key numbers with units, what changed and why, and the limits of the models used. \
 Never present a result from a failed or unverified test as a pass.
@@ -279,10 +283,18 @@ class Session:
         blocks.append({"type": "text", "text": text})
         return blocks
 
-    def run(self, prompt, emit, image=None, mesh=None):
-        """Drive the conversation, calling ``emit(event)`` for every event."""
+    def run(self, prompt, emit, image=None, mesh=None, design=None):
+        """Drive the conversation, calling ``emit(event)`` for every event.  With
+        ``design`` the agent edits that design instead of starting over."""
         self.imported = None
-        messages = [{"role": "user", "content": self._content(prompt, image, mesh)}]
+        content = self._content(prompt, image, mesh)
+        if design:
+            self.design = normalise(design)
+            self.diagram = self.design.get("diagram")
+            emit(engine.design_event(self.design))
+            content.insert(0, {"type": "text", "text": "Current design (edit it):\n"
+                               + json.dumps(self.design)})
+        messages = [{"role": "user", "content": content}]
         emit(engine.status("understand", "Reading the request"))
         response = None
         for _ in range(self.max_turns):
@@ -330,14 +342,14 @@ class Session:
                 p["mesh"] = self.imported["mesh"]
                 p["shape"] = "mesh"
 
-    def events(self, prompt, image=None, mesh=None):
+    def events(self, prompt, image=None, mesh=None, design=None):
         """Generator form of :meth:`run` (runs the loop on a worker thread)."""
         q = queue.Queue()
         done = object()
 
         def work():
             try:
-                self.run(prompt, q.put, image, mesh)
+                self.run(prompt, q.put, image, mesh, design)
             except Exception as exc:
                 q.put({"type": "error", "message": f"{type(exc).__name__}: {exc}"})
             finally:

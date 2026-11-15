@@ -13,7 +13,7 @@ import time
 from . import examples
 from .design import DesignError, geometry_issues, normalise, part_by_id, summary
 from .optimize import optimise_steps
-from .scenarios import run_scenario
+from .scenarios import run_scenario, summarise
 
 
 # -- building blocks ----------------------------------------------------------------
@@ -78,11 +78,7 @@ def test_events(design, verify=True, ids=None):
         result = run_scenario(design, sc, verify=verify, detail=True)
         tests.append(result)
         yield {"type": "test_result", "test": result}
-    counts = {s: sum(t["status"] == s for t in tests)
-              for s in ("pass", "fail", "unverified", "error")}
-    yield ("evaluation", {"tests": tests, "counts": counts,
-                          "all_pass": bool(tests) and counts["pass"] == len(tests),
-                          "violation": sum(t["violation"] for t in tests)})
+    yield ("evaluation", summarise(tests))
 
 
 def run_tests(design, verify=True, ids=None):

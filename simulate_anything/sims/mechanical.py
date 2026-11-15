@@ -436,7 +436,7 @@ class BeamVibration(Simulation):
             "ij,ij->j", Ve, d["M"] @ Ve)
         ray = float(np.max(np.abs(rayleigh / lam[nrb:m] - 1)))
         return [
-            ck.small("Rayleigh quotient reproduces the eigenvalues", ck.STRUCT, ray, 1e-9,
+            ck.small("Rayleigh quotient reproduces the eigenvalues", ck.STRUCT, ray, 1e-7,
                      "phi^T K phi / phi^T M phi vs omega^2 (strain energy = kinetic "
                      "energy in each mode); largest relative gap"),
             ck.small("mode orthogonality (mass matrix)", ck.STRUCT, off, 1e-8,

@@ -1,6 +1,6 @@
-# Create Anything: engine ↔ interface protocol
+# Genie: engine ↔ interface protocol
 
-The Python server (`python -m create_anything serve`, default port 8000) serves
+The Python server (`genie serve`, or `python -m create_anything serve`, default port 8000) serves
 the built web app from `create_anything/web/dist/` and these endpoints. All
 bodies are JSON. Lengths are millimetres, z is up, angles are degrees.
 
@@ -12,7 +12,7 @@ bodies are JSON. Lengths are millimetres, z is up, angles are degrees.
 | GET | `/api/examples` | | `[{"id", "title", "tagline", "prompt", "icon"}]` |
 | GET | `/api/materials` | | `[{"id", "name", "family", "density", "youngs_modulus", "strength", ...}]` |
 | POST | `/api/demo/<id>` | `{}` | **event stream**: a scripted build of an example; every simulation runs live |
-| POST | `/api/create` | `{"prompt": str, "image"?: dataURL, "mesh"?: part}` | **event stream**: Claude designs it (needs a key) |
+| POST | `/api/create` | `{"prompt": str, "image"?: dataURL, "mesh"?: part, "design"?: Design}` (with `design`: edit it) | **event stream**: Claude designs it (needs a key) |
 | POST | `/api/evaluate` | `{"design"}` | `{"design", "summary", "issues", "diagram", "evaluation"}` |
 | POST | `/api/optimise` | `{"design"}` | **event stream** |
 | POST | `/api/import` | `{"name", "data": base64 STL}` | `{"part"}`: a `mesh` part to add to a design |
@@ -114,7 +114,8 @@ matte warm, `composite` → dark woven. Each material has a `color`.
 
 `{"id", "type", "part", "title"?, ...type-specific inputs as strings with units}`.
 Types: `load`, `drop`, `vibration`, `heat`, `fire`, `current`, `flow`, `wind`,
-`coverage`, `enclosure`, `power`. `GET /api/test-types` describes each.
+`coverage`, `enclosure`, `power`, and `simulation` (any of the 32 catalogue
+simulations, bound to the part's dimensions and material). `GET /api/test-types` describes each.
 
 ## TestResult
 
@@ -124,7 +125,9 @@ Types: `load`, `drop`, `vibration`, `heat`, `fire`, `current`, `flow`, `wind`,
   "status": "pass|fail|unverified|error",
   "headline": "one sentence with the key number",
   "metrics": [{"label": "safety factor", "value": 3.1, "unit": "", "limit": 2,
-               "kind": "min|max", "ok": true}],
+               "kind": "min|max", "ok": true, "base": 0,
+               "load": 0.65}],          // share of the limit used: 1 = at the limit
+  "load": 0.65,                         // the test's most loaded metric; null if untrusted
   "notes": ["modelling assumptions, shown collapsed"],
   "simulation": "beam",                 // Simulate Anything template used
   "checks": {"verdict": "VERIFIED", "summary": "...", "verified": true},
@@ -145,4 +148,9 @@ category, status: pass|warn|fail|skip, detail}]}`), `notes`, `params`.
 ## Evaluation
 
 `{"tests": [TestResult], "counts": {"pass", "fail", "unverified", "error"},
-"all_pass": bool, "violation": number}`
+"all_pass": bool, "violation": number, "load": number|null, "limiting": "test id"|null}`
+
+`load` is how much of its allowance a result uses: 0.5 is half, 1 is exactly at
+the limit, 2 is twice over. A maximum is measured from `base` (a temperature
+from the ambient it rises from); a minimum such as a safety factor is
+required / actual. The evaluation's `load` is its most loaded test.

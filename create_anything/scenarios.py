@@ -43,10 +43,41 @@ def _q(sc, key, unit, default=None, delta=False):
         raise ScenarioError(f"scenario '{sc['id']}', '{key}': {exc}") from None
 
 
-def _metric(label, value, unit, limit, kind):
+MAX_LOAD = 99.0          # cap so a load is always a finite JSON number
+
+
+def load_of(value, limit, kind, base=0.0):
+    """How much of its allowance a result uses: 1 is exactly at the limit, 0.5 half
+    of it, 2 twice over (None when it has no meaning).  A maximum is measured
+    from ``base`` (a temperature from the ambient it rises from); a minimum such
+    as a safety factor is required / actual."""
+    if not all(math.isfinite(v) for v in (value, limit, base)):
+        return None
+    if kind == "min":
+        if value <= 0 or limit <= 0:
+            return None
+        out = limit / value
+    else:
+        span = limit - base
+        if span <= 0:
+            return None
+        out = max(0.0, (value - base) / span)
+    return float(min(out, MAX_LOAD))
+
+
+def _metric(label, value, unit, limit, kind, base=0.0):
     ok = value >= limit if kind == "min" else value <= limit
     return {"label": label, "value": float(value), "unit": unit, "limit": float(limit),
-            "kind": kind, "ok": bool(ok)}
+            "kind": kind, "ok": bool(ok), "base": float(base),
+            "load": load_of(float(value), float(limit), kind, float(base))}
+
+
+def load_of_test(t: dict):
+    """A test's load: its most loaded metric (None without a trusted number)."""
+    if t.get("status") not in ("pass", "fail"):
+        return None
+    loads = [m["load"] for m in t.get("metrics", []) if m.get("load") is not None]
+    return max(loads) if loads else None
 
 
 def _violation(metrics) -> float:
@@ -235,7 +266,7 @@ def test_heat(design, part, sc, verify):
             notes.append(f"heat removed differs from the source by {100 * closure:.2g}%")
         notes.append("only the fins are counted; the bare base between them adds a little")
         metrics = [_metric("temperature at the heat source", t_base - 273.15, "degC",
-                           limit - 273.15, "max")]
+                           limit - 273.15, "max", ambient - 273.15)]
         head = (f"{power:.3g} W into the {part['name'].lower()}: the source sits at "
                 f"{t_base - 273.15:.0f} degC (limit {limit - 273.15:.0f} degC), thermal "
                 f"resistance {res.value('thermal_resistance'):.2f} K/W")
@@ -265,7 +296,8 @@ def test_heat(design, part, sc, verify):
         raise ScenarioError(f"a {part['shape']} cannot be tested as a rod heated at one end")
     res = _run("heat_sink_fin", params, verify)
     tip = res.value("tip_temperature")
-    metrics = [_metric("temperature at the far end", tip, "degC", limit - 273.15, "max")]
+    metrics = [_metric("temperature at the far end", tip, "degC", limit - 273.15, "max",
+                       ambient - 273.15)]
     head = (f"One end of the {part['name'].lower()} at {hot - 273.15:.0f} degC: the far end "
             f"reaches {tip:.0f} degC (limit {limit - 273.15:.0f} degC)")
     return res, metrics, head, notes, f"Heat: {hot - 273.15:.0f} degC at one end"
@@ -286,7 +318,8 @@ def test_fire(design, part, sc, verify):
         "ambient_temperature": f"{ambient} K", "critical_temperature": f"{crit_c} degC",
         "duration": f"{duration} s"}, verify)
     peak = crit_c - res.value("margin_to_critical")
-    metrics = [_metric("hottest surface temperature", peak, "degC", crit_c, "max")]
+    metrics = [_metric("hottest surface temperature", peak, "degC", crit_c, "max",
+                       ambient - 273.15)]
     if res.value("reaches_critical"):
         head = (f"{flux / 1e3:.3g} kW/m^2 on the {part['name'].lower()}: {mat['name']} {what} "
                 f"({crit_c:.0f} degC) after {res.value('time_to_critical'):.0f} s")
@@ -324,7 +357,8 @@ def test_current(design, part, sc, verify):
         "conductivity": f"{mat['conductivity']} W/(m*K)", "h": sc.get("h", "12 W/(m^2*K)"),
         "ambient_temperature": f"{ambient} K", "terminal_temperature": f"{ambient} K"}, verify)
     t_max, drop = res.value("max_temperature"), res.value("voltage_drop")
-    metrics = [_metric("hottest point", t_max, "degC", limit - 273.15, "max")]
+    metrics = [_metric("hottest point", t_max, "degC", limit - 273.15, "max",
+                       ambient - 273.15)]
     if sc.get("max_voltage_drop") is not None:
         metrics.append(_metric("voltage drop", drop, "V",
                                _q(sc, "max_voltage_drop", "V"), "max"))
@@ -358,6 +392,168 @@ def test_flow(design, part, sc, verify):
             f"{dp / 1e3:.3g} kPa (limit {limit / 1e3:.3g} kPa) at {vel:.2g} m/s, Reynolds "
             f"number {res.value('reynolds_number'):.0f}")
     return res, metrics, head, [], f"Flow: {rate * 6e4:.3g} L/min"
+
+
+# -- any simulation in the catalogue ---------------------------------------------------
+MATERIAL_UNITS = {"density": "kg/m^3", "youngs_modulus": "Pa", "strength": "Pa",
+                  "conductivity": "W/(m*K)", "specific_heat": "J/(kg*K)",
+                  "service_temp": "degC", "ignition_temp": "degC", "resistivity": "ohm*m"}
+DIMENSION_KEYS = ("size", "radius", "inner_radius", "length", "wall", "base", "fin_height",
+                  "fin_thickness", "n_fins", "boom_length", "element_length", "n_elements")
+SOURCES_HELP = ("size.0 | size.1 | size.2 (or size.x/y/z), radius, inner_radius, length, "
+                "wall, base.0-2, fin_height, fin_thickness, n_fins, boom_length, "
+                "element_length, n_elements, part.mass, part.volume, design.mass, "
+                "spec.<name>, or material.<" + " | ".join(MATERIAL_UNITS) + ">")
+AMBIENT_HINTS = ("ambient", "inlet", "coolant", "outside", "air_temperature",
+                 "fluid_temperature", "initial_temperature")
+
+
+def _has_unit(value) -> bool:
+    if not isinstance(value, str):
+        return False
+    try:
+        return bool(split_quantity(value.strip())[1])
+    except DimensionError:
+        return False
+
+
+def parse_source(source: str):
+    """'size.2' -> ('size', 2); 'wall' -> ('wall', None); 'material.x' -> ('material', 'x')."""
+    src = str(source).strip()
+    key, _, idx = src.partition(".")
+    if key in ("material", "part", "design", "spec"):
+        return key, idx
+    if key not in DIMENSION_KEYS:
+        raise ScenarioError(f"unknown binding source '{src}' (use {SOURCES_HELP})")
+    if not idx:
+        return key, None
+    if idx in AXES:
+        return key, AXES[idx]
+    if idx not in ("0", "1", "2"):
+        raise ScenarioError(f"binding source '{src}': index must be 0-2 or x/y/z")
+    return key, int(idx)
+
+
+def bound_value(design: dict, part: dict, source: str):
+    """The value a binding source stands for, as something sa.run accepts."""
+    key, idx = parse_source(source)
+    mat = materials.get(part["material"])
+    if key == "material":
+        if idx not in MATERIAL_UNITS:
+            raise ScenarioError(f"unknown material property '{idx}' "
+                                f"(known: {sorted(MATERIAL_UNITS)})")
+        if mat[idx] is None:
+            raise ScenarioError(f"{mat['name']} has no {idx.replace('_', ' ')}")
+        return f"{mat[idx]} {MATERIAL_UNITS[idx]}"
+    if key == "spec":
+        if idx not in (part.get("specs") or {}):
+            raise ScenarioError(f"part '{part['id']}' has no spec '{idx}'")
+        return part["specs"][idx]
+    if key == "part":
+        if idx == "mass":
+            return f"{mass_volume_mm3(part) * 1e-9 * mat['density']} kg"
+        if idx == "volume":
+            return f"{volume_mm3(part) * 1e-9} m^3"
+        raise ScenarioError(f"unknown part property '{idx}' (use part.mass or part.volume)")
+    if key == "design":
+        if idx == "mass":
+            return f"{total_mass_kg(design)} kg"
+        raise ScenarioError(f"unknown design property '{idx}' (use design.mass)")
+    if key not in part:
+        raise ScenarioError(f"part '{part['id']}' ({part['shape']}) has no '{key}'")
+    value = part[key] if idx is None else part[key][idx]
+    return int(value) if key in ("n_fins", "n_elements") else f"{value} mm"
+
+
+def _is_temperature(unit: str) -> bool:
+    try:
+        convert("300 K", unit)
+        return bool(unit)
+    except (DimensionError, ValueError, TypeError):
+        return False
+
+
+def _base_for(req: dict, unit: str, params: dict):
+    """Where a temperature's load is measured from: the requirement's 'from', else the
+    run's ambient-like input, else 25 degC (said in a note).  Other units: zero."""
+    if not unit or not _is_temperature(unit):
+        return 0.0, None
+    if req.get("from") is not None:
+        try:
+            return convert(req["from"], unit), None
+        except (DimensionError, ValueError, TypeError) as exc:
+            raise ScenarioError(f"requirement 'from': {exc}") from None
+    for key, value in params.items():
+        if any(h in key for h in AMBIENT_HINTS):
+            try:
+                return convert(value, unit), None
+            except (DimensionError, ValueError, TypeError):
+                continue
+    return convert("25 degC", unit), ("temperature load measured as the rise above 25 degC "
+                                      "(give the requirement a 'from' to change it)")
+
+
+def test_simulation(design, part, sc, verify):
+    name = sc.get("simulation")
+    try:
+        cls = sa.get(str(name))
+    except sa.ParamError:
+        known = sorted(x["name"] for x in sa.catalog())
+        raise ScenarioError(f"unknown simulation '{name}' (known: {known})") from None
+    schema = {p["name"]: p for p in cls.schema()["params"]}
+    params = dict(sc.get("params") or {})
+    bind = sc.get("bind") or {}
+    if not isinstance(bind, dict) or not bind:
+        raise ScenarioError(
+            "a 'simulation' test must bind at least one parameter to the part ('bind': "
+            "{\"param\": \"size.2\" or \"material.conductivity\"...}), otherwise its "
+            "result does not depend on the design")
+    for pname in list(params) + list(bind):
+        if pname not in schema:
+            raise ScenarioError(f"'{name}' has no parameter '{pname}' "
+                                f"(parameters: {sorted(schema)})")
+    for pname, source in bind.items():
+        params[pname] = bound_value(design, part, source)
+    reqs = sc.get("require")
+    if not isinstance(reqs, list) or not reqs:
+        raise ScenarioError("a 'simulation' test needs 'require': [{\"qoi\": name, "
+                            "\"max\" or \"min\": value with unit}]")
+    res = _run(cls.name, params, verify)
+    if not res.qoi:
+        failed = "; ".join(f"{c.name}: {c.detail}" for c in res.report.failed()[:3])
+        raise ScenarioError(f"'{name}' rejected this setup before solving ({failed})")
+    metrics, extra_notes = [], []
+    for r in reqs:
+        q = r.get("qoi") if isinstance(r, dict) else None
+        if q not in res.qoi:
+            raise ScenarioError(f"'{name}' reports no result '{q}' "
+                                f"(results: {sorted(res.qoi)})")
+        kinds = [k for k in ("min", "max") if r.get(k) is not None]
+        if len(kinds) != 1:
+            raise ScenarioError(f"requirement on '{q}' needs exactly one of min or max")
+        value, unit = res.qoi[q]
+        limit = r[kinds[0]]
+        if unit and not _has_unit(limit):
+            raise ScenarioError(f"requirement on '{q}': give a unit, for example "
+                                f"\"{limit} {unit}\"")
+        try:
+            limit = float(limit) if not unit else convert(limit, unit)
+        except (DimensionError, TypeError, ValueError) as exc:
+            raise ScenarioError(f"requirement on '{q}' (reported in '{unit or 'no unit'}'): "
+                                f"{exc}") from None
+        base, note = _base_for(r, unit, params)
+        if note and note not in extra_notes:
+            extra_notes.append(note)
+        metrics.append(_metric(r.get("label") or q.replace("_", " "), value, unit, limit,
+                               kinds[0], base))
+    title = sc.get("title") or cls.schema()["title"]
+    shown = "; ".join(f"{m['label']} {m['value']:.4g} {m['unit']}".rstrip() +
+                      f" ({'needs' if not m['ok'] else 'limit'} "
+                      f"{'>=' if m['kind'] == 'min' else '<='} {m['limit']:.4g})"
+                      for m in metrics)
+    head = f"{cls.schema()['title']} on the {part['name'].lower()}: {shown}"
+    notes = ["bound to the design: " + ", ".join(f"{k} = {v}" for k, v in bind.items())]
+    return res, metrics, head, notes + extra_notes, title
 
 
 DRAG = {"wire_mesh": (1.3, 0.25), "bowtie": (1.3, 0.3), "solar": (1.3, 1.0),
@@ -454,7 +650,8 @@ def test_enclosure(design, part, sc, verify):
         "ambient_temperature": sc.get("ambient", "35 degC"),
         "sky_temperature": sc.get("sky", "20 degC")}, verify)
     t_in = res.value("internal_temperature")
-    metrics = [_metric("air temperature inside", t_in, "degC", limit - 273.15, "max")]
+    amb_c = convert(sc.get("ambient", "35 degC"), "degC")
+    metrics = [_metric("air temperature inside", t_in, "degC", limit - 273.15, "max", amb_c)]
     head = (f"{power:.3g} W of electronics in full sun: {t_in:.0f} degC inside the "
             f"{part['name'].lower()} (limit {limit - 273.15:.0f} degC), "
             f"{res.value('absorbed_sun'):.0f} W of it is sunlight")
@@ -543,7 +740,7 @@ def test_coverage(design, part, sc, verify):
 TESTS = {"load": test_load, "drop": test_drop, "vibration": test_vibration,
          "heat": test_heat, "fire": test_fire, "current": test_current, "flow": test_flow,
          "wind": test_wind, "enclosure": test_enclosure, "power": test_power,
-         "coverage": test_coverage}
+         "coverage": test_coverage, "simulation": test_simulation}
 
 DESCRIPTIONS = {
     "load": "a steady force on a part held like a beam: needs force; optional support "
@@ -578,6 +775,11 @@ DESCRIPTIONS = {
                 "tx_erp (1 MW), frequency (569 MHz), baseline (20 km), tx_bearing (180 deg), "
                 "rcs (0.01 m^2), integration_time (0.5 s), cancellation (30 dB), receiver "
                 "(part id with specs noise_figure), screen (part id with specs rejection)",
+    "simulation": "any simulation in the catalogue, for situations the types above do not "
+                  "cover: needs simulation (template name), bind ({param: source}, at least "
+                  "one, tying the run to this part; sources: " + SOURCES_HELP + "), require "
+                  "([{qoi, min | max (with unit), optional label, optional from: the ambient "
+                  "a temperature rises from}]); optional params (other inputs with units)",
 }
 
 
@@ -616,6 +818,7 @@ def run_scenario(design: dict, sc: dict, verify: bool = True, detail: bool = Tru
                           "source_bearing_deg": float(split_quantity(
                               str(sc.get("tx_bearing", "180 deg")))[0]),
                           "range_m": float(_q(sc, "required_range", "m"))}
+    out["load"] = load_of_test(out)
     if detail:
         out["sim"] = res.to_dict(with_fields=True)
     return out
@@ -623,9 +826,17 @@ def run_scenario(design: dict, sc: dict, verify: bool = True, detail: bool = Tru
 
 def evaluate(design: dict, verify: bool = True, detail: bool = True) -> dict:
     """Run every real-world test of a (normalised) design."""
-    tests = [run_scenario(design, sc, verify, detail) for sc in design["scenarios"]]
+    return summarise([run_scenario(design, sc, verify, detail) for sc in design["scenarios"]])
+
+
+def summarise(tests: list) -> dict:
+    """Evaluation record for a list of test results."""
     counts = {s: sum(t["status"] == s for t in tests)
               for s in ("pass", "fail", "unverified", "error")}
+    loaded = [t for t in tests if t.get("load") is not None]
+    worst = max(loaded, key=lambda t: t["load"]) if loaded else None
     return {"tests": tests, "counts": counts,
             "all_pass": bool(tests) and counts["pass"] == len(tests),
-            "violation": sum(t["violation"] for t in tests)}
+            "violation": sum(t["violation"] for t in tests),
+            "load": worst["load"] if worst else None,
+            "limiting": worst["id"] if worst else None}

@@ -1,4 +1,4 @@
-"""Command line: ``python -m create_anything serve | demo | evaluate | optimise``."""
+"""Command line: ``genie serve | demo | design | evaluate | optimise``."""
 from __future__ import annotations
 
 import argparse
@@ -30,8 +30,8 @@ def _print_event(ev):
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(prog="create-anything",
-                                 description="Design anything; test it against the real world.")
+    ap = argparse.ArgumentParser(prog="genie",
+                                 description="Genie: create anything, tested against the real world.")
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("serve", help="start the web app")
     p.add_argument("--host", default="127.0.0.1")
@@ -39,6 +39,10 @@ def main(argv=None) -> int:
     p = sub.add_parser("demo", help="run a built-in example in the terminal")
     p.add_argument("example", choices=sorted(examples.EXAMPLES))
     p.add_argument("--fast", action="store_true", help="no pauses")
+    p = sub.add_parser("design", help="design something from a description (needs an API key)")
+    p.add_argument("request")
+    p.add_argument("--from", dest="start", help="a design JSON file to change instead")
+    p.add_argument("-o", "--out", help="write the final design here")
     p = sub.add_parser("evaluate", help="test a design JSON file")
     p.add_argument("file")
     p = sub.add_parser("optimise", help="optimise a design JSON file and print the result")
@@ -55,6 +59,20 @@ def main(argv=None) -> int:
         for ev in engine.demo(args.example, pace=0 if args.fast else 0.5):
             _print_event(ev)
             last = ev
+        return 0 if last and last.get("verified") else 1
+    if args.cmd == "design":
+        from .agent import Session
+        start = None
+        if args.start:
+            with open(args.start, encoding="utf-8") as fh:
+                start = json.load(fh)
+        last = None
+        for ev in Session().events(args.request, design=start):
+            _print_event(ev)
+            last = ev
+        if args.out and last and last.get("type") == "done":
+            with open(args.out, "w", encoding="utf-8") as fh:
+                json.dump(last["design"], fh, indent=1)
         return 0 if last and last.get("verified") else 1
     with open(args.file, encoding="utf-8") as fh:
         design = json.load(fh)
