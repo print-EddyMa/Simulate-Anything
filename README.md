@@ -118,22 +118,37 @@ assembly.
 
 ### The optimiser
 
+As drawn, the example shelf bracket's arm is loaded far past its line: it would
+bend 80.5 mm against a 2.5 mm limit (over 999 %), and a dropped book would
+break it (243 %).
+
 ```console
 $ plimsoll optimise create_anything/examples/shelf_bracket.json -o fixed.json
 Wall shelf bracket: 48.1 g -> 99.6 g
+
+Changes
   fix   Arm: thickness 4 -> 8 mm
   fix   Arm: thickness 8 -> 16 mm
   fix   Arm: PLA -> Polycarbonate
   trim  Arm: thickness 16 -> 15.2 mm
   trim  Arm: width 30 -> 27 mm
-  PASS       4 kg of books on the end
+
+Real-world tests (final design, verified)
+  PASS         96%  4 kg of books on the end  [books, arm]
              40 N on the arm: safety factor 10.30 (needs 2), bends 2.39 mm (limit 2.5 mm)
              simulation beam: PASSED WITH WARNINGS: 12 passed, 1 warnings, 0 failed, 2 not applicable
+  PASS         78%  A 1 kg book dropped onto it from 30 cm  [knock, arm]
+             1 kg dropped 0.3 m onto the arm: peak force 325 N (33x the weight), safety factor 1.28 (needs 1)
+             simulation drop_impact: VERIFIED: 12 passed, 0 warnings, 0 failed, 1 not applicable
+
+  2 passed, 0 failed, 0 unverified, 0 could not be run
+  loaded to 96% of the load line (limit: books)
 ```
 
-(Output shortened.) The warning is the beam check noting that the thicker arm is
-now slightly too stubby for simple beam theory (length/depth 9.9, wants 10 or
-more).
+(Output shortened.) The trims spend spare margin to save mass, so the result
+sits just under its line. The warning is the beam check noting that the thicker
+arm is now slightly too stubby for simple beam theory (length/depth 9.9, wants
+10 or more).
 
 It changes the dimensions each failing test depends on (for a `simulation`
 test, the bound ones) and tries other materials. It re-runs every test on every
