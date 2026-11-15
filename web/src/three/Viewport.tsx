@@ -11,6 +11,8 @@ import { finishFor, STATUS_COLOR } from "./looks";
 import { SiteView } from "./SiteView";
 import { ViewportControls } from "./ViewportControls";
 import { fmtMass } from "./format";
+import Hero from "./Hero";
+import { useIsDarkDom } from "@/panels/useIsDark";
 
 const MM = 0.001;
 
@@ -340,17 +342,6 @@ function Effects({ site }: { site: boolean }) {
   );
 }
 
-function Empty() {
-  return (
-    <div className="pointer-events-none absolute inset-0 grid place-items-center">
-      <div className="text-center">
-        <div className="mx-auto mb-4 size-14 rounded-2xl border border-dashed border-muted-foreground/30" />
-        <p className="text-sm text-muted-foreground">Describe something, or pick an example above.</p>
-      </div>
-    </div>
-  );
-}
-
 function FrameOnSite({ controls, active, extent }: { controls: React.RefObject<CameraControls | null>; active: boolean; extent: number }) {
   const { camera } = useThree();
   useEffect(() => {
@@ -386,6 +377,15 @@ export default function Viewport() {
     return Math.max(xs[xs.length - 1] - xs[0], ys[ys.length - 1] - ys[0]) / 2;
   }, [overlayTest]);
 
+  const dark = useIsDarkDom();
+  if (!design) {
+    return (
+      <div className="relative size-full overflow-hidden bg-viewport">
+        <Hero dark={dark} />
+      </div>
+    );
+  }
+
   return (
     <div className="relative size-full overflow-hidden bg-viewport">
       <Canvas
@@ -418,7 +418,6 @@ export default function Viewport() {
           <FrameOnSite controls={controls} active={site} extent={siteExtent} />
         </Suspense>
       </Canvas>
-      {!design && <Empty />}
       {design && <ViewportControls hasSite={!!overlayTest} />}
     </div>
   );
