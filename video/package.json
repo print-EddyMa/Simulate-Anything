@@ -1,0 +1,20 @@
+{
+  "name": "margin-demo-video",
+  "version": "1.0.0",
+  "description": "Remotion source of the Margin demo video",
+  "scripts": {
+    "render": "scripts/render.sh"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@remotion/cli": "^4.0.543",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "^4.0.543"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "typescript": "^5.6.3"
+  },
+  "private": true
+}

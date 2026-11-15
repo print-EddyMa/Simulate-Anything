@@ -29,6 +29,11 @@ simulations that check themselves, and improves it until it passes with margin t
   <img alt="shadcn/ui" src="https://img.shields.io/badge/shadcn%2Fui-000000?logo=shadcnui&logoColor=white">
 </p>
 
+<p align="center">
+  <a href="docs/media/margin-demo.mp4"><img src="docs/media/margin-demo-poster.jpg" alt="Watch the 2-minute demo" width="720"></a><br>
+  <a href="docs/media/margin-demo.mp4"><b>▶ Watch the 2-minute demo</b></a>
+</p>
+
 ![Margin designing a passive radar node: the request, the live process, the 3D model and five real-world tests](docs/screenshot.png)
 
 ## Try it in a minute
@@ -124,6 +129,24 @@ parts appearing in 3D, tests resolving, the optimiser's before-and-after.
 
 The model is the public bistatic radar equation in free space, with
 catalogue-level parts.
+
+We then built the node's screen frame from Margin's design and tested it
+outdoors with a quadcopter (field footage is in the demo video).
+
+### More examples, each designed from one sentence
+
+Claude designed each of these live in Margin, with every visible component as
+its own part, and each passes all of its real-world tests. Open one with
+**Edit JSON** in the app, or test it from the terminal with
+`margin evaluate examples/designs/<file>`.
+
+| Design | Parts | Tests | File |
+|---|---|---|---|
+| Survey quadcopter (300 g camera, 25 min flight, hard landings) | 105 | 6 / 6 | `survey_quadcopter.json` |
+| Desktop robot arm (1 kg at 40 cm reach) | 105 | 6 / 6 | `robot_arm.json` |
+| Rugged smartwatch (1.5 m drop onto concrete, 1 A charging) | 89 | 6 / 6 | `field_smartwatch.json` |
+| 24 V, 20 A go-kart motor driver board | 91 | 3 / 3 | `kart_motor_driver.json` |
+| Solar air-quality sensor for a lamp post | 106 | 5 / 5 | `air_quality_sensor.json` |
 
 ## How we built it
 
@@ -306,7 +329,9 @@ create_anything/      designs, real-world tests, optimiser, agent, live engine, 
   web/dist/           the built interface (served by the Python server)
 web/                  interface source (React, three.js)
 simulate_anything/    the self-checking simulation library
-docs/                 protocol between engine and interface, extending guide
+examples/designs/     example designs (JSON), ready to evaluate or optimise
+docs/                 protocol, extending guide, brand, credits, demo video (docs/media)
+video/                source of the demo video (Remotion composition, app capture scripts)
 tests/
 ```
 
@@ -329,7 +354,9 @@ cd web && npm install && npm run build
 Claude Opus 5.5 (Anthropic) for the designer agent; NumPy and SciPy for the
 engine; React, TypeScript, Vite, Tailwind CSS, three.js (React Three Fiber,
 drei, postprocessing), shadcn/ui, Magic UI, React Flow, Motion and Zustand for
-the interface; Inter and JetBrains Mono typefaces. The full list with
+the interface; Inter and JetBrains Mono typefaces. The demo video was cut in
+Remotion from real app captures (Playwright), with AI footage, narration and
+sound effects generated on Higgsfield. The full list with
 licenses, the data used and the published methods behind each simulation is
 in [docs/CREDITS.md](docs/CREDITS.md).
 

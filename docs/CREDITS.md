@@ -39,6 +39,23 @@ written from scratch in this repository.
 | [react-markdown](https://github.com/remarkjs/react-markdown), [remark-gfm](https://github.com/remarkjs/remark-gfm) | MIT | Rendering the designer's summary |
 | [Inter](https://rsms.me/inter/) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/) via Fontsource | SIL OFL 1.1 | Typefaces (bundled, no CDN) |
 
+## Demo video
+
+| Tool | Used for |
+|---|---|
+| [Remotion](https://www.remotion.dev) | Composing and rendering the video in React (Remotion license; free for individuals and small teams) |
+| [Playwright](https://playwright.dev) | Frame-exact capture of the real app on a virtual clock |
+| [FFmpeg](https://ffmpeg.org) | Encoding and loudness normalisation |
+| [Higgsfield](https://higgsfield.ai): Seedance 2.5 | The cinematic shots (perimeter at dusk, storm, heat, winter, sunrise, wireframe) |
+| Higgsfield: ElevenLabs text-to-speech (voice "Callum") | Narration |
+| Higgsfield: Mirelo text-to-audio | Sound effects |
+| Music | A synthesised score generated in code (`video/scripts/music.py`) |
+| Field footage | Shot by the team during the outdoor test of the radar node |
+
+Every app shot is a screen capture of the real app. The radar run is the app's
+built-in offline replay of a recorded run (its simulations run live); the five
+other designs were made live by the designer agent and tested in the app.
+
 ## Data
 
 | Data | Source | Where |

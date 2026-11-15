@@ -18,31 +18,33 @@ magic-ui, react-flow, motion, zustand
 
 **Track:** General
 
-## Demo video script (about 2 minutes)
+## Demo video (2:00)
 
-1. **The problem (0:00-0:15).** "Ask an AI to design something physical and
-   you get confident numbers nobody checked. Engineers can't use that."
-2. **The request (0:15-0:30).** Open Margin, click *Passive radar to spot
-   drones around a base*. The request appears at the top of the process panel.
-3. **Design (0:30-0:55).** The brief with its requirements, the system
-   diagram drawing itself, the node building in 3D part by part.
-4. **The real world (0:55-1:20).** Five tests resolve. Point at the radar
-   test: 0.75 km against 1.5 km, and why: leaked TV signal raises the noise
-   floor by 44 dB, so a bigger antenna wouldn't help.
-5. **The fix (1:20-1:40).** The mesh screen appears; detection jumps to
-   2.2 km. The optimiser paints the enclosure white, grows the battery,
-   stiffens the mast, trims material.
-6. **Trust (1:40-1:55).** Open a test: margin of safety, the verification
-   checklist, the *Reproduce* command. Switch to *Site* to show the coverage
-   map with drones lighting up.
-7. **Close (1:55-2:00).** "Margin. Create anything."
+File: [docs/media/margin-demo.mp4](media/margin-demo.mp4) (1080p, 46 MB). Upload it to
+YouTube or Vimeo for the form and paste the link here and in the README.
 
-Record at 1440 x 900 or larger with a real GPU (the 3D site view is heavy for
-software rendering). `margin serve`, then open http://127.0.0.1:8000.
+1. **Hook (0:00).** A drone over a base fence. "Ask an AI to design something
+   physical. Nobody checks the physics."
+2. **Logo (0:08).** Margin, Create anything.
+3. **Design (0:14).** The radar request is typed; the points gather while it
+   works; the brief, the system diagram and the node build in 3D.
+4. **The real world (0:36).** Storm gust −88%, summer heat −18%, cloudy winter
+   −50%.
+5. **Problem and fix (0:44).** Drone range 0.75 km on the coverage map; a mesh
+   screen goes on and range jumps to 2.20 km.
+6. **Optimise and verify (1:01).** Sizing changes the simulations prove; 5 / 5
+   tests pass; a test opened to its verified result.
+7. **Field test (1:23).** Margin designed it, we built it and flew a drone at
+   it. 1.09 billion live radio samples captured, none dropped.
+8. **Anything (1:31).** A drone, a robot arm, a watch, a circuit board and a
+   sensor, each designed live and passing every test. "Describe anything."
+9. **Close (1:50).** Margin. Create anything. github.com/print-EddyMa/Simulate-Anything
 
 ## Before submitting
 
+- [x] Demo video rendered and committed (`docs/media/margin-demo.mp4`).
+- [ ] Upload the video to YouTube or Vimeo and add the link to the form and the README.
 - [ ] Set `main` as the default branch (GitHub, Settings, General, Default branch).
 - [ ] Add a repository description and topics (GitHub, About, the gear icon).
-- [ ] Record the demo video and add its link to the README and the form.
 - [ ] Confirm the CI badge is green on the Actions tab.
+- [ ] Rotate the Anthropic API key that was used to make the example designs.
