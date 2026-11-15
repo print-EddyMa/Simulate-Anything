@@ -194,10 +194,10 @@ def demo_ghostlight(pace=1.0):
     groups = [
         (["tripod", "mast"], "A 2.6 m aluminium mast on a tripod lifts the antennas clear "
                              "of people and parked vehicles."),
-        (["antenna_arm", "surv_antenna", "ref_arm", "ref_dipole"],
+        (["arm_clamp", "antenna_arm", "surv_antenna", "ref_clamp", "ref_arm", "ref_dipole"],
          "The surveillance antenna faces the area to protect; the reference dipole faces the "
          "TV tower behind it."),
-        (["enclosure", "sdr", "computer"],
+        (["enclosure", "sdr", "computer", "coax_surv", "coax_ref"],
          "A sealed polycarbonate box holds a two-channel SDR on one clock and the computer "
          "that runs detection."),
         (["battery", "panel_bracket", "solar"],
