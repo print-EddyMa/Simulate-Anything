@@ -1,0 +1,167 @@
+[
+ {
+  "id": "abs",
+  "name": "ABS",
+  "family": "plastic",
+  "density": 1050,
+  "youngs_modulus": 2200000000.0,
+  "strength": 40000000.0,
+  "conductivity": 0.17,
+  "color": "#d9d9d6",
+  "cost_per_kg": 22
+ },
+ {
+  "id": "acrylic",
+  "name": "Acrylic (PMMA)",
+  "family": "plastic",
+  "density": 1180,
+  "youngs_modulus": 3000000000.0,
+  "strength": 65000000.0,
+  "conductivity": 0.19,
+  "color": "#e6f2f5",
+  "cost_per_kg": 8
+ },
+ {
+  "id": "aluminium",
+  "name": "Aluminium 6061-T6",
+  "family": "metal",
+  "density": 2700,
+  "youngs_modulus": 69000000000.0,
+  "strength": 275000000.0,
+  "conductivity": 167,
+  "color": "#c9ced3",
+  "cost_per_kg": 6
+ },
+ {
+  "id": "brass",
+  "name": "Brass",
+  "family": "metal",
+  "density": 8500,
+  "youngs_modulus": 100000000000.0,
+  "strength": 200000000.0,
+  "conductivity": 120,
+  "color": "#c9a858",
+  "cost_per_kg": 8
+ },
+ {
+  "id": "carbon_fibre",
+  "name": "Carbon-fibre composite",
+  "family": "composite",
+  "density": 1600,
+  "youngs_modulus": 70000000000.0,
+  "strength": 600000000.0,
+  "conductivity": 5,
+  "color": "#3b3f44",
+  "cost_per_kg": 80
+ },
+ {
+  "id": "copper",
+  "name": "Copper",
+  "family": "metal",
+  "density": 8960,
+  "youngs_modulus": 117000000000.0,
+  "strength": 70000000.0,
+  "conductivity": 400,
+  "color": "#c98452",
+  "cost_per_kg": 10
+ },
+ {
+  "id": "nylon",
+  "name": "Nylon PA12",
+  "family": "plastic",
+  "density": 1010,
+  "youngs_modulus": 1700000000.0,
+  "strength": 45000000.0,
+  "conductivity": 0.25,
+  "color": "#f1efe6",
+  "cost_per_kg": 60
+ },
+ {
+  "id": "petg",
+  "name": "PETG",
+  "family": "plastic",
+  "density": 1270,
+  "youngs_modulus": 2100000000.0,
+  "strength": 45000000.0,
+  "conductivity": 0.2,
+  "color": "#cfe3ee",
+  "cost_per_kg": 25
+ },
+ {
+  "id": "pine",
+  "name": "Pine",
+  "family": "wood",
+  "density": 500,
+  "youngs_modulus": 9000000000.0,
+  "strength": 40000000.0,
+  "conductivity": 0.12,
+  "color": "#e2c79b",
+  "cost_per_kg": 1.5
+ },
+ {
+  "id": "pla",
+  "name": "PLA",
+  "family": "plastic",
+  "density": 1240,
+  "youngs_modulus": 3500000000.0,
+  "strength": 50000000.0,
+  "conductivity": 0.13,
+  "color": "#e8e4d8",
+  "cost_per_kg": 22
+ },
+ {
+  "id": "plywood",
+  "name": "Birch plywood",
+  "family": "wood",
+  "density": 680,
+  "youngs_modulus": 9000000000.0,
+  "strength": 40000000.0,
+  "conductivity": 0.15,
+  "color": "#d8b98a",
+  "cost_per_kg": 3
+ },
+ {
+  "id": "polycarbonate",
+  "name": "Polycarbonate",
+  "family": "plastic",
+  "density": 1200,
+  "youngs_modulus": 2400000000.0,
+  "strength": 60000000.0,
+  "conductivity": 0.2,
+  "color": "#dfeaf0",
+  "cost_per_kg": 40
+ },
+ {
+  "id": "stainless",
+  "name": "Stainless steel 304",
+  "family": "metal",
+  "density": 8000,
+  "youngs_modulus": 193000000000.0,
+  "strength": 215000000.0,
+  "conductivity": 16,
+  "color": "#b4b9be",
+  "cost_per_kg": 5
+ },
+ {
+  "id": "steel",
+  "name": "Mild steel",
+  "family": "metal",
+  "density": 7850,
+  "youngs_modulus": 200000000000.0,
+  "strength": 250000000.0,
+  "conductivity": 50,
+  "color": "#8d949b",
+  "cost_per_kg": 1.5
+ },
+ {
+  "id": "titanium",
+  "name": "Titanium Ti-6Al-4V",
+  "family": "metal",
+  "density": 4430,
+  "youngs_modulus": 114000000000.0,
+  "strength": 880000000.0,
+  "conductivity": 6.7,
+  "color": "#9aa1a8",
+  "cost_per_kg": 35
+ }
+]
