@@ -100,7 +100,7 @@ function TestCard({ id }: { id: string }) {
             <div className="space-y-4 border-t px-3.5 pb-4 pt-3">
               {r.metrics.length > 0 && (
                 <table className="w-full text-xs">
-                  <thead className="text-muted-foreground"><tr><th className="py-1 text-left font-medium">Requirement</th><th className="text-right font-medium">Result</th><th className="text-right font-medium">Limit</th><th className="text-right font-medium">Load</th><th className="w-8" /></tr></thead>
+                  <thead className="text-muted-foreground"><tr><th className="py-1 text-left font-medium">Requirement</th><th className="text-right font-medium">Result</th><th className="text-right font-medium">Limit</th><th className="text-right font-medium">Margin</th><th className="w-8" /></tr></thead>
                   <tbody>
                     {r.metrics.map((m) => (
                       <tr key={m.label} className="border-t">

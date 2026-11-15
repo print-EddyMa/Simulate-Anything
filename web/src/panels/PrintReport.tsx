@@ -13,7 +13,7 @@ export function PrintReport() {
     <article className="print-only p-8 text-[11pt] leading-snug text-black">
       <h1 className="text-2xl font-bold">{s.design.name}</h1>
       {s.design.description && <p className="mt-1 text-neutral-700">{s.design.description}</p>}
-      <p className="mt-1 text-xs text-neutral-500">Genie report · {new Date().toLocaleString()}</p>
+      <p className="mt-1 text-xs text-neutral-500">Margin report · {new Date().toLocaleString()}</p>
       {s.answer && <div className="mt-4 [&_li]:ml-5 [&_li]:list-disc"><Markdown remarkPlugins={[remarkGfm]}>{s.answer}</Markdown></div>}
       <h2 className="mt-6 text-lg font-semibold">Real-world tests</h2>
       <table className="mt-2 w-full border-collapse text-sm">

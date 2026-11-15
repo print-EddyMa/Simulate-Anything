@@ -21,9 +21,9 @@ from .scenarios import DESCRIPTIONS
 DIST = Path(__file__).parent / "web" / "dist"
 MAX_BODY = 40_000_000
 
-FALLBACK = b"""<!doctype html><meta charset="utf-8"><title>Genie</title>
+FALLBACK = b"""<!doctype html><meta charset="utf-8"><title>Margin</title>
 <body style="font:16px system-ui;margin:3rem;max-width:40rem">
-<h1>Genie: Create Anything</h1><p>The interface has not been built. From the repository root run
+<h1>Margin</h1><p>Create anything</p><p>The interface has not been built. From the repository root run
 <code>cd web && npm install && npm run build</code>, then reload. The API is running.</p>"""
 
 
@@ -37,7 +37,7 @@ def agent_available() -> bool:
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "Genie"
+    server_version = "Margin"
 
     def log_message(self, fmt, *args):
         if os.environ.get("CREATE_ANYTHING_LOG"):
@@ -144,7 +144,7 @@ class Handler(BaseHTTPRequestHandler):
 def serve(host="127.0.0.1", port=8000):
     sa.load_all()
     httpd = ThreadingHTTPServer((host, port), Handler)
-    print(f"Genie is running at http://{host}:{port}  (Ctrl+C to stop)")
+    print(f"Margin is running at http://{host}:{port}  (Ctrl+C to stop)")
     if not (DIST / "index.html").is_file():
         print("note: the web interface is not built yet (cd web && npm install && npm run build)")
     try:

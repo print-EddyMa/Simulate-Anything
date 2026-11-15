@@ -1,4 +1,4 @@
-"""Command line: ``genie serve | demo | design | evaluate | optimise``."""
+"""Command line: ``margin serve | demo | design | evaluate | optimise``."""
 from __future__ import annotations
 
 import argparse
@@ -30,8 +30,8 @@ def _print_event(ev):
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(prog="genie",
-                                 description="Genie: create anything, tested against the real world.")
+    ap = argparse.ArgumentParser(prog="margin",
+                                 description="Margin: create anything, tested against the real world.")
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("serve", help="start the web app")
     p.add_argument("--host", default="127.0.0.1")

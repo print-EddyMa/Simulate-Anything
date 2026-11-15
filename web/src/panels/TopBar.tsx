@@ -15,17 +15,24 @@ const SHORT: Record<string, string> = {
 
 const ICONS: Record<string, typeof Radar> = { radar: Radar, ruler: Ruler, bracket: Ruler, flame: Flame, thermometer: Thermometer, box: Box, sparkles: Sparkles };
 
+/** The mark: a design bar, the margin (brand colour), then the limit line. */
+export function Mark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="8 8 48 48" className={className} aria-hidden>
+      <rect x="13" y="17" width="19" height="30" rx="3.5" className="fill-foreground" />
+      <rect x="34.5" y="17" width="9" height="30" rx="1.5" className="fill-primary" opacity="0.9" />
+      <rect x="47" y="11" width="4" height="42" rx="2" className="fill-foreground" />
+    </svg>
+  );
+}
+
 function Logo() {
   return (
-    <div className="flex items-center gap-2.5">
-      <svg viewBox="0 0 24 24" className="size-7 text-primary" aria-hidden>
-        <path d="M12 2 21 7v10l-9 5-9-5V7z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        <path d="M12 12 21 7M12 12 3 7M12 12v10" stroke="currentColor" strokeWidth="1.5" opacity=".5" />
-        <circle cx="12" cy="12" r="2.2" fill="currentColor" />
-      </svg>
+    <div className="flex items-center gap-2" aria-label="Margin: Create anything">
+      <Mark className="size-7" />
       <div className="leading-none">
-        <div className="text-[17px] font-semibold tracking-tight">Genie</div>
-        <div className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Create Anything</div>
+        <div className="text-[19px] font-semibold tracking-[-0.025em]">margin</div>
+        <div className="mt-0.5 text-[11px] text-muted-foreground">Create anything</div>
       </div>
     </div>
   );

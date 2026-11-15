@@ -85,8 +85,8 @@ export function ResultCard() {
       </div>
       {ev?.load !== undefined && ev.load !== null && (
         <div className="mt-1.5 pl-8 text-xs text-muted-foreground">
-          Load <span className={cn("font-semibold tabular-nums", loadBand(ev.load).text)}>{fmtLoad(ev.load)}</span>
-          {limitingTitle && <> · limited by {limitingTitle}</>}
+          Margin <span className={cn("font-semibold tabular-nums", loadBand(ev.load).text)}>{fmtLoad(ev.load)}</span>
+          {limitingTitle && <> · weakest: {limitingTitle}</>}
         </div>
       )}
       <div className="mt-3 grid grid-cols-3 gap-2">

@@ -65,11 +65,20 @@ def load_of(value, limit, kind, base=0.0):
     return float(min(out, MAX_LOAD))
 
 
+def margin_of(load):
+    """Margin of safety from a load: allowable / actual - 1.  +0.25 means 25% to
+    spare, 0 is exactly at the limit, negative fails (None when untrusted)."""
+    if load is None:
+        return None
+    return MAX_LOAD if load <= 1.0 / (MAX_LOAD + 1) else float(1.0 / load - 1.0)
+
+
 def _metric(label, value, unit, limit, kind, base=0.0):
     ok = value >= limit if kind == "min" else value <= limit
+    load = load_of(float(value), float(limit), kind, float(base))
     return {"label": label, "value": float(value), "unit": unit, "limit": float(limit),
-            "kind": kind, "ok": bool(ok), "base": float(base),
-            "load": load_of(float(value), float(limit), kind, float(base))}
+            "kind": kind, "ok": bool(ok), "base": float(base), "load": load,
+            "margin": margin_of(load)}
 
 
 def load_of_test(t: dict):
@@ -830,6 +839,7 @@ def run_scenario(design: dict, sc: dict, verify: bool = True, detail: bool = Tru
                               str(sc.get("tx_bearing", "180 deg")))[0]),
                           "range_m": float(_q(sc, "required_range", "m"))}
     out["load"] = load_of_test(out)
+    out["margin"] = margin_of(out["load"])
     out["reproduce"] = reproduce_command(res)
     if detail:
         out["sim"] = res.to_dict(with_fields=True)
@@ -851,4 +861,5 @@ def summarise(tests: list) -> dict:
             "all_pass": bool(tests) and counts["pass"] == len(tests),
             "violation": sum(t["violation"] for t in tests),
             "load": worst["load"] if worst else None,
+            "margin": margin_of(worst["load"]) if worst else None,
             "limiting": worst["id"] if worst else None}

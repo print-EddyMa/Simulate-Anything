@@ -1,11 +1,16 @@
-# Genie: Create Anything
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo-dark.svg">
+    <img src="docs/brand/logo-light.svg" alt="Margin: Create anything" width="300">
+  </picture>
+</p>
 
-Describe something, show a photo of it, or import a part. Genie designs it,
+Describe something, show a photo of it, or import a part. Margin designs it,
 shows exactly how it is built, puts it through the real world (wind, sun,
-fire, current, drops, heat, radio), and improves it until every test passes on
-simulations that check themselves.
+fire, current, drops, heat, radio), and improves it until every test passes
+with margin to spare, on simulations that check themselves.
 
-![Genie designing a passive radar node](docs/screenshot.png)
+![Margin designing a passive radar node](docs/screenshot.png)
 
 ## What happens when you ask
 
@@ -14,8 +19,8 @@ simulations that check themselves.
 2. **Design.** A system diagram, then the parts: materials, dimensions, where
    each sits, how they go together. The 3D model builds in front of you.
 3. **Test.** The design faces the situations it will meet. Each test runs a
-   real numerical simulation with its own verification report, and shows how
-   much of its limit it uses.
+   real numerical simulation with its own verification report, and reports a
+   margin of safety.
 4. **Fix.** A failure that needs a new idea (a missing part, the wrong layout)
    is fixed in the design, citing the number that showed it. A failure about
    size or material goes to the optimiser, which keeps only changes the
@@ -24,6 +29,18 @@ simulations that check themselves.
    convergence, known solutions, conservation laws. It is only reported as
    passing if every test passes on verified simulations. Every result carries
    the command that reproduces it.
+
+## Margin of safety
+
+Every result is reported the way aerospace and defence engineers report it:
+
+**margin of safety = allowable / actual - 1**
+
+A margin of +47% means 47% to spare. 0% is exactly at the limit; a negative
+margin fails. For a safety factor or a detection range, "allowable" is the
+requirement; for a temperature, margins are measured on the rise above the
+surroundings. A design's margin is that of its weakest test, and the optimiser
+never trims a passing design below +5%.
 
 ## Example: a passive radar to spot drones
 
@@ -40,7 +57,7 @@ simulations that check themselves.
   detection reaches 2.2 km.
 - The optimiser paints the enclosure white (64 °C inside instead of 71 °C),
   enlarges the battery for three cloudy winter days and stiffens the mast for
-  a 35 m/s gust, then trims material wherever every test still passes.
+  a 35 m/s gust, then trims material while every test keeps at least +5% margin.
 
 The model is the public bistatic radar equation in free space, with
 catalogue-level parts.
@@ -52,7 +69,7 @@ pip install -e ".[agent]"
 ```
 
 ```bash
-genie serve
+margin serve
 ```
 
 Open http://127.0.0.1:8000. Without an API key the suggested requests still run:
@@ -66,17 +83,17 @@ export ANTHROPIC_API_KEY="your-key"
 Or from the terminal:
 
 ```bash
-genie design "A wall bracket that holds a 5 kg speaker 20 cm off the wall" -o bracket.json
+margin design "A wall bracket that holds a 5 kg speaker 20 cm off the wall" -o bracket.json
 ```
 
 In the terminal:
 
 ```bash
-genie demo drone_radar
+margin demo drone_radar
 ```
 
 ```bash
-genie optimise my_design.json -o improved.json
+margin optimise my_design.json -o improved.json
 ```
 
 ## Real-world tests
@@ -137,7 +154,7 @@ requires the matching check to fail.
 
 ## Simulations in the engine
 
-Genie runs on Simulate Anything, a library of 32 simulations that
+Margin runs on Simulate Anything, a library of 32 simulations that
 verify themselves. Each one can also be run on its own:
 
 | Area | Simulations |

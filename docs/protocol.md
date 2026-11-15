@@ -1,6 +1,6 @@
-# Genie: engine ↔ interface protocol
+# Margin: engine ↔ interface protocol
 
-The Python server (`genie serve`, or `python -m create_anything serve`, default port 8000) serves
+The Python server (`margin serve`, or `python -m create_anything serve`, default port 8000) serves
 the built web app from `create_anything/web/dist/` and these endpoints. All
 bodies are JSON. Lengths are millimetres, z is up, angles are degrees.
 
@@ -126,8 +126,10 @@ simulations, bound to the part's dimensions and material). `GET /api/test-types`
   "headline": "one sentence with the key number",
   "metrics": [{"label": "safety factor", "value": 3.1, "unit": "", "limit": 2,
                "kind": "min|max", "ok": true, "base": 0,
-               "load": 0.65}],          // share of the limit used: 1 = at the limit
+               "load": 0.65,             // share of the limit used: 1 = at the limit
+               "margin": 0.54}],         // margin of safety = 1/load - 1: 0.54 = 54% to spare
   "load": 0.65,                         // the test's most loaded metric; null if untrusted
+  "margin": 0.54,                       // its margin of safety
   "notes": ["modelling assumptions, shown collapsed"],
   "simulation": "beam",                 // Simulate Anything template used
   "reproduce": "simulate-anything run beam -p 'length=0.3 m' ...",  // re-run it independently
@@ -149,9 +151,12 @@ category, status: pass|warn|fail|skip, detail}]}`), `notes`, `params`.
 ## Evaluation
 
 `{"tests": [TestResult], "counts": {"pass", "fail", "unverified", "error"},
-"all_pass": bool, "violation": number, "load": number|null, "limiting": "test id"|null}`
+"all_pass": bool, "violation": number, "load": number|null, "margin": number|null,
+"limiting": "test id"|null}`
 
 `load` is how much of its allowance a result uses: 0.5 is half, 1 is exactly at
 the limit, 2 is twice over. A maximum is measured from `base` (a temperature
 from the ambient it rises from); a minimum such as a safety factor is
-required / actual. The evaluation's `load` is its most loaded test.
+required / actual. `margin` is the margin of safety, allowable / actual - 1:
+0.25 means 25% to spare, 0 is exactly at the limit, negative fails. The
+evaluation's `load` and `margin` come from its most loaded test.

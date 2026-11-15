@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "genie-create-anything"
+name = "margin"
 version = "0.2.0"
-description = "Genie: create anything, tested against the real world on simulations that check themselves"
+description = "Margin: create anything, tested against the real world on simulations that check themselves"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Eddy Ma" }]
@@ -17,8 +17,7 @@ dev = ["pytest>=7"]
 
 [project.scripts]
 simulate-anything = "simulate_anything.cli:main"
-genie = "create_anything.__main__:main"
-create-anything = "create_anything.__main__:main"
+margin = "create_anything.__main__:main"
 
 [tool.setuptools.packages.find]
 include = ["simulate_anything*", "create_anything*"]

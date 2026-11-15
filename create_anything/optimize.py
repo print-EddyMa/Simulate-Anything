@@ -28,7 +28,8 @@ from .scenarios import beam_axes, evaluate
 GROW = (1.15, 1.3, 1.6, 2.0)
 BOTH = (0.4, 0.6, 0.8, 1.25, 1.6)          # tunable inputs may move either way
 SHRINK = (0.8, 0.9, 0.95)
-TRIM_MAX_LOAD = 0.95       # trimming stops before any test uses more than this of its limit
+TRIM_MIN_MARGIN = 0.05     # trimming stops before any test's margin of safety drops below 5%
+TRIM_MAX_LOAD = 1.0 / (1.0 + TRIM_MIN_MARGIN)
 MAX_SCALE, MIN_SCALE = 4.0, 0.35
 STRUCTURAL = ("load", "drop", "vibration", "wind")
 METALS_FOR_HEAT = ("aluminium", "steel", "stainless", "copper")
@@ -215,7 +216,7 @@ def _loads(ev):
 
 
 def _keeps_margin(new_ev, old_ev):
-    """A trim may not push any test past TRIM_MAX_LOAD (unless it already was)."""
+    """A trim may not cut any test's margin below 5% (unless it already was)."""
     old = _loads(old_ev)
     return all(v <= max(TRIM_MAX_LOAD, old.get(k, 0.0)) + 1e-12
                for k, v in _loads(new_ev).items())

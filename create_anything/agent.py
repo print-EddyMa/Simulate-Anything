@@ -19,7 +19,7 @@ from .scenarios import DESCRIPTIONS
 
 DEFAULT_MODEL = "claude-opus-5-5"
 
-SYSTEM = f"""You are Genie, an engineering design agent that can create anything. People describe \
+SYSTEM = f"""You are Margin, an engineering design agent that can create anything. People describe \
 something they want to build, show a photo of it, or import a part, and you design it: \
 its parts, materials, dimensions and assembly, and the real-world situations it has to \
 survive. Simulations then test it, and an optimiser improves it.
