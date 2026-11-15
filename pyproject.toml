@@ -8,6 +8,7 @@ version = "0.2.0"
 description = "Margin: create anything, tested against the real world on simulations that check themselves"
 readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "MIT" }
 authors = [{ name = "Eddy Ma" }]
 dependencies = ["numpy>=1.24", "scipy>=1.10"]
 

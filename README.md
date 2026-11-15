@@ -5,44 +5,107 @@
   </picture>
 </p>
 
-Describe something, show a photo of it, or import a part. Margin designs it,
-shows exactly how it is built, puts it through the real world (wind, sun,
-fire, current, drops, heat, radio), and improves it until every test passes
-with margin to spare, on simulations that check themselves.
+<p align="center"><b>Describe anything. Margin designs it, tests it against the real world on
+simulations that check themselves, and improves it until it passes with margin to spare.</b></p>
 
-![Margin designing a passive radar node](docs/screenshot.png)
+<p align="center">
+  <a href="https://github.com/print-EddyMa/Simulate-Anything/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/print-EddyMa/Simulate-Anything/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+  <img alt="Tests: 259 passing" src="https://img.shields.io/badge/tests-259_passing-2ea44f">
+  <img alt="32 self-checking simulations" src="https://img.shields.io/badge/simulations-32_self--checking-5CC8E6">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white">
+</p>
 
-## What happens when you ask
+<p align="center">
+  <img alt="Claude Opus 5.5" src="https://img.shields.io/badge/Claude_Opus_5.5-designer_agent-D97757?logo=claude&logoColor=white">
+  <img alt="Anthropic Claude API" src="https://img.shields.io/badge/Anthropic-Claude_API-191919?logo=anthropic&logoColor=white">
+  <img alt="NumPy" src="https://img.shields.io/badge/NumPy-013243?logo=numpy&logoColor=white">
+  <img alt="SciPy" src="https://img.shields.io/badge/SciPy-8CAAE6?logo=scipy&logoColor=white">
+  <img alt="React" src="https://img.shields.io/badge/React_19-20232A?logo=react&logoColor=61DAFB">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white">
+  <img alt="three.js" src="https://img.shields.io/badge/three.js-000000?logo=threedotjs&logoColor=white">
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white">
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white">
+  <img alt="shadcn/ui" src="https://img.shields.io/badge/shadcn%2Fui-000000?logo=shadcnui&logoColor=white">
+</p>
 
-1. **Understand.** The request becomes a short engineering brief with numbers
-   the design will be held to.
-2. **Design.** A system diagram, then the parts: materials, dimensions, where
-   each sits, how they go together. The 3D model builds in front of you.
-3. **Test.** The design faces the situations it will meet. Each test runs a
-   real numerical simulation with its own verification report, and reports a
-   margin of safety.
-4. **Fix.** A failure that needs a new idea (a missing part, the wrong layout)
-   is fixed in the design, citing the number that showed it. A failure about
-   size or material goes to the optimiser, which keeps only changes the
-   simulations prove and then trims excess material.
-5. **Verify.** The final design is re-run with full verification: grid
-   convergence, known solutions, conservation laws. It is only reported as
-   passing if every test passes on verified simulations. Every result carries
-   the command that reproduces it.
+![Margin designing a passive radar node: the request, the live process, the 3D model and five real-world tests](docs/screenshot.png)
 
-## Margin of safety
+## Try it in a minute
 
-Every result is reported the way aerospace and defence engineers report it:
+Python 3.10 or newer. The web interface ships prebuilt, so Node is not needed.
 
-**margin of safety = allowable / actual - 1**
+```bash
+git clone https://github.com/print-EddyMa/Simulate-Anything.git
+```
 
-A margin of +47% means 47% to spare. 0% is exactly at the limit; a negative
-margin fails. For a safety factor or a detection range, "allowable" is the
-requirement; for a temperature, margins are measured on the rise above the
-surroundings. A design's margin is that of its weakest test, and the optimiser
-never trims a passing design below +5%.
+```bash
+cd Simulate-Anything
+```
 
-## Example: a passive radar to spot drones
+```bash
+pip install -e ".[agent]"
+```
+
+```bash
+margin serve
+```
+
+Open http://127.0.0.1:8000 and click a suggested request. Without an API key
+the design steps are recorded and every simulation runs live (marked "Offline
+run"). To design anything from your own words or photos, set your key before
+starting the server:
+
+```bash
+export ANTHROPIC_API_KEY="your-key"
+```
+
+Everything also works from the terminal:
+
+```bash
+margin demo drone_radar
+```
+
+```bash
+margin design "A wall bracket that holds a 5 kg speaker 20 cm off the wall" -o bracket.json
+```
+
+```bash
+margin optimise examples/designs/shelf_bracket.json -o improved.json
+```
+
+## Inspiration
+
+Ask an AI model to design a bracket, a heat sink or a radar and you get
+confident numbers that nobody checked. Engineers don't trust a result until it
+has been tested against physics, and for good reason. We wanted the speed of
+asking an AI with the trust of a verified simulation: the model does the
+design thinking, and every number comes from a simulation that proves it got
+the physics right.
+
+## What it does
+
+You describe something, attach a photo, or import an STL. Margin:
+
+1. writes a short engineering brief with numbers the design will be held to;
+2. sketches the system as a block diagram, then builds the parts in 3D:
+   materials, dimensions, where each sits, how they go together;
+3. puts the design through the real world: wind, sun, fire, current, drops,
+   heat, vibration, flow, radio coverage. Each test is a real numerical
+   simulation that verifies itself (grid convergence, known solutions,
+   conservation laws, units);
+4. fixes what fails. A failure that needs a new idea (a missing part, the
+   wrong layout) is fixed in the design, citing the number that showed it. A
+   failure about size or material goes to an optimiser that keeps only changes
+   the simulations prove, then trims excess material;
+5. reports every result as a **margin of safety**, with the command that
+   reproduces it, and calls the design ready only when every test passes on
+   verified simulations.
+
+You watch all of it happen live: the reasoning, the diagram drawing itself,
+parts appearing in 3D, tests resolving, the optimiser's before-and-after.
+
+### Example: a passive radar to spot drones
 
 > Design a passive radar that detects small drones around a US military base.
 > Receive-only, using the TV broadcast signals already in the air. It has to
@@ -62,39 +125,81 @@ never trims a passing design below +5%.
 The model is the public bistatic radar equation in free space, with
 catalogue-level parts.
 
-## Run it
+## How we built it
 
-```bash
-pip install -e ".[agent]"
-```
+- **A self-checking simulation library** (Python, NumPy, SciPy): 32
+  simulations on solvers written for this project: finite volumes for heat,
+  diffusion, electrostatics and magnetostatics; beam and plane-stress finite
+  elements; a projection-method Navier-Stokes solver; 1-D and 2-D FDTD for
+  electromagnetic waves; thermal networks with radiation. Every run produces a
+  verification report; a result that fails its own checks is never shown as a
+  pass.
+- **Real-world tests** that map a part onto those simulations (a bracket arm
+  becomes a cantilever, a hollow section the rectangle of equal stiffness) and
+  turn the answer into a margin of safety. A `simulation` test type binds any
+  of the 32 simulations to a part's dimensions and material.
+- **The designer agent** on Claude Opus 5.5 with tool use: set the diagram,
+  set or edit the design, run the tests, optimise. It reads every test result
+  and failed self-check, and is told never to present an unverified number.
+- **A live event stream** from a standard-library Python server to a React 19
+  interface with three.js (React Three Fiber), shadcn/ui, Magic UI and React
+  Flow. The same stream drives live runs and recorded ones.
+- **259 tests**, including tests that inject wrong units, unstable time steps,
+  missing supports and wrong physics and require the matching check to fail.
 
-```bash
-margin serve
-```
+## Challenges we ran into
 
-Open http://127.0.0.1:8000. Without an API key the suggested requests still run:
-their design steps are recorded, and every simulation runs live. To design anything from
-your own words or photos, set your key before starting the server:
+- **The optimiser found a loophole.** Asked to cut mass while keeping an
+  enclosure cool, it shrank the box until the electronics no longer fitted
+  inside, so there was no heat left to test. We added a containment rule: a
+  housing can never shrink below what it holds.
+- **A bigger antenna didn't help the radar.** The first instinct was more
+  gain. The simulation showed the receiver was limited by TV signal leaking
+  into the back of the antenna, which a bigger antenna hears just as loudly.
+  The fix was geometry: a mesh screen. Getting the model honest enough to
+  show that took the leakage term, the antenna pattern and the exact bistatic
+  geometry.
+- **Verified and fast.** Every test runs a three-grid convergence study, yet
+  the whole radar design (five tests, an optimiser that evaluates dozens of
+  candidates, then a fully verified final run) computes in about 3 seconds.
+- **Two versions at once.** A parallel branch rebuilt the same features under
+  another name; we merged its best ideas (load metrics, design editing,
+  any-simulation tests) and kept one codebase.
 
-```bash
-export ANTHROPIC_API_KEY="your-key"
-```
+## Accomplishments we're proud of
 
-Or from the terminal:
+- 32 simulations that check themselves, each against an exact or benchmark
+  solution (including Ghia et al.'s cavity-flow data at Re 100, 400 and 1000).
+- Every number in the interface can be re-run on its own from the command
+  that produced it.
+- A design process you can watch, where the AI's decisions are always backed
+  by physics it didn't compute itself.
 
-```bash
-margin design "A wall bracket that holds a 5 kg speaker 20 cm off the wall" -o bracket.json
-```
+## What we learned
 
-In the terminal:
+The model is very good at the parts engineers find tedious (choosing parts,
+laying them out, deciding what to test) and should never be trusted with the
+arithmetic. Splitting the work that way, and making the checks impossible to
+skip, is what makes the output usable.
 
-```bash
-margin demo drone_radar
-```
+## What's next
 
-```bash
-margin optimise my_design.json -o improved.json
-```
+- 3-D finite elements on the real shape, beyond beam and wall idealisations.
+- Terrain and multipath in the radar model; flame spread in the fire test.
+- Measured dimensions from photos with a reference object, and STEP export.
+- Supplier datasheets in place of handbook material values.
+
+## Margin of safety
+
+Every result is reported the way aerospace and defence engineers report it:
+
+**margin of safety = allowable / actual - 1**
+
+A margin of +47% means 47% to spare. 0% is exactly at the limit; a negative
+margin fails. For a safety factor or a detection range, "allowable" is the
+requirement; for a temperature, margins are measured on the rise above the
+surroundings. A design's margin is that of its weakest test, and the optimiser
+never trims a passing design below +5%.
 
 ## Real-world tests
 
@@ -218,3 +323,20 @@ python -m pytest
 ```bash
 cd web && npm install && npm run build
 ```
+
+## Built with
+
+Claude Opus 5.5 (Anthropic) for the designer agent; NumPy and SciPy for the
+engine; React, TypeScript, Vite, Tailwind CSS, three.js (React Three Fiber,
+drei, postprocessing), shadcn/ui, Magic UI, React Flow, Motion and Zustand for
+the interface; Inter and JetBrains Mono typefaces. The full list with
+licenses, the data used and the published methods behind each simulation is
+in [docs/CREDITS.md](docs/CREDITS.md).
+
+## Team
+
+Eddy Ma ([@print-EddyMa](https://github.com/print-EddyMa))
+
+## License
+
+[MIT](LICENSE)

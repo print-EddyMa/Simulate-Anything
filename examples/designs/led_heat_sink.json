@@ -1,0 +1,73 @@
+{
+ "name": "Heat sink for a 40 W LED",
+ "description": "An extruded fin heat sink that keeps a high-power LED module cool in still air.",
+ "parts": [
+  {
+   "id": "sink",
+   "name": "Heat sink",
+   "shape": "heatsink",
+   "base": [
+    90,
+    90,
+    6
+   ],
+   "fin_height": 25,
+   "fin_thickness": 2,
+   "n_fins": 9,
+   "position": [
+    0,
+    0,
+    18.5
+   ],
+   "material": "aluminium",
+   "process": "extrude",
+   "group": "Thermal",
+   "purpose": "Spreads the LED's heat into the air"
+  },
+  {
+   "id": "led",
+   "name": "LED module",
+   "shape": "box",
+   "look": "pcb",
+   "size": [
+    40,
+    40,
+    3
+   ],
+   "position": [
+    0,
+    0,
+    1.5
+   ],
+   "material": "electronics",
+   "process": "buy",
+   "group": "Light",
+   "specs": {
+    "power": "40 W"
+   },
+   "purpose": "Makes the light (and the heat)"
+  }
+ ],
+ "assembly": [
+  {
+   "parts": [
+    "led",
+    "sink"
+   ],
+   "action": "Paste and screw the LED to the base"
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "led_heat",
+   "type": "heat",
+   "part": "sink",
+   "title": "40 W in still air",
+   "mode": "heatsink",
+   "power": "40 W",
+   "max_temperature": "85 degC",
+   "h": "8 W/(m^2*K)",
+   "ambient": "30 degC"
+  }
+ ]
+}

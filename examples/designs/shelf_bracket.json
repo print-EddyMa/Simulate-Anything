@@ -1,0 +1,123 @@
+{
+ "name": "Shelf bracket",
+ "description": "A 3D-printed L bracket that holds a shelf of books off a wall.",
+ "parts": [
+  {
+   "id": "wall_leg",
+   "name": "Wall leg",
+   "shape": "box",
+   "size": [
+    8,
+    30,
+    140
+   ],
+   "position": [
+    4,
+    0,
+    70
+   ],
+   "material": "pla",
+   "group": "Bracket",
+   "purpose": "Screws to the wall"
+  },
+  {
+   "id": "shelf_arm",
+   "name": "Shelf arm",
+   "shape": "box",
+   "size": [
+    180,
+    30,
+    8
+   ],
+   "position": [
+    98,
+    0,
+    136
+   ],
+   "material": "pla",
+   "group": "Bracket",
+   "purpose": "Carries the shelf"
+  },
+  {
+   "id": "screw_top",
+   "name": "Wall screw (top)",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 40,
+   "axis": "x",
+   "position": [
+    -12,
+    0,
+    115
+   ],
+   "material": "steel",
+   "process": "buy",
+   "group": "Fixings",
+   "purpose": "Holds the bracket to the wall"
+  },
+  {
+   "id": "screw_bottom",
+   "name": "Wall screw (bottom)",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 40,
+   "axis": "x",
+   "position": [
+    -12,
+    0,
+    25
+   ],
+   "material": "steel",
+   "process": "buy",
+   "group": "Fixings",
+   "purpose": "Holds the bracket to the wall"
+  }
+ ],
+ "assembly": [
+  {
+   "parts": [
+    "wall_leg",
+    "shelf_arm"
+   ],
+   "action": "Print the bracket as one piece"
+  },
+  {
+   "parts": [
+    "screw_top",
+    "screw_bottom"
+   ],
+   "action": "Screw it to the wall"
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "books",
+   "type": "load",
+   "part": "shelf_arm",
+   "title": "8 kg of books",
+   "force": "40 N",
+   "support": "cantilever",
+   "position": 0.6,
+   "min_safety_factor": 2,
+   "max_deflection": "3 mm"
+  },
+  {
+   "id": "knock",
+   "type": "drop",
+   "part": "shelf_arm",
+   "title": "A 1 kg book dropped",
+   "mass": "1 kg",
+   "height": "0.3 m",
+   "min_safety_factor": 1
+  },
+  {
+   "id": "candle",
+   "type": "fire",
+   "part": "shelf_arm",
+   "title": "Candle underneath",
+   "heat_flux": "8 kW/m^2",
+   "duration": "300 s",
+   "criterion": "softening"
+  }
+ ]
+}
