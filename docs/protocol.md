@@ -130,6 +130,7 @@ simulations, bound to the part's dimensions and material). `GET /api/test-types`
   "load": 0.65,                         // the test's most loaded metric; null if untrusted
   "notes": ["modelling assumptions, shown collapsed"],
   "simulation": "beam",                 // Simulate Anything template used
+  "reproduce": "simulate-anything run beam -p 'length=0.3 m' ...",  // re-run it independently
   "checks": {"verdict": "VERIFIED", "summary": "...", "verified": true},
   "sim": SimResult,                     // full simulation output (see below)
   "overlay"?: {"kind": "ground", "field": 0, "threshold": 13, "unit": "dB",

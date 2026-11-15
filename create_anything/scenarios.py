@@ -783,6 +783,17 @@ DESCRIPTIONS = {
 }
 
 
+def reproduce_command(res) -> str:
+    """The exact command that re-runs this simulation on its own."""
+    import json as _json
+    import shlex
+    parts = [f"simulate-anything run {res.name}"]
+    for key, value in res.params.items():
+        text = value if isinstance(value, str) else _json.dumps(value)
+        parts.append(f"-p {shlex.quote(f'{key}={text}')}")
+    return " ".join(parts)
+
+
 def run_scenario(design: dict, sc: dict, verify: bool = True, detail: bool = True) -> dict:
     out = {"id": sc["id"], "type": sc["type"], "part": sc["part"],
            "title": sc.get("title") or sc["type"].capitalize(), "metrics": [], "notes": [],
@@ -819,6 +830,7 @@ def run_scenario(design: dict, sc: dict, verify: bool = True, detail: bool = Tru
                               str(sc.get("tx_bearing", "180 deg")))[0]),
                           "range_m": float(_q(sc, "required_range", "m"))}
     out["load"] = load_of_test(out)
+    out["reproduce"] = reproduce_command(res)
     if detail:
         out["sim"] = res.to_dict(with_fields=True)
     return out

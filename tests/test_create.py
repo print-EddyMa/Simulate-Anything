@@ -101,6 +101,16 @@ def test_load_test_matches_beam_theory():
     tip = 100 * 0.2 ** 3 / (3 * e * i) + weight * 0.2 ** 4 / (8 * e * i)
     assert r["metrics"][1]["value"] == pytest.approx(tip * 1e3, rel=1e-3)
     assert r["status"] == "pass" and r["checks"]["verdict"] == "VERIFIED"
+    # the reproduce command re-runs the same simulation to the same answer
+    import shlex
+    from simulate_anything import cli
+    argv = shlex.split(r["reproduce"])[1:] + ["--json"]
+    import contextlib, io
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        assert cli.main(argv) == 0
+    rerun = json.loads(buf.getvalue())
+    assert rerun["results"]["max_deflection"]["value"] == pytest.approx(r["metrics"][1]["value"])
 
 
 def test_unverified_simulation_never_counts_as_pass():
