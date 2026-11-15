@@ -57,7 +57,7 @@ export function ViewportControls({ hasSite }: { hasSite: boolean }) {
             <IconToggle on={s.xray} label="X-ray" onClick={() => s.set({ xray: !s.xray })}><ScanEye className="size-4" /></IconToggle>
             <IconToggle on={s.tint} label="Colour parts by test result" onClick={() => s.set({ tint: !s.tint })}><ShieldCheck className="size-4" /></IconToggle>
             <IconToggle on={false} label="Reset view" onClick={() => s.set({ isolate: null, explode: 0, selected: null, frameNonce: s.frameNonce + 1 })}><Focus className="size-4" /></IconToggle>
-            <div className="flex items-center gap-2 pl-2 pr-1">
+            <div className="flex items-center gap-2 pl-2 pr-1 max-sm:hidden">
               <Layers className="size-4 text-muted-foreground" aria-hidden />
               <Slider aria-label="Explode" className="w-24" min={0} max={1} step={0.01} value={[s.explode]} onValueChange={([v]) => s.set({ explode: v })} />
             </div>

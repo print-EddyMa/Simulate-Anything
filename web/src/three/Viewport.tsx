@@ -241,6 +241,7 @@ function Ground() {
     return z * MM;
   }, [design]);
   const cell = niceStep(span / 12);
+  const fade = useMemo(() => radialFade(), []);
   return (
     <group position={[0, floor - 0.0005, 0]}>
       <Grid
@@ -259,16 +260,18 @@ function Ground() {
       <ContactShadows position={[0, 0.0006, 0]} scale={span * 3} blur={2.4} far={span * 1.2} opacity={dark ? 0.75 : 0.45} resolution={1024} />
       {/* a subtle, slightly rough mirror under the grid */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.0004, 0]}>
-        <planeGeometry args={[span * 12, span * 12]} />
+        <circleGeometry args={[span * 2.2, 96]} />
         <MeshReflectorMaterial
-          color={dark ? "#0d1117" : "#e7ebf0"}
+          color={dark ? "#06080b" : "#eef1f5"}
+          transparent
+          alphaMap={fade}
           blur={[400, 120]}
           resolution={1024}
           mixBlur={1}
-          mixStrength={dark ? 1.4 : 0.6}
-          mirror={0.35}
-          roughness={0.85}
-          metalness={0.2}
+          mixStrength={dark ? 0.9 : 0.5}
+          mirror={0.3}
+          roughness={1}
+          metalness={0.4}
           depthScale={1}
           minDepthThreshold={0.6}
           maxDepthThreshold={1.2}
@@ -276,6 +279,20 @@ function Ground() {
       </mesh>
     </group>
   );
+}
+
+/** White centre fading to black at the rim: an alpha map that melts the floor into the background. */
+function radialFade() {
+  const c = document.createElement("canvas");
+  c.width = c.height = 256;
+  const g = c.getContext("2d")!;
+  const grad = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  grad.addColorStop(0, "#fff");
+  grad.addColorStop(0.45, "#bbb");
+  grad.addColorStop(1, "#000");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 256, 256);
+  return new THREE.CanvasTexture(c);
 }
 
 export function niceStep(x: number) {

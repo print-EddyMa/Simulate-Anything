@@ -171,7 +171,9 @@ export function ProcessPanel() {
   }, [run]);
 
   useEffect(() => {
-    if (stick.current && run === "running") end.current?.scrollIntoView({ block: "end", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    // scroll only the panel, never the page
+    const el = box.current;
+    if (stick.current && run === "running" && el) el.scrollTo({ top: el.scrollHeight, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }, [visible.length]);
 
   return (

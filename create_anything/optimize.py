@@ -28,6 +28,7 @@ from .scenarios import beam_axes, evaluate
 GROW = (1.15, 1.3, 1.6, 2.0)
 BOTH = (0.4, 0.6, 0.8, 1.25, 1.6)          # tunable inputs may move either way
 SHRINK = (0.8, 0.9, 0.95)
+TRIM_MAX_LOAD = 0.95       # trimming stops before any test uses more than this of its limit
 MAX_SCALE, MIN_SCALE = 4.0, 0.35
 STRUCTURAL = ("load", "drop", "vibration", "wind")
 METALS_FOR_HEAT = ("aluminium", "steel", "stainless", "copper")
@@ -209,6 +210,17 @@ def _score(design):
     return (bad, round(ev["violation"], 9), total_mass_kg(design)), ev
 
 
+def _loads(ev):
+    return {t["id"]: (t.get("load") or 0.0) for t in ev["tests"]}
+
+
+def _keeps_margin(new_ev, old_ev):
+    """A trim may not push any test past TRIM_MAX_LOAD (unless it already was)."""
+    old = _loads(old_ev)
+    return all(v <= max(TRIM_MAX_LOAD, old.get(k, 0.0)) + 1e-12
+               for k, v in _loads(new_ev).items())
+
+
 def _statuses(ev):
     return {t["id"]: t["status"] for t in ev["tests"]}
 
@@ -274,7 +286,7 @@ def optimise_steps(design: dict, max_rounds: int = 12, slim: bool = True, before
                     if not made:
                         break
                     s, e = _score(made[0])
-                    if s[0] != 0 or s[2] >= score[2]:
+                    if s[0] != 0 or s[2] >= score[2] or not _keeps_margin(e, ev):
                         break
                     score, ev, current = s, e, made[0]
             if current is not start_design:

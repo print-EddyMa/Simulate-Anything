@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 build/
 dist/
+!create_anything/web/dist/
 .venv/
 runs/
 .DS_Store

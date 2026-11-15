@@ -1,13 +1,12 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, Download, FileJson, Printer } from "lucide-react";
 import { useStore } from "@/store";
 import { download } from "@/api";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { NumberTicker } from "@/components/ui/number-ticker";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { StatusIcon } from "./StatusIcon";
 import { fmtLoad, loadBand } from "./Load";
@@ -34,6 +33,24 @@ export function exportReport() {
 }
 
 const MD = "mt-3 text-[13px] leading-relaxed text-foreground/90 [&_li]:ml-4 [&_li]:list-disc [&_p]:my-1.5 [&_strong]:font-semibold [&_em]:text-muted-foreground [&_h2]:mt-3 [&_h2]:font-semibold [&_h3]:mt-3 [&_h3]:font-semibold [&_table]:my-2 [&_table]:w-full [&_table]:text-xs [&_th]:pb-1 [&_th]:text-left [&_th]:font-medium [&_th]:text-muted-foreground [&_td]:border-t [&_td]:py-1.5 [&_td]:pr-2 [&_td]:align-top";
+
+/** Counts up once on mount (no in-view trigger, so it can't stall at zero). */
+function CountUp({ value, decimals }: { value: number; decimals: number }) {
+  const [v, setV] = useState(() => (matchMedia("(prefers-reduced-motion: reduce)").matches ? value : 0));
+  useEffect(() => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { setV(value); return; }
+    const t0 = performance.now(), dur = 700;
+    let raf = 0;
+    const step = (t: number) => {
+      const k = Math.min(1, (t - t0) / dur);
+      setV(value * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [value]);
+  return <span className="tabular-nums">{v.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}</span>;
+}
 
 export function ResultCard() {
   const run = useStore((s) => s.run);
@@ -82,7 +99,7 @@ export function ResultCard() {
             <div className="text-[11px] text-muted-foreground">{m.label}</div>
             <div className="text-lg font-semibold tracking-tight">
               {m.pre && <span className="text-sm text-muted-foreground">{m.unit}</span>}
-              <NumberTicker value={m.value} decimalPlaces={m.dec} className="text-foreground" />
+              <CountUp value={m.value} decimals={m.dec} />
               {!m.pre && m.unit && <span className="ml-0.5 text-xs font-normal text-muted-foreground">{m.unit}</span>}
             </div>
           </div>
