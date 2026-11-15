@@ -34,7 +34,11 @@ update_design as you refine it, so the person watching sees it come together. Us
 dimensions in millimetres, z up, positions at the centre of each part's bounding box, \
 parts touching where they join. Use catalogue materials. Give every part a short \
 purpose and a group (its subsystem). Use specs for datasheet values of bought parts \
-(power, gain, noise figure, capacity). Use look hints so it renders recognisably.
+(power, gain, noise figure, capacity). Use look hints so it renders recognisably. \
+Model it in enough detail to look like the real product: the visible parts a person \
+would recognise, each its own part (on a circuit board the chips, passives, connectors \
+and mounting hardware; on a drone the motors, propeller blades, gimbal and antennas). \
+A part may set "color" (hex) for its finish and "rotation" (degrees about x, y, z).
 4. Define the real-world tests in the design's scenarios: the loads, drops, heat, fire, \
 current, flow, wind, sun, power or radio coverage it must survive, with realistic values \
 and a clear pass limit. Pick the three to six that matter most for this object.
