@@ -9,7 +9,7 @@
 simulations that check themselves, and improves it until it passes with margin to spare.</b></p>
 
 <p align="center">
-  <a href="https://github.com/print-EddyMa/Simulate-Anything/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/print-EddyMa/Simulate-Anything/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+  <a href="https://github.com/print-EddyMa/margin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/print-EddyMa/margin/actions/workflows/ci.yml/badge.svg?branch=main"></a>
   <img alt="Tests: 259 passing" src="https://img.shields.io/badge/tests-259_passing-2ea44f">
   <img alt="32 self-checking simulations" src="https://img.shields.io/badge/simulations-32_self--checking-5CC8E6">
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
@@ -41,11 +41,11 @@ simulations that check themselves, and improves it until it passes with margin t
 Python 3.10 or newer. The web interface ships prebuilt, so Node is not needed.
 
 ```bash
-git clone https://github.com/print-EddyMa/Simulate-Anything.git
+git clone https://github.com/print-EddyMa/margin.git
 ```
 
 ```bash
-cd Simulate-Anything
+cd margin
 ```
 
 ```bash

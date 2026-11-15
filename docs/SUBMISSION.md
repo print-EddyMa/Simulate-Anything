@@ -10,7 +10,7 @@ Copy for the hackathon form. The README is the full write-up.
 Describe anything. AI designs it, verified physics simulations test it against
 the real world, and it's improved until every test passes with margin to spare.
 
-**Repository:** https://github.com/print-EddyMa/Simulate-Anything
+**Repository:** https://github.com/print-EddyMa/margin
 
 **Built with (tags):** claude, anthropic, claude-api, python, numpy, scipy,
 react, typescript, vite, tailwindcss, three.js, react-three-fiber, shadcn-ui,
@@ -38,12 +38,13 @@ YouTube or Vimeo for the form and paste the link here and in the README.
    it. 1.09 billion live radio samples captured, none dropped.
 8. **Anything (1:31).** A drone, a robot arm, a watch, a circuit board and a
    sensor, each designed live and passing every test. "Describe anything."
-9. **Close (1:50).** Margin. Create anything. github.com/print-EddyMa/Simulate-Anything
+9. **Close (1:50).** Margin. Create anything. github.com/print-EddyMa/margin
 
 ## Before submitting
 
 - [x] Demo video rendered and committed (`docs/media/margin-demo.mp4`).
 - [ ] Upload the video to YouTube or Vimeo and add the link to the form and the README.
+- [ ] Rename the repository to `margin` (GitHub, Settings, General, Repository name) and set its description to "Margin: Create anything".
 - [ ] Set `main` as the default branch (GitHub, Settings, General, Default branch).
 - [ ] Add a repository description and topics (GitHub, About, the gear icon).
 - [ ] Confirm the CI badge is green on the Actions tab.
