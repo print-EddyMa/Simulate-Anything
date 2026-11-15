@@ -302,8 +302,8 @@ class Session:
         emit(engine.status("understand", "Reading the request"))
         response = None
         for _ in range(self.max_turns):
-            response = self.client.beta.messages.create(
-                model=self.model, max_tokens=16000, system=SYSTEM, tools=TOOLS,
+            response = self._ask(
+                model=self.model, max_tokens=64000, system=SYSTEM, tools=TOOLS,
                 messages=messages,
                 thinking={"type": "adaptive", "display": "summarized"},
                 output_config={"effort": "high"},
@@ -325,6 +325,10 @@ class Session:
                     results.append(self._call(block, emit))
             messages.append({"role": "user", "content": results})
         text = "\n".join(b.text for b in response.content if b.type == "text").strip()
+        if response.stop_reason == "max_tokens":
+            emit({"type": "error", "message": "The design ran past the model's output limit "
+                  "before it was finished. Ask for fewer parts, or change it in steps."})
+            return
         if response.stop_reason == "refusal":
             emit({"type": "error", "message": text or "The model declined this request."})
             return
@@ -345,6 +349,15 @@ class Session:
             if p.get("id") == self.imported["id"]:
                 p["mesh"] = self.imported["mesh"]
                 p["shape"] = "mesh"
+
+    def _ask(self, **kw):
+        """One model turn. Streams when the client can, since a large design is a long
+        answer; scripted stand-ins in the tests only offer create()."""
+        msgs = self.client.beta.messages
+        if hasattr(msgs, "stream"):
+            with msgs.stream(**kw) as stream:
+                return stream.get_final_message()
+        return msgs.create(**kw)
 
     def events(self, prompt, image=None, mesh=None, design=None):
         """Generator form of :meth:`run` (runs the loop on a worker thread)."""
