@@ -28,7 +28,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#8C8F93"
   },
   {
    "id": "bezel",
@@ -54,7 +55,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#2E3033"
   },
   {
    "id": "crystal",
@@ -80,7 +82,8 @@
    "quantity": 1,
    "process": "3d_print",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#CFE3EE"
   },
   {
    "id": "display",
@@ -113,7 +116,8 @@
    "fill": 1.0,
    "radius": 19.0,
    "length": 1.2,
-   "axis": "z"
+   "axis": "z",
+   "color": "#07090C"
   },
   {
    "id": "pcb",
@@ -143,7 +147,8 @@
    ],
    "quantity": 1,
    "process": "buy",
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#1E5B2E"
   },
   {
    "id": "battery",
@@ -175,7 +180,8 @@
    ],
    "quantity": 1,
    "process": "buy",
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#C9CED6"
   },
   {
    "id": "caseback",
@@ -202,7 +208,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#A3A6AA"
   },
   {
    "id": "pogo_pos",
@@ -213,7 +220,7 @@
    "axis": "z",
    "position": [
     -3.0,
-    0.0,
+    -12.0,
     0.5
    ],
    "material": "brass",
@@ -227,7 +234,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#D4A93C"
   },
   {
    "id": "pogo_neg",
@@ -238,7 +246,7 @@
    "axis": "z",
    "position": [
     3.0,
-    0.0,
+    -12.0,
     0.5
    ],
    "material": "brass",
@@ -252,7 +260,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#D4A93C"
   },
   {
    "id": "button_top",
@@ -263,12 +272,12 @@
    "axis": "x",
    "position": [
     25.0,
-    8.0,
+    12.0,
     5.0
    ],
    "material": "titanium",
    "group": "controls",
-   "purpose": "Sealed pusher, guarded by case shoulder",
+   "purpose": "Sealed start/stop pusher at 2 o'clock",
    "rotation": [
     0.0,
     0.0,
@@ -277,7 +286,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#7D8085"
   },
   {
    "id": "button_bot",
@@ -288,12 +298,12 @@
    "axis": "x",
    "position": [
     25.0,
-    -8.0,
+    -12.0,
     5.0
    ],
    "material": "titanium",
    "group": "controls",
-   "purpose": "Sealed pusher",
+   "purpose": "Sealed back/lap pusher at 4 o'clock",
    "rotation": [
     0.0,
     0.0,
@@ -302,7 +312,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#7D8085"
   },
   {
    "id": "lug_tl",
@@ -329,7 +340,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#8C8F93"
   },
   {
    "id": "lug_tr",
@@ -356,7 +368,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#8C8F93"
   },
   {
    "id": "lug_bl",
@@ -383,7 +396,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#8C8F93"
   },
   {
    "id": "lug_br",
@@ -410,7 +424,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#8C8F93"
   },
   {
    "id": "springbar_t",
@@ -435,7 +450,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#B5B8BC"
   },
   {
    "id": "springbar_b",
@@ -460,7 +476,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#B5B8BC"
   },
   {
    "id": "strap_t",
@@ -488,7 +505,8 @@
    "quantity": 1,
    "process": "3d_print",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#3B4A35"
   },
   {
    "id": "strap_b",
@@ -516,59 +534,2045 @@
    "quantity": 1,
    "process": "3d_print",
    "specs": {},
+   "fill": 1.0,
+   "color": "#3B4A35"
+  },
+  {
+   "id": "mk_12",
+   "name": "Bezel index 12 (triangle)",
+   "shape": "box",
+   "size": [
+    1.6,
+    3.0,
+    0.2
+   ],
+   "position": [
+    0.0,
+    21.5,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "color": "#FF6A13",
+   "group": "bezel_markings",
+   "purpose": "Luminous orange 12 o'clock index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_01",
+   "name": "Bezel index 1",
+   "shape": "box",
+   "size": [
+    0.8,
+    2.0,
+    0.2
+   ],
+   "position": [
+    10.75,
+    18.62,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -30.0
+   ],
+   "material": "abs",
+   "color": "#BFBFBF",
+   "group": "bezel_markings",
+   "purpose": "Minute index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_02",
+   "name": "Bezel index 2",
+   "shape": "box",
+   "size": [
+    0.8,
+    2.0,
+    0.2
+   ],
+   "position": [
+    18.62,
+    10.75,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -60.0
+   ],
+   "material": "abs",
+   "color": "#BFBFBF",
+   "group": "bezel_markings",
+   "purpose": "Minute index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_03",
+   "name": "Bezel index 3",
+   "shape": "box",
+   "size": [
+    1.4,
+    3.0,
+    0.2
+   ],
+   "position": [
+    21.5,
+    0.0,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -90.0
+   ],
+   "material": "abs",
+   "color": "#F2F2F2",
+   "group": "bezel_markings",
+   "purpose": "Major index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_04",
+   "name": "Bezel index 4",
+   "shape": "box",
+   "size": [
+    0.8,
+    2.0,
+    0.2
+   ],
+   "position": [
+    18.62,
+    -10.75,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -120.0
+   ],
+   "material": "abs",
+   "color": "#BFBFBF",
+   "group": "bezel_markings",
+   "purpose": "Minute index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_05",
+   "name": "Bezel index 5",
+   "shape": "box",
+   "size": [
+    0.8,
+    2.0,
+    0.2
+   ],
+   "position": [
+    10.75,
+    -18.62,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -150.0
+   ],
+   "material": "abs",
+   "color": "#BFBFBF",
+   "group": "bezel_markings",
+   "purpose": "Minute index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_06",
+   "name": "Bezel index 6",
+   "shape": "box",
+   "size": [
+    1.4,
+    3.0,
+    0.2
+   ],
+   "position": [
+    0.0,
+    -21.5,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -180.0
+   ],
+   "material": "abs",
+   "color": "#F2F2F2",
+   "group": "bezel_markings",
+   "purpose": "Major index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_07",
+   "name": "Bezel index 7",
+   "shape": "box",
+   "size": [
+    0.8,
+    2.0,
+    0.2
+   ],
+   "position": [
+    -10.75,
+    -18.62,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -210.0
+   ],
+   "material": "abs",
+   "color": "#BFBFBF",
+   "group": "bezel_markings",
+   "purpose": "Minute index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_08",
+   "name": "Bezel index 8",
+   "shape": "box",
+   "size": [
+    0.8,
+    2.0,
+    0.2
+   ],
+   "position": [
+    -18.62,
+    -10.75,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -240.0
+   ],
+   "material": "abs",
+   "color": "#BFBFBF",
+   "group": "bezel_markings",
+   "purpose": "Minute index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_09",
+   "name": "Bezel index 9",
+   "shape": "box",
+   "size": [
+    1.4,
+    3.0,
+    0.2
+   ],
+   "position": [
+    -21.5,
+    0.0,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -270.0
+   ],
+   "material": "abs",
+   "color": "#F2F2F2",
+   "group": "bezel_markings",
+   "purpose": "Major index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_10",
+   "name": "Bezel index 10",
+   "shape": "box",
+   "size": [
+    0.8,
+    2.0,
+    0.2
+   ],
+   "position": [
+    -18.62,
+    10.75,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -300.0
+   ],
+   "material": "abs",
+   "color": "#BFBFBF",
+   "group": "bezel_markings",
+   "purpose": "Minute index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mk_11",
+   "name": "Bezel index 11",
+   "shape": "box",
+   "size": [
+    0.8,
+    2.0,
+    0.2
+   ],
+   "position": [
+    -10.75,
+    18.62,
+    16.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    -330.0
+   ],
+   "material": "abs",
+   "color": "#BFBFBF",
+   "group": "bezel_markings",
+   "purpose": "Minute index",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "bz_scr_1",
+   "name": "Bezel screw 1:30",
+   "shape": "cylinder",
+   "radius": 0.9,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    15.2,
+    15.2,
+    16.15
+   ],
+   "material": "titanium",
+   "color": "#6E6E73",
+   "group": "structure",
+   "purpose": "Exposed hex screw on front ring",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "bz_scr_2",
+   "name": "Bezel screw 4:30",
+   "shape": "cylinder",
+   "radius": 0.9,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    15.2,
+    -15.2,
+    16.15
+   ],
+   "material": "titanium",
+   "color": "#6E6E73",
+   "group": "structure",
+   "purpose": "Exposed hex screw on front ring",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "bz_scr_3",
+   "name": "Bezel screw 7:30",
+   "shape": "cylinder",
+   "radius": 0.9,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    -15.2,
+    -15.2,
+    16.15
+   ],
+   "material": "titanium",
+   "color": "#6E6E73",
+   "group": "structure",
+   "purpose": "Exposed hex screw on front ring",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "bz_scr_4",
+   "name": "Bezel screw 10:30",
+   "shape": "cylinder",
+   "radius": 0.9,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    -15.2,
+    15.2,
+    16.15
+   ],
+   "material": "titanium",
+   "color": "#6E6E73",
+   "group": "structure",
+   "purpose": "Exposed hex screw on front ring",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cs_scr_1",
+   "name": "Case corner screw NE",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.4,
+   "axis": "z",
+   "position": [
+    20.5,
+    20.5,
+    9.2
+   ],
+   "material": "titanium",
+   "color": "#5E6064",
+   "group": "structure",
+   "purpose": "Clamps front ring to midframe",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cs_scr_2",
+   "name": "Case corner screw SE",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.4,
+   "axis": "z",
+   "position": [
+    20.5,
+    -20.5,
+    9.2
+   ],
+   "material": "titanium",
+   "color": "#5E6064",
+   "group": "structure",
+   "purpose": "Clamps front ring to midframe",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cs_scr_3",
+   "name": "Case corner screw SW",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.4,
+   "axis": "z",
+   "position": [
+    -20.5,
+    -20.5,
+    9.2
+   ],
+   "material": "titanium",
+   "color": "#5E6064",
+   "group": "structure",
+   "purpose": "Clamps front ring to midframe",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cs_scr_4",
+   "name": "Case corner screw NW",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.4,
+   "axis": "z",
+   "position": [
+    -20.5,
+    20.5,
+    9.2
+   ],
+   "material": "titanium",
+   "color": "#5E6064",
+   "group": "structure",
+   "purpose": "Clamps front ring to midframe",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "crown",
+   "name": "Screw-down crown",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 3.5,
+   "axis": "x",
+   "position": [
+    25.25,
+    0.0,
+    5.0
+   ],
+   "material": "titanium",
+   "color": "#8A8D91",
+   "group": "controls",
+   "purpose": "Knurled screw-down crown for menu scroll",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "crown_cap",
+   "name": "Crown accent cap",
+   "shape": "cylinder",
+   "radius": 2.0,
+   "length": 0.3,
+   "axis": "x",
+   "position": [
+    27.15,
+    0.0,
+    5.0
+   ],
+   "material": "abs",
+   "color": "#FF6A13",
+   "group": "controls",
+   "purpose": "Orange identification inlay",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "crown_guard_t",
+   "name": "Crown guard upper",
+   "shape": "box",
+   "size": [
+    3.0,
+    2.5,
+    6.0
+   ],
+   "position": [
+    25.0,
+    4.75,
+    5.0
+   ],
+   "material": "titanium",
+   "color": "#8C8F93",
+   "group": "structure",
+   "purpose": "Shoulder protecting crown from side impacts",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "crown_guard_b",
+   "name": "Crown guard lower",
+   "shape": "box",
+   "size": [
+    3.0,
+    2.5,
+    6.0
+   ],
+   "position": [
+    25.0,
+    -4.75,
+    5.0
+   ],
+   "material": "titanium",
+   "color": "#8C8F93",
+   "group": "structure",
+   "purpose": "Shoulder protecting crown from side impacts",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "collar_top",
+   "name": "Upper pusher collar",
+   "shape": "tube",
+   "radius": 3.3,
+   "inner_radius": 2.5,
+   "length": 1.0,
+   "axis": "x",
+   "position": [
+    24.0,
+    12.0,
+    5.0
+   ],
+   "material": "titanium",
+   "color": "#5E6064",
+   "group": "controls",
+   "purpose": "Guard collar around pusher",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "collar_bot",
+   "name": "Lower pusher collar",
+   "shape": "tube",
+   "radius": 3.3,
+   "inner_radius": 2.5,
+   "length": 1.0,
+   "axis": "x",
+   "position": [
+    24.0,
+    -12.0,
+    5.0
+   ],
+   "material": "titanium",
+   "color": "#5E6064",
+   "group": "controls",
+   "purpose": "Guard collar around pusher",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "button_lt",
+   "name": "Light pusher (left upper)",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 3.0,
+   "axis": "x",
+   "position": [
+    -25.0,
+    12.0,
+    5.0
+   ],
+   "material": "titanium",
+   "color": "#7D8085",
+   "group": "controls",
+   "purpose": "Backlight / power pusher",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "button_lb",
+   "name": "Mode pusher (left lower)",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 3.0,
+   "axis": "x",
+   "position": [
+    -25.0,
+    -12.0,
+    5.0
+   ],
+   "material": "titanium",
+   "color": "#7D8085",
+   "group": "controls",
+   "purpose": "Mode / down pusher",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "speaker_grille",
+   "name": "Speaker grille",
+   "shape": "box",
+   "size": [
+    0.3,
+    8.0,
+    2.5
+   ],
+   "position": [
+    -23.65,
+    0.0,
+    4.5
+   ],
+   "material": "stainless",
+   "color": "#1A1A1A",
+   "group": "electronics",
+   "purpose": "Waterproof membrane speaker port",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mic_1",
+   "name": "Microphone port 1",
+   "shape": "cylinder",
+   "radius": 0.5,
+   "length": 0.2,
+   "axis": "x",
+   "position": [
+    -23.6,
+    2.5,
+    7.5
+   ],
+   "material": "abs",
+   "color": "#0D0D0D",
+   "group": "electronics",
+   "purpose": "Mic / barometer vent",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mic_2",
+   "name": "Microphone port 2",
+   "shape": "cylinder",
+   "radius": 0.5,
+   "length": 0.2,
+   "axis": "x",
+   "position": [
+    -23.6,
+    -2.5,
+    7.5
+   ],
+   "material": "abs",
+   "color": "#0D0D0D",
+   "group": "electronics",
+   "purpose": "Second mic for noise cancelling",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lugscr_tl",
+   "name": "Bar screw head top-left",
+   "shape": "cylinder",
+   "radius": 1.6,
+   "length": 0.6,
+   "axis": "x",
+   "position": [
+    -13.8,
+    27.5,
+    6.0
+   ],
+   "material": "titanium",
+   "color": "#9A9DA1",
+   "group": "strap",
+   "purpose": "Screw head of solid top bar",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lugscr_tr",
+   "name": "Bar screw head top-right",
+   "shape": "cylinder",
+   "radius": 1.6,
+   "length": 0.6,
+   "axis": "x",
+   "position": [
+    13.8,
+    27.5,
+    6.0
+   ],
+   "material": "titanium",
+   "color": "#9A9DA1",
+   "group": "strap",
+   "purpose": "Screw head of solid top bar",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lugscr_bl",
+   "name": "Bar screw head bottom-left",
+   "shape": "cylinder",
+   "radius": 1.6,
+   "length": 0.6,
+   "axis": "x",
+   "position": [
+    -13.8,
+    -27.5,
+    6.0
+   ],
+   "material": "titanium",
+   "color": "#9A9DA1",
+   "group": "strap",
+   "purpose": "Screw head of solid bottom bar",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lugscr_br",
+   "name": "Bar screw head bottom-right",
+   "shape": "cylinder",
+   "radius": 1.6,
+   "length": 0.6,
+   "axis": "x",
+   "position": [
+    13.8,
+    -27.5,
+    6.0
+   ],
+   "material": "titanium",
+   "color": "#9A9DA1",
+   "group": "strap",
+   "purpose": "Screw head of solid bottom bar",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cb_scr_1",
+   "name": "Caseback screw NE",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.4,
+   "axis": "z",
+   "position": [
+    18.5,
+    18.5,
+    -0.2
+   ],
+   "material": "titanium",
+   "color": "#6E6E73",
+   "group": "structure",
+   "purpose": "Caseback retaining screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cb_scr_2",
+   "name": "Caseback screw SE",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.4,
+   "axis": "z",
+   "position": [
+    18.5,
+    -18.5,
+    -0.2
+   ],
+   "material": "titanium",
+   "color": "#6E6E73",
+   "group": "structure",
+   "purpose": "Caseback retaining screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cb_scr_3",
+   "name": "Caseback screw SW",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.4,
+   "axis": "z",
+   "position": [
+    -18.5,
+    -18.5,
+    -0.2
+   ],
+   "material": "titanium",
+   "color": "#6E6E73",
+   "group": "structure",
+   "purpose": "Caseback retaining screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cb_scr_4",
+   "name": "Caseback screw NW",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.4,
+   "axis": "z",
+   "position": [
+    -18.5,
+    18.5,
+    -0.2
+   ],
+   "material": "titanium",
+   "color": "#6E6E73",
+   "group": "structure",
+   "purpose": "Caseback retaining screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "sensor_ring",
+   "name": "HR sensor bezel ring",
+   "shape": "tube",
+   "radius": 8.0,
+   "inner_radius": 7.0,
+   "length": 0.8,
+   "axis": "z",
+   "position": [
+    0.0,
+    0.0,
+    -0.4
+   ],
+   "material": "polycarbonate",
+   "color": "#222428",
+   "group": "sensors",
+   "purpose": "Raised ring pressing sensor against skin, blocks ambient light",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "sensor_window",
+   "name": "HR sensor window",
+   "shape": "cylinder",
+   "radius": 7.0,
+   "length": 0.8,
+   "axis": "z",
+   "position": [
+    0.0,
+    0.0,
+    -0.4
+   ],
+   "material": "polycarbonate",
+   "look": "glass",
+   "color": "#1B1F26",
+   "group": "sensors",
+   "purpose": "Optical window over PPG LEDs and photodiodes",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "led_g1",
+   "name": "PPG green LED 1",
+   "shape": "box",
+   "size": [
+    1.5,
+    1.5,
+    0.3
+   ],
+   "position": [
+    -1.5,
+    0.0,
+    -0.95
+   ],
+   "material": "electronics",
+   "color": "#2BD34F",
+   "group": "sensors",
+   "purpose": "Heart-rate emitter",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "led_g2",
+   "name": "PPG green LED 2",
+   "shape": "box",
+   "size": [
+    1.5,
+    1.5,
+    0.3
+   ],
+   "position": [
+    1.5,
+    0.0,
+    -0.95
+   ],
+   "material": "electronics",
+   "color": "#2BD34F",
+   "group": "sensors",
+   "purpose": "Heart-rate emitter",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pd_n",
+   "name": "Photodiode N",
+   "shape": "box",
+   "size": [
+    2.0,
+    2.0,
+    0.3
+   ],
+   "position": [
+    0.0,
+    4.5,
+    -0.95
+   ],
+   "material": "electronics",
+   "color": "#1F2A5A",
+   "group": "sensors",
+   "purpose": "PPG receiver",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pd_s",
+   "name": "Photodiode S",
+   "shape": "box",
+   "size": [
+    2.0,
+    2.0,
+    0.3
+   ],
+   "position": [
+    0.0,
+    -4.5,
+    -0.95
+   ],
+   "material": "electronics",
+   "color": "#1F2A5A",
+   "group": "sensors",
+   "purpose": "PPG receiver",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pd_e",
+   "name": "Photodiode E",
+   "shape": "box",
+   "size": [
+    2.0,
+    2.0,
+    0.3
+   ],
+   "position": [
+    4.5,
+    0.0,
+    -0.95
+   ],
+   "material": "electronics",
+   "color": "#1F2A5A",
+   "group": "sensors",
+   "purpose": "PPG receiver",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pd_w",
+   "name": "Photodiode W",
+   "shape": "box",
+   "size": [
+    2.0,
+    2.0,
+    0.3
+   ],
+   "position": [
+    -4.5,
+    0.0,
+    -0.95
+   ],
+   "material": "electronics",
+   "color": "#1F2A5A",
+   "group": "sensors",
+   "purpose": "PPG receiver",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "grommet_pos",
+   "name": "Pogo grommet (+)",
+   "shape": "tube",
+   "radius": 1.5,
+   "inner_radius": 0.75,
+   "length": 0.5,
+   "axis": "z",
+   "position": [
+    -3.0,
+    -12.0,
+    -0.25
+   ],
+   "material": "nylon",
+   "color": "#111111",
+   "group": "power",
+   "purpose": "Sealing insulator around + pin",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "grommet_neg",
+   "name": "Pogo grommet (-)",
+   "shape": "tube",
+   "radius": 1.5,
+   "inner_radius": 0.75,
+   "length": 0.5,
+   "axis": "z",
+   "position": [
+    3.0,
+    -12.0,
+    -0.25
+   ],
+   "material": "nylon",
+   "color": "#111111",
+   "group": "power",
+   "purpose": "Sealing insulator around - pin",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "soc",
+   "name": "Application SoC",
+   "shape": "box",
+   "size": [
+    8.0,
+    8.0,
+    0.8
+   ],
+   "position": [
+    -6.0,
+    4.0,
+    8.65
+   ],
+   "material": "electronics",
+   "color": "#1A1A1A",
+   "group": "electronics",
+   "purpose": "Main processor",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "gnss",
+   "name": "Multi-band GNSS module",
+   "shape": "box",
+   "size": [
+    7.0,
+    7.0,
+    0.9
+   ],
+   "position": [
+    8.0,
+    6.0,
+    8.7
+   ],
+   "material": "electronics",
+   "color": "#B0B3B8",
+   "group": "electronics",
+   "purpose": "L1/L5 positioning, shielded can",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "imu",
+   "name": "IMU / compass",
+   "shape": "box",
+   "size": [
+    3.0,
+    3.0,
+    0.8
+   ],
+   "position": [
+    -8.0,
+    -8.0,
+    8.65
+   ],
+   "material": "electronics",
+   "color": "#1A1A1A",
+   "group": "electronics",
+   "purpose": "Accelerometer, gyro, magnetometer",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pmic",
+   "name": "PMIC + fuel gauge",
+   "shape": "box",
+   "size": [
+    4.0,
+    4.0,
+    0.8
+   ],
+   "position": [
+    2.0,
+    -8.0,
+    8.65
+   ],
+   "material": "electronics",
+   "color": "#1A1A1A",
+   "group": "electronics",
+   "purpose": "Rails, protection FET, fuel gauge",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "flash",
+   "name": "Flash memory",
+   "shape": "box",
+   "size": [
+    6.0,
+    4.0,
+    0.7
+   ],
+   "position": [
+    10.0,
+    -6.0,
+    8.6
+   ],
+   "material": "electronics",
+   "color": "#222222",
+   "group": "electronics",
+   "purpose": "Maps and activity storage",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "b2b",
+   "name": "Display flex connector",
+   "shape": "box",
+   "size": [
+    10.0,
+    3.0,
+    1.0
+   ],
+   "position": [
+    0.0,
+    15.0,
+    8.75
+   ],
+   "material": "electronics",
+   "color": "#E8E2D0",
+   "group": "electronics",
+   "purpose": "Board-to-board connector for display flex",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "vibe",
+   "name": "Vibration motor",
+   "shape": "cylinder",
+   "radius": 2.0,
+   "length": 8.0,
+   "axis": "y",
+   "position": [
+    19.25,
+    0.0,
+    4.75
+   ],
+   "material": "electronics",
+   "color": "#C0C0C0",
+   "group": "electronics",
+   "purpose": "Haptic alerts",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "keeper_1",
+   "name": "Strap keeper (fixed)",
+   "shape": "box",
+   "size": [
+    25.0,
+    4.0,
+    3.5
+   ],
+   "wall": 0.7,
+   "position": [
+    0.0,
+    88.0,
+    6.0
+   ],
+   "material": "nylon",
+   "color": "#3B4A35",
+   "group": "strap",
+   "purpose": "Holds strap tail",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "keeper_2",
+   "name": "Strap keeper (floating)",
+   "shape": "box",
+   "size": [
+    25.0,
+    4.0,
+    3.5
+   ],
+   "wall": 0.7,
+   "position": [
+    0.0,
+    80.0,
+    6.0
+   ],
+   "material": "nylon",
+   "color": "#3B4A35",
+   "group": "strap",
+   "purpose": "Second loop for strap tail",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "buckle_pin",
+   "name": "Buckle pivot bar",
+   "shape": "cylinder",
+   "radius": 1.0,
+   "length": 23.0,
+   "axis": "x",
+   "position": [
+    0.0,
+    100.5,
+    6.0
+   ],
+   "material": "stainless",
+   "color": "#B8BBBF",
+   "group": "strap",
+   "purpose": "Strap loops around this bar",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "buckle_rail_l",
+   "name": "Buckle frame left",
+   "shape": "box",
+   "size": [
+    2.0,
+    18.0,
+    2.5
+   ],
+   "position": [
+    -12.5,
+    108.5,
+    6.0
+   ],
+   "material": "stainless",
+   "color": "#B8BBBF",
+   "group": "strap",
+   "purpose": "Buckle frame side",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "buckle_rail_r",
+   "name": "Buckle frame right",
+   "shape": "box",
+   "size": [
+    2.0,
+    18.0,
+    2.5
+   ],
+   "position": [
+    12.5,
+    108.5,
+    6.0
+   ],
+   "material": "stainless",
+   "color": "#B8BBBF",
+   "group": "strap",
+   "purpose": "Buckle frame side",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "buckle_end",
+   "name": "Buckle frame end bar",
+   "shape": "box",
+   "size": [
+    27.0,
+    2.0,
+    2.5
+   ],
+   "position": [
+    0.0,
+    118.5,
+    6.0
+   ],
+   "material": "stainless",
+   "color": "#B8BBBF",
+   "group": "strap",
+   "purpose": "Buckle frame end",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "buckle_tongue",
+   "name": "Buckle tongue",
+   "shape": "box",
+   "size": [
+    2.0,
+    16.0,
+    1.0
+   ],
+   "position": [
+    0.0,
+    109.5,
+    6.0
+   ],
+   "material": "stainless",
+   "color": "#9EA1A5",
+   "group": "strap",
+   "purpose": "Prong engaging strap holes",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "hole_1",
+   "name": "Strap hole 1",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    0.0,
+    -55.0,
+    6.9
+   ],
+   "material": "nylon",
+   "color": "#111111",
+   "group": "strap",
+   "purpose": "Adjustment hole",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "hole_2",
+   "name": "Strap hole 2",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    0.0,
+    -62.0,
+    6.9
+   ],
+   "material": "nylon",
+   "color": "#111111",
+   "group": "strap",
+   "purpose": "Adjustment hole",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "hole_3",
+   "name": "Strap hole 3",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    0.0,
+    -69.0,
+    6.9
+   ],
+   "material": "nylon",
+   "color": "#111111",
+   "group": "strap",
+   "purpose": "Adjustment hole",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "hole_4",
+   "name": "Strap hole 4",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    0.0,
+    -76.0,
+    6.9
+   ],
+   "material": "nylon",
+   "color": "#111111",
+   "group": "strap",
+   "purpose": "Adjustment hole",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "hole_5",
+   "name": "Strap hole 5",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    0.0,
+    -83.0,
+    6.9
+   ],
+   "material": "nylon",
+   "color": "#111111",
+   "group": "strap",
+   "purpose": "Adjustment hole",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "hole_6",
+   "name": "Strap hole 6",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    0.0,
+    -90.0,
+    6.9
+   ],
+   "material": "nylon",
+   "color": "#111111",
+   "group": "strap",
+   "purpose": "Adjustment hole",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "hole_7",
+   "name": "Strap hole 7",
+   "shape": "cylinder",
+   "radius": 1.1,
+   "length": 0.3,
+   "axis": "z",
+   "position": [
+    0.0,
+    -97.0,
+    6.9
+   ],
+   "material": "nylon",
+   "color": "#111111",
+   "group": "strap",
+   "purpose": "Adjustment hole",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
    "fill": 1.0
   }
  ],
  "assembly": [
   {
    "parts": [
-    "battery",
-    "pcb"
+    "pcb",
+    "soc",
+    "gnss",
+    "imu",
+    "pmic",
+    "flash",
+    "b2b"
    ],
-   "action": "Stack cell and PCB on foam spacers in the midframe; connect the cell flex"
+   "action": "Reflow SoC, GNSS, IMU, PMIC, flash and display connector onto the main PCB"
+  },
+  {
+   "parts": [
+    "battery",
+    "pcb",
+    "vibe"
+   ],
+   "action": "Stack cell and PCB on foam spacers in the midframe, fit the vibration motor beside the cell, connect the cell flex"
   },
   {
    "parts": [
     "bezel",
     "display",
-    "crystal"
+    "crystal",
+    "mk_12",
+    "mk_01",
+    "mk_02",
+    "mk_03",
+    "mk_04",
+    "mk_05",
+    "mk_06",
+    "mk_07",
+    "mk_08",
+    "mk_09",
+    "mk_10",
+    "mk_11"
    ],
-   "action": "Seat the round display in the front ring, bond the crystal with gasket 0.5 mm below the ring top"
+   "action": "Pad-print/inlay bezel indices; seat the display in the front ring and bond the crystal 0.5 mm below the ring top"
   },
   {
    "parts": [
     "case",
-    "bezel"
+    "bezel",
+    "cs_scr_1",
+    "cs_scr_2",
+    "cs_scr_3",
+    "cs_scr_4",
+    "bz_scr_1",
+    "bz_scr_2",
+    "bz_scr_3",
+    "bz_scr_4",
+    "b2b"
    ],
-   "action": "Route the display flex through, fit the face O-ring, and screw the front ring onto the midframe"
+   "action": "Route the display flex to the connector, fit the face O-ring, screw the front ring onto the midframe"
   },
   {
    "parts": [
     "caseback",
+    "sensor_window",
+    "sensor_ring",
+    "led_g1",
+    "led_g2",
+    "pd_n",
+    "pd_s",
+    "pd_e",
+    "pd_w",
     "pogo_pos",
-    "pogo_neg"
+    "pogo_neg",
+    "grommet_pos",
+    "grommet_neg"
    ],
-   "action": "Fit the pogo pins with sealing grommets; screw the caseback on with the O-ring (4 screws)"
+   "action": "Bond the PPG sensor window and ring, fit pogo pins with sealing grommets"
   },
   {
    "parts": [
-    "button_top",
-    "button_bot"
+    "case",
+    "caseback",
+    "cb_scr_1",
+    "cb_scr_2",
+    "cb_scr_3",
+    "cb_scr_4"
    ],
-   "action": "Insert the pushers with double O-rings"
+   "action": "Screw the caseback on over its O-ring (4 screws)"
+  },
+  {
+   "parts": [
+    "crown",
+    "crown_cap",
+    "crown_guard_t",
+    "crown_guard_b",
+    "button_top",
+    "button_bot",
+    "collar_top",
+    "collar_bot",
+    "button_lt",
+    "button_lb",
+    "speaker_grille",
+    "mic_1",
+    "mic_2"
+   ],
+   "action": "Insert the crown and pushers with double O-rings, fit collars, the speaker membrane and the mic vents"
   },
   {
    "parts": [
     "springbar_t",
     "springbar_b",
-    "strap_t",
-    "strap_b",
     "lug_tl",
     "lug_tr",
     "lug_bl",
-    "lug_br"
+    "lug_br",
+    "lugscr_tl",
+    "lugscr_tr",
+    "lugscr_bl",
+    "lugscr_br",
+    "strap_t",
+    "strap_b"
    ],
-   "action": "Thread the straps on and screw the bars into the lugs"
+   "action": "Thread the straps on and screw the solid bars into the lugs"
+  },
+  {
+   "parts": [
+    "strap_t",
+    "buckle_pin",
+    "buckle_rail_l",
+    "buckle_rail_r",
+    "buckle_end",
+    "buckle_tongue",
+    "keeper_1",
+    "keeper_2",
+    "strap_b",
+    "hole_1",
+    "hole_2",
+    "hole_3",
+    "hole_4",
+    "hole_5",
+    "hole_6",
+    "hole_7"
+   ],
+   "action": "Loop strap over the buckle pivot, slide on the keepers, punch the adjustment holes"
   }
  ],
  "scenarios": [

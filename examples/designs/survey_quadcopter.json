@@ -1,6 +1,6 @@
 {
  "name": "AgriSurvey Q650 camera quadcopter",
- "description": "650 mm motor-to-motor plus-layout quadcopter for farmland mapping. 15\" props on 400 kV motors, 6S2P 21700 Li-ion pack (~216 Wh), 300 g mapping camera on a 2-axis gimbal underneath, carbon skid landing gear. Target AUW ~3 kg, hover ~300 W, 25 min flight with 20% reserve.",
+ "description": "650 mm motor-to-motor plus-layout quadcopter for farmland mapping. 15\" two-blade props on 4114 400 kV motors, 6S3P 21700 Li-ion pack (324 Wh) strapped on a tray above a white avionics canopy, GNSS on a carbon mast, twin RC/telemetry dipoles, nav LEDs, 300 g survey camera on a 3-axis gimbal hung on damping balls, carbon legs and skids with alloy clamps and tees.",
  "parts": [
   {
    "id": "plate_bot",
@@ -19,6 +19,7 @@
    "material": "carbon_fibre",
    "group": "frame",
    "purpose": "Lower clamp plate for arms; mounts gimbal and landing legs",
+   "color": "#1c1c1c",
    "rotation": [
     0.0,
     0.0,
@@ -45,7 +46,8 @@
    ],
    "material": "carbon_fibre",
    "group": "frame",
-   "purpose": "Upper clamp plate; mounts avionics and battery",
+   "purpose": "Upper clamp plate; mounts avionics and canopy",
+   "color": "#1c1c1c",
    "rotation": [
     0.0,
     0.0,
@@ -53,6 +55,110 @@
    ],
    "quantity": 1,
    "process": "layup",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "standoff_1",
+   "name": "Standoff FL",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 29.8,
+   "axis": "z",
+   "position": [
+    70.0,
+    70.0,
+    16.9
+   ],
+   "material": "aluminium",
+   "group": "frame",
+   "purpose": "Spaces the centre plates",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "standoff_2",
+   "name": "Standoff FR",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 29.8,
+   "axis": "z",
+   "position": [
+    70.0,
+    -70.0,
+    16.9
+   ],
+   "material": "aluminium",
+   "group": "frame",
+   "purpose": "Spaces the centre plates",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "standoff_3",
+   "name": "Standoff RL",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 29.8,
+   "axis": "z",
+   "position": [
+    -70.0,
+    70.0,
+    16.9
+   ],
+   "material": "aluminium",
+   "group": "frame",
+   "purpose": "Spaces the centre plates",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "standoff_4",
+   "name": "Standoff RR",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 29.8,
+   "axis": "z",
+   "position": [
+    -70.0,
+    -70.0,
+    16.9
+   ],
+   "material": "aluminium",
+   "group": "frame",
+   "purpose": "Spaces the centre plates",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
    "specs": {},
    "fill": 1.0
   },
@@ -72,6 +178,7 @@
    "material": "carbon_fibre",
    "group": "frame",
    "purpose": "Carries motor thrust back to the body",
+   "color": "#222222",
    "rotation": [
     0.0,
     0.0,
@@ -98,6 +205,7 @@
    "material": "carbon_fibre",
    "group": "frame",
    "purpose": "Carries motor thrust back to the body",
+   "color": "#222222",
    "rotation": [
     0.0,
     0.0,
@@ -124,6 +232,7 @@
    "material": "carbon_fibre",
    "group": "frame",
    "purpose": "Carries motor thrust back to the body",
+   "color": "#222222",
    "rotation": [
     0.0,
     0.0,
@@ -150,6 +259,7 @@
    "material": "carbon_fibre",
    "group": "frame",
    "purpose": "Carries motor thrust back to the body",
+   "color": "#222222",
    "rotation": [
     0.0,
     0.0,
@@ -161,20 +271,218 @@
    "fill": 1.0
   },
   {
+   "id": "clamp_px",
+   "name": "Arm clamp +X",
+   "shape": "box",
+   "size": [
+    30.0,
+    40.0,
+    29.8
+   ],
+   "position": [
+    65.0,
+    0.0,
+    16.9
+   ],
+   "material": "aluminium",
+   "group": "frame",
+   "purpose": "Clamps arm root between plates",
+   "color": "#8a8f96",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.35
+  },
+  {
+   "id": "clamp_nx",
+   "name": "Arm clamp -X",
+   "shape": "box",
+   "size": [
+    30.0,
+    40.0,
+    29.8
+   ],
+   "position": [
+    -65.0,
+    0.0,
+    16.9
+   ],
+   "material": "aluminium",
+   "group": "frame",
+   "purpose": "Clamps arm root between plates",
+   "color": "#8a8f96",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.35
+  },
+  {
+   "id": "clamp_py",
+   "name": "Arm clamp +Y",
+   "shape": "box",
+   "size": [
+    40.0,
+    30.0,
+    29.8
+   ],
+   "position": [
+    0.0,
+    65.0,
+    16.9
+   ],
+   "material": "aluminium",
+   "group": "frame",
+   "purpose": "Clamps arm root between plates",
+   "color": "#8a8f96",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.35
+  },
+  {
+   "id": "clamp_ny",
+   "name": "Arm clamp -Y",
+   "shape": "box",
+   "size": [
+    40.0,
+    30.0,
+    29.8
+   ],
+   "position": [
+    0.0,
+    -65.0,
+    16.9
+   ],
+   "material": "aluminium",
+   "group": "frame",
+   "purpose": "Clamps arm root between plates",
+   "color": "#8a8f96",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.35
+  },
+  {
+   "id": "canopy",
+   "name": "Avionics canopy (top cover)",
+   "shape": "box",
+   "size": [
+    156.0,
+    156.0,
+    30.0
+   ],
+   "wall": 2.0,
+   "position": [
+    0.0,
+    0.0,
+    47.8
+   ],
+   "material": "polycarbonate",
+   "group": "body",
+   "purpose": "Weather cover over ESC, FC and radio",
+   "color": "#f2f2f2",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "status_led",
+   "name": "Status LED",
+   "shape": "cylinder",
+   "radius": 4.0,
+   "length": 2.0,
+   "axis": "z",
+   "position": [
+    60.0,
+    45.0,
+    63.8
+   ],
+   "material": "electronics",
+   "group": "body",
+   "purpose": "Arming / GPS status indicator",
+   "color": "#3498db",
+   "specs": {
+    "power": "0.2"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "mmount_px",
+   "name": "Motor mount +X",
+   "shape": "box",
+   "size": [
+    56.0,
+    40.0,
+    4.0
+   ],
+   "position": [
+    320.0,
+    0.0,
+    32.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Clamps motor to arm tip",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.5
+  },
+  {
    "id": "mot_px",
-   "name": "Motor +X (4114 400kV)",
+   "name": "Motor +X (4114 400kV) stator base",
    "shape": "cylinder",
-   "radius": 22.0,
-   "length": 30.0,
+   "radius": 21.0,
+   "length": 8.0,
    "axis": "z",
    "position": [
     320.0,
     0.0,
-    45.8
+    38.8
    ],
    "material": "aluminium",
    "group": "propulsion",
    "purpose": "Drives prop",
+   "color": "#5a5a5a",
    "specs": {
     "power": "108",
     "max_power": "450",
@@ -191,56 +499,21 @@
    "fill": 1.0
   },
   {
-   "id": "mot_nx",
-   "name": "Motor -X (4114 400kV)",
+   "id": "bell_px",
+   "name": "Motor bell +X",
    "shape": "cylinder",
-   "radius": 22.0,
-   "length": 30.0,
+   "radius": 22.5,
+   "length": 18.0,
    "axis": "z",
    "position": [
-    -320.0,
-    0.0,
-    45.8
-   ],
-   "material": "aluminium",
-   "group": "propulsion",
-   "purpose": "Drives prop",
-   "specs": {
-    "power": "108",
-    "max_power": "450",
-    "kv": "400",
-    "max_thrust_g": "2600"
-   },
-   "rotation": [
-    0.0,
-    0.0,
-    0.0
-   ],
-   "quantity": 1,
-   "process": "machine",
-   "fill": 1.0
-  },
-  {
-   "id": "mot_py",
-   "name": "Motor +Y (4114 400kV)",
-   "shape": "cylinder",
-   "radius": 22.0,
-   "length": 30.0,
-   "axis": "z",
-   "position": [
-    0.0,
     320.0,
-    45.8
+    0.0,
+    51.8
    ],
    "material": "aluminium",
    "group": "propulsion",
-   "purpose": "Drives prop",
-   "specs": {
-    "power": "108",
-    "max_power": "450",
-    "kv": "400",
-    "max_thrust_g": "2600"
-   },
+   "purpose": "Rotor with magnets",
+   "color": "#1e1e1e",
    "rotation": [
     0.0,
     0.0,
@@ -248,144 +521,806 @@
    ],
    "quantity": 1,
    "process": "machine",
-   "fill": 1.0
-  },
-  {
-   "id": "mot_ny",
-   "name": "Motor -Y (4114 400kV)",
-   "shape": "cylinder",
-   "radius": 22.0,
-   "length": 30.0,
-   "axis": "z",
-   "position": [
-    0.0,
-    -320.0,
-    45.8
-   ],
-   "material": "aluminium",
-   "group": "propulsion",
-   "purpose": "Drives prop",
-   "specs": {
-    "power": "108",
-    "max_power": "450",
-    "kv": "400",
-    "max_thrust_g": "2600"
-   },
-   "rotation": [
-    0.0,
-    0.0,
-    0.0
-   ],
-   "quantity": 1,
-   "process": "machine",
+   "specs": {},
    "fill": 1.0
   },
   {
    "id": "prop_px",
-   "name": "Prop 15x5 +X",
-   "shape": "box",
-   "size": [
-    381.0,
-    25.0,
-    3.0
-   ],
+   "name": "Prop 15x5 hub +X",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 8.0,
+   "axis": "z",
    "position": [
     320.0,
     0.0,
-    62.3
+    64.8
    ],
-   "material": "carbon_fibre",
+   "material": "aluminium",
    "group": "propulsion",
-   "purpose": "Generates lift",
+   "purpose": "Prop hub/adapter",
+   "color": "#9aa0a6",
    "rotation": [
     0.0,
     0.0,
     0.0
    ],
    "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "blade_px_a",
+   "name": "Prop blade +X a",
+   "shape": "box",
+   "size": [
+    180.0,
+    30.0,
+    3.0
+   ],
+   "position": [
+    420.0,
+    0.0,
+    64.8
+   ],
+   "rotation": [
+    12.0,
+    0.0,
+    0.0
+   ],
+   "material": "carbon_fibre",
+   "group": "propulsion",
+   "purpose": "Generates lift",
+   "color": "#111111",
+   "quantity": 1,
    "process": "layup",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "blade_px_b",
+   "name": "Prop blade +X b",
+   "shape": "box",
+   "size": [
+    180.0,
+    30.0,
+    3.0
+   ],
+   "position": [
+    220.0,
+    0.0,
+    64.8
+   ],
+   "rotation": [
+    -12.0,
+    0.0,
+    0.0
+   ],
+   "material": "carbon_fibre",
+   "group": "propulsion",
+   "purpose": "Generates lift",
+   "color": "#111111",
+   "quantity": 1,
+   "process": "layup",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "nut_px",
+   "name": "Prop nut +X",
+   "shape": "cylinder",
+   "radius": 7.0,
+   "length": 7.0,
+   "axis": "z",
+   "position": [
+    320.0,
+    0.0,
+    72.3
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Retains prop (CW)",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "led_px",
+   "name": "Nav LED +X (front, white)",
+   "shape": "cylinder",
+   "radius": 6.0,
+   "length": 4.0,
+   "axis": "z",
+   "position": [
+    300.0,
+    0.0,
+    0.0
+   ],
+   "material": "electronics",
+   "group": "avionics",
+   "purpose": "Orientation light",
+   "color": "#ffffff",
+   "specs": {
+    "power": "0.5"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "mmount_nx",
+   "name": "Motor mount -X",
+   "shape": "box",
+   "size": [
+    56.0,
+    40.0,
+    4.0
+   ],
+   "position": [
+    -320.0,
+    0.0,
+    32.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Clamps motor to arm tip",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.5
+  },
+  {
+   "id": "mot_nx",
+   "name": "Motor -X (4114 400kV) stator base",
+   "shape": "cylinder",
+   "radius": 21.0,
+   "length": 8.0,
+   "axis": "z",
+   "position": [
+    -320.0,
+    0.0,
+    38.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Drives prop",
+   "color": "#5a5a5a",
+   "specs": {
+    "power": "108",
+    "max_power": "450",
+    "kv": "400",
+    "max_thrust_g": "2600"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "fill": 1.0
+  },
+  {
+   "id": "bell_nx",
+   "name": "Motor bell -X",
+   "shape": "cylinder",
+   "radius": 22.5,
+   "length": 18.0,
+   "axis": "z",
+   "position": [
+    -320.0,
+    0.0,
+    51.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Rotor with magnets",
+   "color": "#1e1e1e",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
    "specs": {},
    "fill": 1.0
   },
   {
    "id": "prop_nx",
-   "name": "Prop 15x5 -X",
-   "shape": "box",
-   "size": [
-    381.0,
-    25.0,
-    3.0
-   ],
+   "name": "Prop 15x5 hub -X",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 8.0,
+   "axis": "z",
    "position": [
     -320.0,
     0.0,
-    62.3
+    64.8
    ],
-   "material": "carbon_fibre",
+   "material": "aluminium",
    "group": "propulsion",
-   "purpose": "Generates lift",
+   "purpose": "Prop hub/adapter",
+   "color": "#9aa0a6",
    "rotation": [
     0.0,
     0.0,
     0.0
    ],
    "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "blade_nx_a",
+   "name": "Prop blade -X a",
+   "shape": "box",
+   "size": [
+    180.0,
+    30.0,
+    3.0
+   ],
+   "position": [
+    -220.0,
+    0.0,
+    64.8
+   ],
+   "rotation": [
+    12.0,
+    0.0,
+    0.0
+   ],
+   "material": "carbon_fibre",
+   "group": "propulsion",
+   "purpose": "Generates lift",
+   "color": "#111111",
+   "quantity": 1,
    "process": "layup",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "blade_nx_b",
+   "name": "Prop blade -X b",
+   "shape": "box",
+   "size": [
+    180.0,
+    30.0,
+    3.0
+   ],
+   "position": [
+    -420.0,
+    0.0,
+    64.8
+   ],
+   "rotation": [
+    -12.0,
+    0.0,
+    0.0
+   ],
+   "material": "carbon_fibre",
+   "group": "propulsion",
+   "purpose": "Generates lift",
+   "color": "#111111",
+   "quantity": 1,
+   "process": "layup",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "nut_nx",
+   "name": "Prop nut -X",
+   "shape": "cylinder",
+   "radius": 7.0,
+   "length": 7.0,
+   "axis": "z",
+   "position": [
+    -320.0,
+    0.0,
+    72.3
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Retains prop (CW)",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "led_nx",
+   "name": "Nav LED -X (rear, white strobe)",
+   "shape": "cylinder",
+   "radius": 6.0,
+   "length": 4.0,
+   "axis": "z",
+   "position": [
+    -300.0,
+    0.0,
+    0.0
+   ],
+   "material": "electronics",
+   "group": "avionics",
+   "purpose": "Orientation light",
+   "color": "#f5f5f5",
+   "specs": {
+    "power": "0.5"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "mmount_py",
+   "name": "Motor mount +Y",
+   "shape": "box",
+   "size": [
+    40.0,
+    56.0,
+    4.0
+   ],
+   "position": [
+    0.0,
+    320.0,
+    32.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Clamps motor to arm tip",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.5
+  },
+  {
+   "id": "mot_py",
+   "name": "Motor +Y (4114 400kV) stator base",
+   "shape": "cylinder",
+   "radius": 21.0,
+   "length": 8.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    320.0,
+    38.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Drives prop",
+   "color": "#5a5a5a",
+   "specs": {
+    "power": "108",
+    "max_power": "450",
+    "kv": "400",
+    "max_thrust_g": "2600"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "fill": 1.0
+  },
+  {
+   "id": "bell_py",
+   "name": "Motor bell +Y",
+   "shape": "cylinder",
+   "radius": 22.5,
+   "length": 18.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    320.0,
+    51.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Rotor with magnets",
+   "color": "#1e1e1e",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
    "specs": {},
    "fill": 1.0
   },
   {
    "id": "prop_py",
-   "name": "Prop 15x5 +Y",
-   "shape": "box",
-   "size": [
-    25.0,
-    381.0,
-    3.0
-   ],
+   "name": "Prop 15x5 hub +Y",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 8.0,
+   "axis": "z",
    "position": [
     0.0,
     320.0,
-    62.3
+    64.8
    ],
-   "material": "carbon_fibre",
+   "material": "aluminium",
    "group": "propulsion",
-   "purpose": "Generates lift",
+   "purpose": "Prop hub/adapter",
+   "color": "#9aa0a6",
    "rotation": [
     0.0,
     0.0,
     0.0
    ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "blade_py_a",
+   "name": "Prop blade +Y a",
+   "shape": "box",
+   "size": [
+    30.0,
+    180.0,
+    3.0
+   ],
+   "position": [
+    0.0,
+    420.0,
+    64.8
+   ],
+   "rotation": [
+    0.0,
+    12.0,
+    0.0
+   ],
+   "material": "carbon_fibre",
+   "group": "propulsion",
+   "purpose": "Generates lift",
+   "color": "#111111",
    "quantity": 1,
    "process": "layup",
    "specs": {},
    "fill": 1.0
   },
   {
-   "id": "prop_ny",
-   "name": "Prop 15x5 -Y",
+   "id": "blade_py_b",
+   "name": "Prop blade +Y b",
    "shape": "box",
    "size": [
-    25.0,
-    381.0,
+    30.0,
+    180.0,
     3.0
    ],
    "position": [
     0.0,
-    -320.0,
-    62.3
+    220.0,
+    64.8
+   ],
+   "rotation": [
+    0.0,
+    -12.0,
+    0.0
    ],
    "material": "carbon_fibre",
    "group": "propulsion",
    "purpose": "Generates lift",
+   "color": "#111111",
+   "quantity": 1,
+   "process": "layup",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "nut_py",
+   "name": "Prop nut +Y",
+   "shape": "cylinder",
+   "radius": 7.0,
+   "length": 7.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    320.0,
+    72.3
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Retains prop (CCW)",
+   "color": "#bdc3c7",
    "rotation": [
     0.0,
     0.0,
     0.0
    ],
    "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "led_py",
+   "name": "Nav LED +Y (left, red)",
+   "shape": "cylinder",
+   "radius": 6.0,
+   "length": 4.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    300.0,
+    0.0
+   ],
+   "material": "electronics",
+   "group": "avionics",
+   "purpose": "Orientation light",
+   "color": "#e74c3c",
+   "specs": {
+    "power": "0.5"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "mmount_ny",
+   "name": "Motor mount -Y",
+   "shape": "box",
+   "size": [
+    40.0,
+    56.0,
+    4.0
+   ],
+   "position": [
+    0.0,
+    -320.0,
+    32.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Clamps motor to arm tip",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.5
+  },
+  {
+   "id": "mot_ny",
+   "name": "Motor -Y (4114 400kV) stator base",
+   "shape": "cylinder",
+   "radius": 21.0,
+   "length": 8.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    -320.0,
+    38.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Drives prop",
+   "color": "#5a5a5a",
+   "specs": {
+    "power": "108",
+    "max_power": "450",
+    "kv": "400",
+    "max_thrust_g": "2600"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "fill": 1.0
+  },
+  {
+   "id": "bell_ny",
+   "name": "Motor bell -Y",
+   "shape": "cylinder",
+   "radius": 22.5,
+   "length": 18.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    -320.0,
+    51.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Rotor with magnets",
+   "color": "#1e1e1e",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "prop_ny",
+   "name": "Prop 15x5 hub -Y",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 8.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    -320.0,
+    64.8
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Prop hub/adapter",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "blade_ny_a",
+   "name": "Prop blade -Y a",
+   "shape": "box",
+   "size": [
+    30.0,
+    180.0,
+    3.0
+   ],
+   "position": [
+    0.0,
+    -220.0,
+    64.8
+   ],
+   "rotation": [
+    0.0,
+    12.0,
+    0.0
+   ],
+   "material": "carbon_fibre",
+   "group": "propulsion",
+   "purpose": "Generates lift",
+   "color": "#111111",
+   "quantity": 1,
    "process": "layup",
    "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "blade_ny_b",
+   "name": "Prop blade -Y b",
+   "shape": "box",
+   "size": [
+    30.0,
+    180.0,
+    3.0
+   ],
+   "position": [
+    0.0,
+    -420.0,
+    64.8
+   ],
+   "rotation": [
+    0.0,
+    -12.0,
+    0.0
+   ],
+   "material": "carbon_fibre",
+   "group": "propulsion",
+   "purpose": "Generates lift",
+   "color": "#111111",
+   "quantity": 1,
+   "process": "layup",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "nut_ny",
+   "name": "Prop nut -Y",
+   "shape": "cylinder",
+   "radius": 7.0,
+   "length": 7.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    -320.0,
+    72.3
+   ],
+   "material": "aluminium",
+   "group": "propulsion",
+   "purpose": "Retains prop (CCW)",
+   "color": "#bdc3c7",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "led_ny",
+   "name": "Nav LED -Y (right, green)",
+   "shape": "cylinder",
+   "radius": 6.0,
+   "length": 4.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    -300.0,
+    0.0
+   ],
+   "material": "electronics",
+   "group": "avionics",
+   "purpose": "Orientation light",
+   "color": "#2ecc71",
+   "specs": {
+    "power": "0.5"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
    "fill": 1.0
   },
   {
@@ -406,6 +1341,7 @@
    "look": "pcb",
    "group": "avionics",
    "purpose": "Motor speed control",
+   "color": "#1b5e20",
    "specs": {
     "power": "6",
     "current_rating_a": "60"
@@ -437,6 +1373,7 @@
    "look": "pcb",
    "group": "avionics",
    "purpose": "Stabilisation, waypoint mission, camera trigger",
+   "color": "#263238",
    "specs": {
     "power": "2"
    },
@@ -467,6 +1404,7 @@
    "look": "pcb",
    "group": "avionics",
    "purpose": "Pilot link and ground-station telemetry",
+   "color": "#0d47a1",
    "specs": {
     "power": "2"
    },
@@ -480,6 +1418,34 @@
    "fill": 1.0
   },
   {
+   "id": "gps_base",
+   "name": "GPS mast foot",
+   "shape": "box",
+   "size": [
+    20.0,
+    20.0,
+    4.0
+   ],
+   "position": [
+    66.0,
+    0.0,
+    64.8
+   ],
+   "material": "nylon",
+   "group": "avionics",
+   "purpose": "Folding mast base on canopy",
+   "color": "#2b2b2b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 0.5
+  },
+  {
    "id": "gps_mast",
    "name": "GPS mast",
    "shape": "tube",
@@ -488,13 +1454,14 @@
    "length": 80.0,
    "axis": "z",
    "position": [
-    45.0,
-    -55.0,
-    72.8
+    66.0,
+    0.0,
+    106.8
    ],
    "material": "carbon_fibre",
    "group": "avionics",
    "purpose": "Lifts GPS clear of power wiring",
+   "color": "#1a1a1a",
    "rotation": [
     0.0,
     0.0,
@@ -513,13 +1480,14 @@
    "length": 15.0,
    "axis": "z",
    "position": [
-    45.0,
-    -55.0,
-    120.3
+    66.0,
+    0.0,
+    154.3
    ],
    "material": "electronics",
    "group": "avionics",
    "purpose": "Position and heading for survey grid",
+   "color": "#e6e6e6",
    "specs": {
     "power": "1"
    },
@@ -533,6 +1501,138 @@
    "fill": 1.0
   },
   {
+   "id": "ant_base_l",
+   "name": "Antenna mount left",
+   "shape": "cylinder",
+   "radius": 5.0,
+   "length": 6.0,
+   "axis": "z",
+   "position": [
+    -70.0,
+    60.0,
+    65.8
+   ],
+   "material": "nylon",
+   "group": "avionics",
+   "purpose": "SMA bulkhead on canopy",
+   "color": "#333333",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ant_base_r",
+   "name": "Antenna mount right",
+   "shape": "cylinder",
+   "radius": 5.0,
+   "length": 6.0,
+   "axis": "z",
+   "position": [
+    -70.0,
+    -60.0,
+    65.8
+   ],
+   "material": "nylon",
+   "group": "avionics",
+   "purpose": "SMA bulkhead on canopy",
+   "color": "#333333",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ant_l",
+   "name": "Dipole antenna left",
+   "shape": "cylinder",
+   "radius": 4.0,
+   "length": 90.0,
+   "axis": "z",
+   "position": [
+    -92.5,
+    60.0,
+    107.8
+   ],
+   "rotation": [
+    0.0,
+    -30.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "avionics",
+   "purpose": "RC / telemetry diversity antenna",
+   "color": "#111111",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ant_r",
+   "name": "Dipole antenna right",
+   "shape": "cylinder",
+   "radius": 4.0,
+   "length": 90.0,
+   "axis": "z",
+   "position": [
+    -92.5,
+    -60.0,
+    107.8
+   ],
+   "rotation": [
+    0.0,
+    -30.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "avionics",
+   "purpose": "RC / telemetry diversity antenna",
+   "color": "#111111",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tray",
+   "name": "Battery tray",
+   "shape": "box",
+   "size": [
+    130.0,
+    80.0,
+    2.0
+   ],
+   "position": [
+    -10.0,
+    0.0,
+    63.8
+   ],
+   "material": "carbon_fibre",
+   "group": "power",
+   "purpose": "Anti-slip battery platform on canopy",
+   "color": "#1c1c1c",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "layup",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
    "id": "battery",
    "name": "6S3P 21700 pack 15Ah",
    "shape": "box",
@@ -542,14 +1642,15 @@
     72.0
    ],
    "position": [
-    -40.0,
+    -10.0,
     0.0,
-    76.8
+    100.8
    ],
    "material": "lifepo4",
    "look": "battery",
    "group": "power",
    "purpose": "Flight energy",
+   "color": "#2e86c1",
    "specs": {
     "capacity": "324 Wh",
     "voltage": "21.6",
@@ -567,21 +1668,218 @@
    "fill": 1.0
   },
   {
-   "id": "lead",
-   "name": "Battery lead 10AWG",
-   "shape": "cylinder",
-   "radius": 1.3,
-   "length": 150.0,
-   "axis": "x",
+   "id": "strap1_top",
+   "name": "Battery strap 1 top",
+   "shape": "box",
+   "size": [
+    20.0,
+    70.0,
+    2.0
+   ],
    "position": [
-    40.0,
-    30.0,
-    34.1
+    -45.0,
+    0.0,
+    137.8
+   ],
+   "material": "nylon",
+   "group": "power",
+   "purpose": "Holds battery down",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "strap1_l",
+   "name": "Battery strap 1 left",
+   "shape": "box",
+   "size": [
+    20.0,
+    2.0,
+    72.0
+   ],
+   "position": [
+    -45.0,
+    34.0,
+    100.8
+   ],
+   "material": "nylon",
+   "group": "power",
+   "purpose": "Holds battery down",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "strap1_r",
+   "name": "Battery strap 1 right",
+   "shape": "box",
+   "size": [
+    20.0,
+    2.0,
+    72.0
+   ],
+   "position": [
+    -45.0,
+    -34.0,
+    100.8
+   ],
+   "material": "nylon",
+   "group": "power",
+   "purpose": "Holds battery down",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "strap2_top",
+   "name": "Battery strap 2 top",
+   "shape": "box",
+   "size": [
+    20.0,
+    70.0,
+    2.0
+   ],
+   "position": [
+    25.0,
+    0.0,
+    137.8
+   ],
+   "material": "nylon",
+   "group": "power",
+   "purpose": "Holds battery down",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "strap2_l",
+   "name": "Battery strap 2 left",
+   "shape": "box",
+   "size": [
+    20.0,
+    2.0,
+    72.0
+   ],
+   "position": [
+    25.0,
+    34.0,
+    100.8
+   ],
+   "material": "nylon",
+   "group": "power",
+   "purpose": "Holds battery down",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "strap2_r",
+   "name": "Battery strap 2 right",
+   "shape": "box",
+   "size": [
+    20.0,
+    2.0,
+    72.0
+   ],
+   "position": [
+    25.0,
+    -34.0,
+    100.8
+   ],
+   "material": "nylon",
+   "group": "power",
+   "purpose": "Holds battery down",
+   "color": "#c0392b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "xt90",
+   "name": "XT90 anti-spark connector",
+   "shape": "box",
+   "size": [
+    22.0,
+    16.0,
+    10.0
+   ],
+   "position": [
+    -20.0,
+    50.0,
+    67.8
+   ],
+   "material": "nylon",
+   "group": "power",
+   "purpose": "Main power connector",
+   "color": "#f1c40f",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "batt_cable",
+   "name": "Battery pigtail",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 9.0,
+   "axis": "y",
+   "position": [
+    -20.0,
+    37.5,
+    70.0
    ],
    "material": "copper",
    "look": "cable",
    "group": "power",
-   "purpose": "Battery to ESC power",
+   "purpose": "Battery to XT90",
+   "color": "#b71c1c",
    "rotation": [
     0.0,
     0.0,
@@ -593,22 +1891,204 @@
    "fill": 1.0
   },
   {
-   "id": "gimbal",
-   "name": "2-axis gimbal",
+   "id": "balance",
+   "name": "Balance lead plug",
    "shape": "box",
    "size": [
-    60.0,
-    60.0,
-    30.0
+    14.0,
+    4.0,
+    8.0
    ],
    "position": [
+    -10.0,
+    -35.0,
+    125.0
+   ],
+   "material": "nylon",
+   "group": "power",
+   "purpose": "Cell balancing connector",
+   "color": "#fafafa",
+   "rotation": [
     0.0,
     0.0,
-    -15.0
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lead",
+   "name": "Battery lead 10AWG",
+   "shape": "cylinder",
+   "radius": 1.3,
+   "length": 150.0,
+   "axis": "x",
+   "position": [
+    0.0,
+    30.0,
+    34.1
+   ],
+   "material": "copper",
+   "look": "cable",
+   "group": "power",
+   "purpose": "Battery to ESC power",
+   "color": "#b71c1c",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "damper_plate",
+   "name": "Gimbal damper plate",
+   "shape": "box",
+   "size": [
+    70.0,
+    70.0,
+    2.0
+   ],
+   "position": [
+    10.0,
+    0.0,
+    -9.0
+   ],
+   "material": "carbon_fibre",
+   "group": "payload",
+   "purpose": "Isolated gimbal mounting plate",
+   "color": "#1c1c1c",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "layup",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "damper_1",
+   "name": "Damping ball 1",
+   "shape": "sphere",
+   "radius": 4.0,
+   "position": [
+    35.0,
+    25.0,
+    -4.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "group": "payload",
+   "purpose": "Vibration isolation",
+   "color": "#ff7043",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "damper_2",
+   "name": "Damping ball 2",
+   "shape": "sphere",
+   "radius": 4.0,
+   "position": [
+    35.0,
+    -25.0,
+    -4.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "group": "payload",
+   "purpose": "Vibration isolation",
+   "color": "#ff7043",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "damper_3",
+   "name": "Damping ball 3",
+   "shape": "sphere",
+   "radius": 4.0,
+   "position": [
+    -15.0,
+    25.0,
+    -4.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "group": "payload",
+   "purpose": "Vibration isolation",
+   "color": "#ff7043",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "damper_4",
+   "name": "Damping ball 4",
+   "shape": "sphere",
+   "radius": 4.0,
+   "position": [
+    -15.0,
+    -25.0,
+    -4.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "group": "payload",
+   "purpose": "Vibration isolation",
+   "color": "#ff7043",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "gimbal",
+   "name": "Gimbal yaw motor",
+   "shape": "cylinder",
+   "radius": 18.0,
+   "length": 18.0,
+   "axis": "z",
+   "position": [
+    10.0,
+    0.0,
+    -19.0
    ],
    "material": "aluminium",
    "group": "payload",
-   "purpose": "Keeps camera nadir-pointing",
+   "purpose": "Keeps camera nadir-pointing (yaw axis)",
+   "color": "#3b3b3b",
    "specs": {
     "power": "5"
    },
@@ -622,22 +2102,241 @@
    "fill": 1.0
   },
   {
+   "id": "yaw_arm",
+   "name": "Gimbal yaw arm",
+   "shape": "box",
+   "size": [
+    78.0,
+    14.0,
+    6.0
+   ],
+   "position": [
+    -22.0,
+    0.0,
+    -31.0
+   ],
+   "material": "aluminium",
+   "group": "payload",
+   "purpose": "Links yaw to roll stage",
+   "color": "#3b3b3b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.5
+  },
+  {
+   "id": "yaw_drop",
+   "name": "Gimbal yaw drop link",
+   "shape": "box",
+   "size": [
+    14.0,
+    14.0,
+    36.0
+   ],
+   "position": [
+    -54.0,
+    0.0,
+    -52.0
+   ],
+   "material": "aluminium",
+   "group": "payload",
+   "purpose": "Drops to roll motor",
+   "color": "#3b3b3b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.4
+  },
+  {
+   "id": "roll_motor",
+   "name": "Gimbal roll motor",
+   "shape": "cylinder",
+   "radius": 15.0,
+   "length": 16.0,
+   "axis": "x",
+   "position": [
+    -54.0,
+    0.0,
+    -85.0
+   ],
+   "material": "aluminium",
+   "group": "payload",
+   "purpose": "Roll stabilisation",
+   "color": "#2b2b2b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "roll_frame",
+   "name": "Gimbal roll crossbar",
+   "shape": "box",
+   "size": [
+    6.0,
+    106.0,
+    20.0
+   ],
+   "position": [
+    -43.0,
+    0.0,
+    -85.0
+   ],
+   "material": "aluminium",
+   "group": "payload",
+   "purpose": "Roll frame carrying pitch stage",
+   "color": "#3b3b3b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.5
+  },
+  {
+   "id": "side_arm_l",
+   "name": "Gimbal side arm left",
+   "shape": "box",
+   "size": [
+    65.0,
+    6.0,
+    20.0
+   ],
+   "position": [
+    -7.5,
+    50.0,
+    -85.0
+   ],
+   "material": "aluminium",
+   "group": "payload",
+   "purpose": "Holds pitch motor",
+   "color": "#3b3b3b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.5
+  },
+  {
+   "id": "side_arm_r",
+   "name": "Gimbal side arm right",
+   "shape": "box",
+   "size": [
+    65.0,
+    6.0,
+    20.0
+   ],
+   "position": [
+    -7.5,
+    -50.0,
+    -85.0
+   ],
+   "material": "aluminium",
+   "group": "payload",
+   "purpose": "Holds pitch bearing",
+   "color": "#3b3b3b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.5
+  },
+  {
+   "id": "pitch_motor_l",
+   "name": "Gimbal pitch motor",
+   "shape": "cylinder",
+   "radius": 14.0,
+   "length": 12.0,
+   "axis": "y",
+   "position": [
+    15.0,
+    41.0,
+    -85.0
+   ],
+   "material": "aluminium",
+   "group": "payload",
+   "purpose": "Pitch stabilisation",
+   "color": "#2b2b2b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pitch_bearing_r",
+   "name": "Gimbal pitch bearing",
+   "shape": "cylinder",
+   "radius": 14.0,
+   "length": 12.0,
+   "axis": "y",
+   "position": [
+    15.0,
+    -41.0,
+    -85.0
+   ],
+   "material": "aluminium",
+   "group": "payload",
+   "purpose": "Pitch pivot",
+   "color": "#2b2b2b",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
    "id": "camera",
    "name": "Survey camera 300 g",
    "shape": "box",
    "size": [
-    100.0,
+    80.0,
     70.0,
-    80.0
+    60.0
    ],
    "position": [
+    15.0,
     0.0,
-    0.0,
-    -70.0
+    -85.0
    ],
    "material": "electronics",
    "group": "payload",
    "purpose": "RGB/multispectral mapping imagery",
+   "color": "#2d2d2d",
    "specs": {
     "power": "6",
     "mass_g": "300"
@@ -652,21 +2351,187 @@
    "fill": 1.0
   },
   {
+   "id": "lens",
+   "name": "Camera lens",
+   "shape": "cylinder",
+   "radius": 18.0,
+   "length": 25.0,
+   "axis": "z",
+   "position": [
+    25.0,
+    0.0,
+    -127.5
+   ],
+   "material": "aluminium",
+   "group": "payload",
+   "purpose": "Nadir mapping lens",
+   "color": "#111111",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.5
+  },
+  {
+   "id": "lens_glass",
+   "name": "Lens front element",
+   "shape": "cylinder",
+   "radius": 15.0,
+   "length": 1.0,
+   "axis": "z",
+   "position": [
+    25.0,
+    0.0,
+    -140.5
+   ],
+   "material": "acrylic",
+   "look": "glass",
+   "group": "payload",
+   "purpose": "Optical window",
+   "color": "#5d6d7e",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "laser_cut",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lclamp_fl",
+   "name": "Leg clamp FL",
+   "shape": "box",
+   "size": [
+    44.0,
+    44.0,
+    12.0
+   ],
+   "position": [
+    70.0,
+    62.0,
+    -6.0
+   ],
+   "material": "aluminium",
+   "group": "landing_gear",
+   "purpose": "Clamps leg under bottom plate",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.35
+  },
+  {
+   "id": "lclamp_fr",
+   "name": "Leg clamp FR",
+   "shape": "box",
+   "size": [
+    44.0,
+    44.0,
+    12.0
+   ],
+   "position": [
+    70.0,
+    -62.0,
+    -6.0
+   ],
+   "material": "aluminium",
+   "group": "landing_gear",
+   "purpose": "Clamps leg under bottom plate",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.35
+  },
+  {
+   "id": "lclamp_rl",
+   "name": "Leg clamp RL",
+   "shape": "box",
+   "size": [
+    44.0,
+    44.0,
+    12.0
+   ],
+   "position": [
+    -70.0,
+    62.0,
+    -6.0
+   ],
+   "material": "aluminium",
+   "group": "landing_gear",
+   "purpose": "Clamps leg under bottom plate",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.35
+  },
+  {
+   "id": "lclamp_rr",
+   "name": "Leg clamp RR",
+   "shape": "box",
+   "size": [
+    44.0,
+    44.0,
+    12.0
+   ],
+   "position": [
+    -70.0,
+    -62.0,
+    -6.0
+   ],
+   "material": "aluminium",
+   "group": "landing_gear",
+   "purpose": "Clamps leg under bottom plate",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.35
+  },
+  {
    "id": "leg_fl",
    "name": "Landing leg front-left",
    "shape": "tube",
-   "radius": 18.4,
-   "inner_radius": 15.12,
+   "radius": 18.892,
+   "inner_radius": 14.63,
    "length": 180.0,
    "axis": "z",
    "position": [
-    60.0,
+    70.0,
     62.0,
     -90.0
    ],
    "material": "carbon_fibre",
    "group": "landing_gear",
    "purpose": "Takes landing impact",
+   "color": "#1a1a1a",
    "rotation": [
     0.0,
     0.0,
@@ -682,17 +2547,18 @@
    "name": "Landing leg front-right",
    "shape": "tube",
    "radius": 18.4,
-   "inner_radius": 15.12,
+   "inner_radius": 14.63,
    "length": 180.0,
    "axis": "z",
    "position": [
-    60.0,
+    70.0,
     -62.0,
     -90.0
    ],
    "material": "carbon_fibre",
    "group": "landing_gear",
    "purpose": "Takes landing impact",
+   "color": "#1a1a1a",
    "rotation": [
     0.0,
     0.0,
@@ -708,17 +2574,18 @@
    "name": "Landing leg rear-left",
    "shape": "tube",
    "radius": 18.4,
-   "inner_radius": 15.12,
+   "inner_radius": 14.63,
    "length": 180.0,
    "axis": "z",
    "position": [
-    -60.0,
+    -70.0,
     62.0,
     -90.0
    ],
    "material": "carbon_fibre",
    "group": "landing_gear",
    "purpose": "Takes landing impact",
+   "color": "#1a1a1a",
    "rotation": [
     0.0,
     0.0,
@@ -734,17 +2601,18 @@
    "name": "Landing leg rear-right",
    "shape": "tube",
    "radius": 18.4,
-   "inner_radius": 15.12,
+   "inner_radius": 14.63,
    "length": 180.0,
    "axis": "z",
    "position": [
-    -60.0,
+    -70.0,
     -62.0,
     -90.0
    ],
    "material": "carbon_fibre",
    "group": "landing_gear",
    "purpose": "Takes landing impact",
+   "color": "#1a1a1a",
    "rotation": [
     0.0,
     0.0,
@@ -754,6 +2622,118 @@
    "process": "layup",
    "specs": {},
    "fill": 1.0
+  },
+  {
+   "id": "tee_fl",
+   "name": "Skid tee FL",
+   "shape": "box",
+   "size": [
+    46.0,
+    40.0,
+    24.0
+   ],
+   "position": [
+    70.0,
+    62.0,
+    -188.0
+   ],
+   "material": "aluminium",
+   "group": "landing_gear",
+   "purpose": "Joins leg to skid",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.3
+  },
+  {
+   "id": "tee_fr",
+   "name": "Skid tee FR",
+   "shape": "box",
+   "size": [
+    46.0,
+    40.0,
+    24.0
+   ],
+   "position": [
+    70.0,
+    -62.0,
+    -188.0
+   ],
+   "material": "aluminium",
+   "group": "landing_gear",
+   "purpose": "Joins leg to skid",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.3
+  },
+  {
+   "id": "tee_rl",
+   "name": "Skid tee RL",
+   "shape": "box",
+   "size": [
+    46.0,
+    40.0,
+    24.0
+   ],
+   "position": [
+    -70.0,
+    62.0,
+    -188.0
+   ],
+   "material": "aluminium",
+   "group": "landing_gear",
+   "purpose": "Joins leg to skid",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.3
+  },
+  {
+   "id": "tee_rr",
+   "name": "Skid tee RR",
+   "shape": "box",
+   "size": [
+    46.0,
+    40.0,
+    24.0
+   ],
+   "position": [
+    -70.0,
+    -62.0,
+    -188.0
+   ],
+   "material": "aluminium",
+   "group": "landing_gear",
+   "purpose": "Joins leg to skid",
+   "color": "#9aa0a6",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 0.3
   },
   {
    "id": "skid_l",
@@ -771,6 +2751,7 @@
    "material": "carbon_fibre",
    "group": "landing_gear",
    "purpose": "Spreads landing load, stable on soft soil",
+   "color": "#1a1a1a",
    "rotation": [
     0.0,
     0.0,
@@ -797,6 +2778,7 @@
    "material": "carbon_fibre",
    "group": "landing_gear",
    "purpose": "Spreads landing load, stable on soft soil",
+   "color": "#1a1a1a",
    "rotation": [
     0.0,
     0.0,
@@ -806,72 +2788,266 @@
    "process": "layup",
    "specs": {},
    "fill": 1.0
+  },
+  {
+   "id": "cap_lf",
+   "name": "Skid end cap L front",
+   "shape": "cylinder",
+   "radius": 14.0,
+   "length": 10.0,
+   "axis": "x",
+   "position": [
+    155.0,
+    62.0,
+    -194.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "group": "landing_gear",
+   "purpose": "Protects skid end",
+   "color": "#111111",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cap_lr",
+   "name": "Skid end cap L rear",
+   "shape": "cylinder",
+   "radius": 14.0,
+   "length": 10.0,
+   "axis": "x",
+   "position": [
+    -155.0,
+    62.0,
+    -194.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "group": "landing_gear",
+   "purpose": "Protects skid end",
+   "color": "#111111",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cap_rf",
+   "name": "Skid end cap R front",
+   "shape": "cylinder",
+   "radius": 14.0,
+   "length": 10.0,
+   "axis": "x",
+   "position": [
+    155.0,
+    -62.0,
+    -194.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "group": "landing_gear",
+   "purpose": "Protects skid end",
+   "color": "#111111",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cap_rr",
+   "name": "Skid end cap R rear",
+   "shape": "cylinder",
+   "radius": 14.0,
+   "length": 10.0,
+   "axis": "x",
+   "position": [
+    -155.0,
+    -62.0,
+    -194.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "group": "landing_gear",
+   "purpose": "Protects skid end",
+   "color": "#111111",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
   }
  ],
  "assembly": [
   {
    "parts": [
     "plate_bot",
+    "standoff_1",
+    "standoff_2",
+    "standoff_3",
+    "standoff_4",
     "arm_px",
     "arm_nx",
     "arm_py",
     "arm_ny",
+    "clamp_px",
+    "clamp_nx",
+    "clamp_py",
+    "clamp_ny",
     "plate_top"
    ],
-   "action": "Clamp the four arms between the centre plates with M3 bolts and arm clamps"
+   "action": "Clamp the four arms between the centre plates with alloy arm clamps and M3 bolts; fit corner standoffs"
   },
   {
    "parts": [
+    "mmount_px",
+    "mmount_nx",
+    "mmount_py",
+    "mmount_ny",
     "mot_px",
     "mot_nx",
     "mot_py",
-    "mot_ny"
+    "mot_ny",
+    "bell_px",
+    "bell_nx",
+    "bell_py",
+    "bell_ny"
    ],
-   "action": "Bolt motors to the arm-tip mounts; alternate CW/CCW"
+   "action": "Clamp motor mounts to arm tips and bolt motors on; alternate CW/CCW"
+  },
+  {
+   "parts": [
+    "led_px",
+    "led_nx",
+    "led_py",
+    "led_ny"
+   ],
+   "action": "Stick nav LEDs under the arm tips and route leads inside the arms"
   },
   {
    "parts": [
     "esc",
     "fc",
     "rx",
-    "gps_mast",
-    "gps",
     "lead"
    ],
-   "action": "Mount ESC and FC on soft standoffs on the top plate; wire the battery lead; fit the GPS mast"
+   "action": "Mount ESC and FC on soft standoffs on the top plate; wire the battery lead and radio"
   },
   {
    "parts": [
-    "battery"
+    "canopy",
+    "status_led",
+    "ant_base_l",
+    "ant_base_r",
+    "ant_l",
+    "ant_r",
+    "gps_base",
+    "gps_mast",
+    "gps"
    ],
-   "action": "Strap the battery on the top plate over the CG"
+   "action": "Fit the canopy; install antenna bulkheads and dipoles, status LED and the folding GPS mast"
   },
   {
    "parts": [
+    "tray",
+    "battery",
+    "strap1_top",
+    "strap1_l",
+    "strap1_r",
+    "strap2_top",
+    "strap2_l",
+    "strap2_r",
+    "xt90",
+    "batt_cable",
+    "balance"
+   ],
+   "action": "Place the battery on the tray over the CG, cinch both straps, connect XT90"
+  },
+  {
+   "parts": [
+    "damper_plate",
+    "damper_1",
+    "damper_2",
+    "damper_3",
+    "damper_4",
     "gimbal",
-    "camera"
+    "yaw_arm",
+    "yaw_drop",
+    "roll_motor",
+    "roll_frame",
+    "side_arm_l",
+    "side_arm_r",
+    "pitch_motor_l",
+    "pitch_bearing_r",
+    "camera",
+    "lens",
+    "lens_glass"
    ],
-   "action": "Hang the gimbal from the bottom plate on damping balls; fit the camera"
+   "action": "Hang the damper plate on four damping balls; mount the 3-axis gimbal and balance the camera"
   },
   {
    "parts": [
+    "lclamp_fl",
+    "lclamp_fr",
+    "lclamp_rl",
+    "lclamp_rr",
     "leg_fl",
     "leg_fr",
     "leg_rl",
     "leg_rr",
+    "tee_fl",
+    "tee_fr",
+    "tee_rl",
+    "tee_rr",
     "skid_l",
-    "skid_r"
+    "skid_r",
+    "cap_lf",
+    "cap_lr",
+    "cap_rf",
+    "cap_rr"
    ],
-   "action": "Fit legs in clamps under the bottom plate and join to the skids with T-pieces"
+   "action": "Fit legs in clamps under the bottom plate, join to skids with tees, push on end caps"
   },
   {
    "parts": [
     "prop_px",
     "prop_nx",
     "prop_py",
-    "prop_ny"
+    "prop_ny",
+    "blade_px_a",
+    "blade_px_b",
+    "blade_nx_a",
+    "blade_nx_b",
+    "blade_py_a",
+    "blade_py_b",
+    "blade_ny_a",
+    "blade_ny_b",
+    "nut_px",
+    "nut_nx",
+    "nut_py",
+    "nut_ny"
    ],
-   "action": "Fit props last and check rotation directions"
+   "action": "Fit prop hubs and blades last, torque the nuts and check rotation directions"
   }
  ],
  "scenarios": [
@@ -899,29 +3075,29 @@
   },
   {
    "id": "hard_landing",
-   "title": "Hard landing 0.5 m (3.1 m/s) tilted onto one skid: one leg carries half the aircraft",
+   "title": "Hard landing 0.5 m (3.1 m/s) tilted onto one skid: one leg carries half the 4.14 kg aircraft",
    "type": "drop",
    "part": "leg_fl",
    "height": 0.5,
-   "mass": 2.0,
+   "mass": 2.07,
    "min_safety_factor": 1.5
   },
   {
    "id": "skid_landing",
-   "title": "Level hard landing 0.5 m on a rock mid-span: one skid carries half the aircraft",
+   "title": "Level hard landing 0.5 m on a rock mid-span: one skid carries half the 4.14 kg aircraft",
    "type": "drop",
    "part": "skid_l",
    "height": 0.5,
-   "mass": 2.0,
+   "mass": 2.07,
    "support": "simply_supported",
    "min_safety_factor": 1.5
   },
   {
    "id": "endurance",
-   "title": "25 min hover at 3.88 kg (455 W x 25 min = 190 Wh, as 7.9 W over 24 h) with 20% reserve",
+   "title": "25 min hover at 4.14 kg (502 W x 25 min = 209 Wh, as 8.7 W over 24 h) with 20% reserve",
    "type": "power",
    "part": "battery",
-   "load": 7.9,
+   "load": 8.7,
    "days": 1,
    "min_charge": 0.2
   },
@@ -940,17 +3116,17 @@
   "nodes": [
    {
     "id": "bat",
-    "label": "6S battery pack",
+    "label": "6S3P 21700 pack 324 Wh",
     "kind": "power"
    },
    {
-    "id": "pdb",
-    "label": "Power lead / PDB",
+    "id": "xt90",
+    "label": "XT90 + 10AWG lead",
     "kind": "power"
    },
    {
     "id": "esc",
-    "label": "4-in-1 ESC",
+    "label": "4-in-1 ESC 60A",
     "kind": "component"
    },
    {
@@ -960,7 +3136,7 @@
    },
    {
     "id": "gps",
-    "label": "GPS / compass",
+    "label": "GNSS/compass on mast",
     "kind": "component"
    },
    {
@@ -969,23 +3145,38 @@
     "kind": "component"
    },
    {
+    "id": "ant",
+    "label": "2x dipole antennas",
+    "kind": "component"
+   },
+   {
+    "id": "led",
+    "label": "Nav LEDs",
+    "kind": "component"
+   },
+   {
     "id": "mot",
-    "label": "4\u00d7 motors + 15in props",
+    "label": "4x 4114 motors + 15in props",
     "kind": "component"
    },
    {
     "id": "frame",
-    "label": "Carbon frame + arms",
+    "label": "Carbon plates, arms, canopy",
     "kind": "component"
    },
    {
     "id": "gear",
-    "label": "Landing skids",
+    "label": "Legs, tees, skids",
+    "kind": "component"
+   },
+   {
+    "id": "gim",
+    "label": "3-axis gimbal on dampers",
     "kind": "component"
    },
    {
     "id": "cam",
-    "label": "Survey camera 300 g + gimbal",
+    "label": "Survey camera 300 g",
     "kind": "component"
    },
    {
@@ -995,36 +3186,41 @@
    },
    {
     "id": "air",
-    "label": "Air / wind gusts",
+    "label": "Air / gusts",
     "kind": "environment"
    },
    {
     "id": "sat",
     "label": "GNSS satellites",
     "kind": "signal"
+   },
+   {
+    "id": "gcs",
+    "label": "Pilot / ground station",
+    "kind": "signal"
    }
   ],
   "edges": [
    {
     "from": "bat",
-    "to": "pdb",
+    "to": "xt90",
     "kind": "power",
     "label": "22 V, up to 60 A"
    },
    {
-    "from": "pdb",
+    "from": "xt90",
     "to": "esc",
     "kind": "power"
    },
    {
-    "from": "pdb",
+    "from": "esc",
     "to": "fc",
     "kind": "power",
     "label": "5 V BEC"
    },
    {
-    "from": "pdb",
-    "to": "cam",
+    "from": "esc",
+    "to": "gim",
     "kind": "power",
     "label": "12 V"
    },
@@ -1041,10 +3237,20 @@
     "label": "3-phase"
    },
    {
+    "from": "fc",
+    "to": "led",
+    "kind": "data"
+   },
+   {
     "from": "mot",
     "to": "frame",
     "kind": "mechanical",
-    "label": "thrust ~25 N/arm max"
+    "label": "thrust up to 26 N/arm"
+   },
+   {
+    "from": "mot",
+    "to": "frame",
+    "kind": "heat"
    },
    {
     "from": "frame",
@@ -1052,10 +3258,22 @@
     "kind": "mechanical"
    },
    {
+    "from": "frame",
+    "to": "gim",
+    "kind": "mechanical",
+    "label": "damping balls"
+   },
+   {
+    "from": "gim",
+    "to": "cam",
+    "kind": "mechanical",
+    "label": "nadir hold"
+   },
+   {
     "from": "gnd",
     "to": "gear",
     "kind": "mechanical",
-    "label": "landing impact"
+    "label": "landing impact 3.1 m/s"
    },
    {
     "from": "air",
@@ -1073,6 +3291,16 @@
     "kind": "data"
    },
    {
+    "from": "gcs",
+    "to": "ant",
+    "kind": "rf"
+   },
+   {
+    "from": "ant",
+    "to": "rx",
+    "kind": "rf"
+   },
+   {
     "from": "rx",
     "to": "fc",
     "kind": "data"
@@ -1082,11 +3310,6 @@
     "to": "cam",
     "kind": "data",
     "label": "trigger + geotag"
-   },
-   {
-    "from": "mot",
-    "to": "frame",
-    "kind": "heat"
    }
   ]
  }

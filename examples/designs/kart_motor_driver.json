@@ -1,83 +1,26 @@
 {
- "name": "24 V 20 A Go-Kart Motor Driver",
- "description": "H-bridge brushed DC motor driver for an electric go-kart. Four low-Rds(on) MOSFETs on a 2 oz PCB with copper bus bars, sealed in a die-cast aluminium box; MOSFETs are clamped through a thermal pad to the lid, which carries an external finned heatsink. Rated 24 V, 20 A continuous at 40 \u00b0C ambient.",
+ "name": "KD-2420 Go-Kart BLDC Motor Driver PCB",
+ "description": "Bare 24 V / 20 A three-phase BLDC motor driver board for an electric go-kart: 160 x 100 mm 4-layer FR4 board, six TO-220 MOSFETs bolted to a black anodised finned heat sink along the top edge, copper DC+ bus bar, bulk electrolytics, MCU, gate drivers, CAN, status LEDs and screw terminals, on four brass standoffs.",
  "parts": [
   {
-   "id": "enclosure",
-   "name": "Die-cast enclosure (light grey powder coat)",
+   "id": "pcb",
+   "name": "4-layer FR4 PCB 160x100x1.6",
    "shape": "box",
    "size": [
     160.0,
-    130.0,
-    80.0
-   ],
-   "wall": 3.0,
-   "position": [
-    0.0,
-    0.0,
-    40.0
-   ],
-   "material": "aluminium",
-   "group": "housing",
-   "purpose": "Sealed IP65 housing; lid conducts MOSFET heat to heatsink",
-   "rotation": [
-    0.0,
-    0.0,
-    0.0
-   ],
-   "quantity": 1,
-   "process": "machine",
-   "specs": {},
-   "fill": 1.0
-  },
-  {
-   "id": "heatsink",
-   "name": "Finned heatsink",
-   "shape": "heatsink",
-   "base": [
-    120.0,
     100.0,
-    6.0
-   ],
-   "fin_height": 30.0,
-   "fin_thickness": 1.5,
-   "n_fins": 12,
-   "position": [
-    0.0,
-    0.0,
-    98.0
-   ],
-   "material": "aluminium",
-   "group": "thermal",
-   "purpose": "Rejects MOSFET losses to kart air",
-   "rotation": [
-    0.0,
-    0.0,
-    0.0
-   ],
-   "quantity": 1,
-   "process": "machine",
-   "specs": {},
-   "fill": 1.0
-  },
-  {
-   "id": "pcb",
-   "name": "Driver PCB (FR4, 2 oz Cu)",
-   "shape": "box",
-   "size": [
-    120.0,
-    90.0,
     1.6
    ],
    "position": [
     0.0,
     0.0,
-    70.2
+    0.8
    ],
    "material": "electronics",
    "look": "pcb",
-   "group": "electronics",
-   "purpose": "Carries power stage and control",
+   "color": "#1e6b35",
+   "group": "board",
+   "purpose": "Carries all components and 2 oz copper power planes",
    "rotation": [
     0.0,
     0.0,
@@ -89,24 +32,270 @@
    "fill": 1.0
   },
   {
-   "id": "q1",
-   "name": "MOSFET Q1 (40 V, 2 m\u03a9, D2PAK)",
-   "shape": "box",
-   "size": [
-    16.0,
-    20.0,
-    6.0
+   "id": "so1",
+   "name": "Brass standoff M3x10",
+   "shape": "tube",
+   "radius": 3.0,
+   "inner_radius": 1.6,
+   "length": 10.0,
+   "position": [
+    -75.0,
+    -45.0,
+    -5.0
+   ],
+   "material": "brass",
+   "color": "#c9a227",
+   "group": "mounting",
+   "purpose": "Mounts board to kart chassis plate",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "so2",
+   "name": "Brass standoff M3x10",
+   "shape": "tube",
+   "radius": 3.0,
+   "inner_radius": 1.6,
+   "length": 10.0,
+   "position": [
+    75.0,
+    -45.0,
+    -5.0
+   ],
+   "material": "brass",
+   "color": "#c9a227",
+   "group": "mounting",
+   "purpose": "Mounts board to kart chassis plate",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "so3",
+   "name": "Brass standoff M3x10",
+   "shape": "tube",
+   "radius": 3.0,
+   "inner_radius": 1.6,
+   "length": 10.0,
+   "position": [
+    -75.0,
+    45.0,
+    -5.0
+   ],
+   "material": "brass",
+   "color": "#c9a227",
+   "group": "mounting",
+   "purpose": "Mounts board to kart chassis plate",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "so4",
+   "name": "Brass standoff M3x10",
+   "shape": "tube",
+   "radius": 3.0,
+   "inner_radius": 1.6,
+   "length": 10.0,
+   "position": [
+    75.0,
+    45.0,
+    -5.0
+   ],
+   "material": "brass",
+   "color": "#c9a227",
+   "group": "mounting",
+   "purpose": "Mounts board to kart chassis plate",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ms1",
+   "name": "M3 pan-head screw",
+   "shape": "cylinder",
+   "radius": 2.75,
+   "length": 2.5,
+   "position": [
+    -75.0,
+    -45.0,
+    2.85
+   ],
+   "material": "stainless",
+   "color": "#b8bcc0",
+   "group": "mounting",
+   "purpose": "Clamps board to standoff",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ms2",
+   "name": "M3 pan-head screw",
+   "shape": "cylinder",
+   "radius": 2.75,
+   "length": 2.5,
+   "position": [
+    75.0,
+    -45.0,
+    2.85
+   ],
+   "material": "stainless",
+   "color": "#b8bcc0",
+   "group": "mounting",
+   "purpose": "Clamps board to standoff",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ms3",
+   "name": "M3 pan-head screw",
+   "shape": "cylinder",
+   "radius": 2.75,
+   "length": 2.5,
+   "position": [
+    -75.0,
+    45.0,
+    2.85
+   ],
+   "material": "stainless",
+   "color": "#b8bcc0",
+   "group": "mounting",
+   "purpose": "Clamps board to standoff",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ms4",
+   "name": "M3 pan-head screw",
+   "shape": "cylinder",
+   "radius": 2.75,
+   "length": 2.5,
+   "position": [
+    75.0,
+    45.0,
+    2.85
+   ],
+   "material": "stainless",
+   "color": "#b8bcc0",
+   "group": "mounting",
+   "purpose": "Clamps board to standoff",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "hs",
+   "name": "Black anodised extruded heat sink 140 mm",
+   "shape": "heatsink",
+   "base": [
+    140.0,
+    30.0,
+    5.0
+   ],
+   "fin_height": 25.0,
+   "fin_thickness": 1.5,
+   "n_fins": 19,
+   "rotation": [
+    -90.0,
+    0.0,
+    0.0
    ],
    "position": [
-    -45.0,
-    -10.0,
-    74.0
+    0.0,
+    61.0,
+    16.6
+   ],
+   "material": "aluminium",
+   "color": "#141414",
+   "group": "thermal",
+   "purpose": "Dissipates MOSFET conduction and switching losses",
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "q1",
+   "name": "MOSFET Q1 IRFB7437 (TO-220) body",
+   "shape": "box",
+   "size": [
+    10.0,
+    4.5,
+    9.0
+   ],
+   "position": [
+    -55.0,
+    42.45,
+    9.5
    ],
    "material": "electronics",
-   "group": "power",
-   "purpose": "High side A",
+   "color": "#1a1a1a",
+   "group": "bridge",
+   "purpose": "Phase U high side",
    "specs": {
-    "power": "3"
+    "power": "1.67",
+    "vds": "40",
+    "rds_on_mohm": "1.8"
    },
    "rotation": [
     0.0,
@@ -119,23 +308,26 @@
   },
   {
    "id": "q2",
-   "name": "MOSFET Q2",
+   "name": "MOSFET Q2 IRFB7437 (TO-220) body",
    "shape": "box",
    "size": [
-    16.0,
-    20.0,
-    6.0
+    10.0,
+    4.5,
+    9.0
    ],
    "position": [
-    -15.0,
-    -10.0,
-    74.0
+    -33.0,
+    42.45,
+    9.5
    ],
    "material": "electronics",
-   "group": "power",
-   "purpose": "Low side A",
+   "color": "#1a1a1a",
+   "group": "bridge",
+   "purpose": "Phase U low side",
    "specs": {
-    "power": "3"
+    "power": "1.67",
+    "vds": "40",
+    "rds_on_mohm": "1.8"
    },
    "rotation": [
     0.0,
@@ -148,23 +340,26 @@
   },
   {
    "id": "q3",
-   "name": "MOSFET Q3",
+   "name": "MOSFET Q3 IRFB7437 (TO-220) body",
    "shape": "box",
    "size": [
-    16.0,
-    20.0,
-    6.0
+    10.0,
+    4.5,
+    9.0
    ],
    "position": [
-    15.0,
-    -10.0,
-    74.0
+    -11.0,
+    42.45,
+    9.5
    ],
    "material": "electronics",
-   "group": "power",
-   "purpose": "High side B",
+   "color": "#1a1a1a",
+   "group": "bridge",
+   "purpose": "Phase V high side",
    "specs": {
-    "power": "3"
+    "power": "1.67",
+    "vds": "40",
+    "rds_on_mohm": "1.8"
    },
    "rotation": [
     0.0,
@@ -177,50 +372,971 @@
   },
   {
    "id": "q4",
-   "name": "MOSFET Q4",
+   "name": "MOSFET Q4 IRFB7437 (TO-220) body",
    "shape": "box",
    "size": [
-    16.0,
+    10.0,
+    4.5,
+    9.0
+   ],
+   "position": [
+    11.0,
+    42.45,
+    9.5
+   ],
+   "material": "electronics",
+   "color": "#1a1a1a",
+   "group": "bridge",
+   "purpose": "Phase V low side",
+   "specs": {
+    "power": "1.67",
+    "vds": "40",
+    "rds_on_mohm": "1.8"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "q5",
+   "name": "MOSFET Q5 IRFB7437 (TO-220) body",
+   "shape": "box",
+   "size": [
+    10.0,
+    4.5,
+    9.0
+   ],
+   "position": [
+    33.0,
+    42.45,
+    9.5
+   ],
+   "material": "electronics",
+   "color": "#1a1a1a",
+   "group": "bridge",
+   "purpose": "Phase W high side",
+   "specs": {
+    "power": "1.67",
+    "vds": "40",
+    "rds_on_mohm": "1.8"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "q6",
+   "name": "MOSFET Q6 IRFB7437 (TO-220) body",
+   "shape": "box",
+   "size": [
+    10.0,
+    4.5,
+    9.0
+   ],
+   "position": [
+    55.0,
+    42.45,
+    9.5
+   ],
+   "material": "electronics",
+   "color": "#1a1a1a",
+   "group": "bridge",
+   "purpose": "Phase W low side",
+   "specs": {
+    "power": "1.67",
+    "vds": "40",
+    "rds_on_mohm": "1.8"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "t1",
+   "name": "Q1 tinned copper tab",
+   "shape": "box",
+   "size": [
+    10.0,
+    1.3,
+    15.5
+   ],
+   "position": [
+    -55.0,
+    45.35,
+    12.75
+   ],
+   "material": "copper",
+   "color": "#c8c8c8",
+   "group": "bridge",
+   "purpose": "Drain tab, conducts heat into heat sink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "t2",
+   "name": "Q2 tinned copper tab",
+   "shape": "box",
+   "size": [
+    10.0,
+    1.3,
+    15.5
+   ],
+   "position": [
+    -33.0,
+    45.35,
+    12.75
+   ],
+   "material": "copper",
+   "color": "#c8c8c8",
+   "group": "bridge",
+   "purpose": "Drain tab, conducts heat into heat sink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "t3",
+   "name": "Q3 tinned copper tab",
+   "shape": "box",
+   "size": [
+    10.0,
+    1.3,
+    15.5
+   ],
+   "position": [
+    -11.0,
+    45.35,
+    12.75
+   ],
+   "material": "copper",
+   "color": "#c8c8c8",
+   "group": "bridge",
+   "purpose": "Drain tab, conducts heat into heat sink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "t4",
+   "name": "Q4 tinned copper tab",
+   "shape": "box",
+   "size": [
+    10.0,
+    1.3,
+    15.5
+   ],
+   "position": [
+    11.0,
+    45.35,
+    12.75
+   ],
+   "material": "copper",
+   "color": "#c8c8c8",
+   "group": "bridge",
+   "purpose": "Drain tab, conducts heat into heat sink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "t5",
+   "name": "Q5 tinned copper tab",
+   "shape": "box",
+   "size": [
+    10.0,
+    1.3,
+    15.5
+   ],
+   "position": [
+    33.0,
+    45.35,
+    12.75
+   ],
+   "material": "copper",
+   "color": "#c8c8c8",
+   "group": "bridge",
+   "purpose": "Drain tab, conducts heat into heat sink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "t6",
+   "name": "Q6 tinned copper tab",
+   "shape": "box",
+   "size": [
+    10.0,
+    1.3,
+    15.5
+   ],
+   "position": [
+    55.0,
+    45.35,
+    12.75
+   ],
+   "material": "copper",
+   "color": "#c8c8c8",
+   "group": "bridge",
+   "purpose": "Drain tab, conducts heat into heat sink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "l1",
+   "name": "Q1 leads (G-D-S)",
+   "shape": "box",
+   "size": [
+    8.0,
+    1.0,
+    3.4
+   ],
+   "position": [
+    -55.0,
+    42.45,
+    3.3
+   ],
+   "material": "copper",
+   "color": "#d0d0d0",
+   "group": "bridge",
+   "purpose": "Through-hole leads soldered to board",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "l2",
+   "name": "Q2 leads (G-D-S)",
+   "shape": "box",
+   "size": [
+    8.0,
+    1.0,
+    3.4
+   ],
+   "position": [
+    -33.0,
+    42.45,
+    3.3
+   ],
+   "material": "copper",
+   "color": "#d0d0d0",
+   "group": "bridge",
+   "purpose": "Through-hole leads soldered to board",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "l3",
+   "name": "Q3 leads (G-D-S)",
+   "shape": "box",
+   "size": [
+    8.0,
+    1.0,
+    3.4
+   ],
+   "position": [
+    -11.0,
+    42.45,
+    3.3
+   ],
+   "material": "copper",
+   "color": "#d0d0d0",
+   "group": "bridge",
+   "purpose": "Through-hole leads soldered to board",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "l4",
+   "name": "Q4 leads (G-D-S)",
+   "shape": "box",
+   "size": [
+    8.0,
+    1.0,
+    3.4
+   ],
+   "position": [
+    11.0,
+    42.45,
+    3.3
+   ],
+   "material": "copper",
+   "color": "#d0d0d0",
+   "group": "bridge",
+   "purpose": "Through-hole leads soldered to board",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "l5",
+   "name": "Q5 leads (G-D-S)",
+   "shape": "box",
+   "size": [
+    8.0,
+    1.0,
+    3.4
+   ],
+   "position": [
+    33.0,
+    42.45,
+    3.3
+   ],
+   "material": "copper",
+   "color": "#d0d0d0",
+   "group": "bridge",
+   "purpose": "Through-hole leads soldered to board",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "l6",
+   "name": "Q6 leads (G-D-S)",
+   "shape": "box",
+   "size": [
+    8.0,
+    1.0,
+    3.4
+   ],
+   "position": [
+    55.0,
+    42.45,
+    3.3
+   ],
+   "material": "copper",
+   "color": "#d0d0d0",
+   "group": "bridge",
+   "purpose": "Through-hole leads soldered to board",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fs1",
+   "name": "Q1 M3 clamp screw",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 2.5,
+   "rotation": [
+    90.0,
+    0.0,
+    0.0
+   ],
+   "position": [
+    -55.0,
+    43.45,
+    17.0
+   ],
+   "material": "stainless",
+   "color": "#a9adb2",
+   "group": "bridge",
+   "purpose": "Bolts MOSFET tab to heat sink",
+   "axis": "z",
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fs2",
+   "name": "Q2 M3 clamp screw",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 2.5,
+   "rotation": [
+    90.0,
+    0.0,
+    0.0
+   ],
+   "position": [
+    -33.0,
+    43.45,
+    17.0
+   ],
+   "material": "stainless",
+   "color": "#a9adb2",
+   "group": "bridge",
+   "purpose": "Bolts MOSFET tab to heat sink",
+   "axis": "z",
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fs3",
+   "name": "Q3 M3 clamp screw",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 2.5,
+   "rotation": [
+    90.0,
+    0.0,
+    0.0
+   ],
+   "position": [
+    -11.0,
+    43.45,
+    17.0
+   ],
+   "material": "stainless",
+   "color": "#a9adb2",
+   "group": "bridge",
+   "purpose": "Bolts MOSFET tab to heat sink",
+   "axis": "z",
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fs4",
+   "name": "Q4 M3 clamp screw",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 2.5,
+   "rotation": [
+    90.0,
+    0.0,
+    0.0
+   ],
+   "position": [
+    11.0,
+    43.45,
+    17.0
+   ],
+   "material": "stainless",
+   "color": "#a9adb2",
+   "group": "bridge",
+   "purpose": "Bolts MOSFET tab to heat sink",
+   "axis": "z",
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fs5",
+   "name": "Q5 M3 clamp screw",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 2.5,
+   "rotation": [
+    90.0,
+    0.0,
+    0.0
+   ],
+   "position": [
+    33.0,
+    43.45,
+    17.0
+   ],
+   "material": "stainless",
+   "color": "#a9adb2",
+   "group": "bridge",
+   "purpose": "Bolts MOSFET tab to heat sink",
+   "axis": "z",
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fs6",
+   "name": "Q6 M3 clamp screw",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 2.5,
+   "rotation": [
+    90.0,
+    0.0,
+    0.0
+   ],
+   "position": [
+    55.0,
+    43.45,
+    17.0
+   ],
+   "material": "stainless",
+   "color": "#a9adb2",
+   "group": "bridge",
+   "purpose": "Bolts MOSFET tab to heat sink",
+   "axis": "z",
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "rg1",
+   "name": "Gate resistor 10R 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    -55.0,
+    38.6,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "bridge",
+   "purpose": "Q1 gate damping",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "rg2",
+   "name": "Gate resistor 10R 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    -33.0,
+    38.6,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "bridge",
+   "purpose": "Q2 gate damping",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "rg3",
+   "name": "Gate resistor 10R 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    -11.0,
+    38.6,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "bridge",
+   "purpose": "Q3 gate damping",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "rg4",
+   "name": "Gate resistor 10R 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    11.0,
+    38.6,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "bridge",
+   "purpose": "Q4 gate damping",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "rg5",
+   "name": "Gate resistor 10R 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    33.0,
+    38.6,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "bridge",
+   "purpose": "Q5 gate damping",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "rg6",
+   "name": "Gate resistor 10R 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    55.0,
+    38.6,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "bridge",
+   "purpose": "Q6 gate damping",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "bus",
+   "name": "Copper DC+ bus bar 132x8x2",
+   "shape": "box",
+   "size": [
+    132.0,
+    8.0,
+    2.0
+   ],
+   "position": [
+    0.0,
+    33.0,
+    2.6
+   ],
+   "material": "copper",
+   "color": "#c87533",
+   "group": "power",
+   "purpose": "Carries 20 A battery current to the high-side MOSFET drains",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "shunt",
+   "name": "Current shunt 2 m\u03a9 2512 3 W",
+   "shape": "box",
+   "size": [
+    6.4,
+    3.2,
+    0.6
+   ],
+   "position": [
+    -62.0,
+    22.0,
+    1.9
+   ],
+   "material": "electronics",
+   "color": "#9a9a9a",
+   "group": "bridge",
+   "purpose": "Low-side DC current measurement",
+   "specs": {
+    "resistance_mohm": "2",
+    "power": "0.8"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "tvs",
+   "name": "TVS diode SMCJ33A",
+   "shape": "box",
+   "size": [
+    7.0,
+    6.0,
+    2.3
+   ],
+   "position": [
+    -62.0,
+    10.0,
+    2.75
+   ],
+   "material": "electronics",
+   "color": "#202020",
+   "group": "power",
+   "purpose": "Clamps battery transients from motor regen",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tb_bat",
+   "name": "Battery screw terminal 2-pos 10.16 mm",
+   "shape": "box",
+   "size": [
+    10.0,
+    10.16,
+    12.0
+   ],
+   "position": [
+    -74.0,
     20.0,
-    6.0
+    7.6
+   ],
+   "material": "nylon",
+   "color": "#2e8b3a",
+   "group": "power",
+   "purpose": "24 V battery input, 30 A rated",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tbs1",
+   "name": "Terminal screw B+",
+   "shape": "cylinder",
+   "radius": 1.8,
+   "length": 0.6,
+   "position": [
+    -74.0,
+    22.54,
+    13.9
+   ],
+   "material": "steel",
+   "color": "#bfc3c7",
+   "group": "power",
+   "purpose": "Wire clamp screw",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tbs2",
+   "name": "Terminal screw B-",
+   "shape": "cylinder",
+   "radius": 1.8,
+   "length": 0.6,
+   "position": [
+    -74.0,
+    17.46,
+    13.9
+   ],
+   "material": "steel",
+   "color": "#bfc3c7",
+   "group": "power",
+   "purpose": "Wire clamp screw",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tb_mot",
+   "name": "Motor phase screw terminal 3-pos U/V/W",
+   "shape": "box",
+   "size": [
+    10.0,
+    15.24,
+    12.0
    ],
    "position": [
-    45.0,
+    74.0,
     -10.0,
-    74.0
+    7.6
    ],
-   "material": "electronics",
-   "group": "power",
-   "purpose": "Low side B",
-   "specs": {
-    "power": "3"
-   },
+   "material": "nylon",
+   "color": "#2e8b3a",
+   "group": "bridge",
+   "purpose": "Motor phase outputs",
    "rotation": [
     0.0,
     0.0,
     0.0
    ],
    "quantity": 1,
-   "process": "buy",
+   "process": "3d_print",
+   "specs": {},
    "fill": 1.0
   },
   {
-   "id": "bus_pos",
-   "name": "+24 V bus bar",
-   "shape": "box",
-   "size": [
-    100.0,
-    8.0,
-    2.0
-   ],
+   "id": "tms1",
+   "name": "Terminal screw U",
+   "shape": "cylinder",
+   "radius": 1.8,
+   "length": 0.6,
    "position": [
-    0.0,
-    30.0,
-    72.0
+    74.0,
+    -4.92,
+    13.9
    ],
-   "material": "copper",
-   "group": "power",
-   "purpose": "Carries 20 A supply to high-side FETs",
+   "material": "steel",
+   "color": "#bfc3c7",
+   "group": "bridge",
+   "purpose": "Wire clamp screw",
+   "axis": "z",
    "rotation": [
     0.0,
     0.0,
@@ -232,22 +1348,21 @@
    "fill": 1.0
   },
   {
-   "id": "bus_neg",
-   "name": "GND bus bar",
-   "shape": "box",
-   "size": [
-    100.0,
-    8.0,
-    2.0
-   ],
+   "id": "tms2",
+   "name": "Terminal screw V",
+   "shape": "cylinder",
+   "radius": 1.8,
+   "length": 0.6,
    "position": [
-    0.0,
-    -35.0,
-    72.0
+    74.0,
+    -10.0,
+    13.9
    ],
-   "material": "copper",
-   "group": "power",
-   "purpose": "Return path from low-side FETs",
+   "material": "steel",
+   "color": "#bfc3c7",
+   "group": "bridge",
+   "purpose": "Wire clamp screw",
+   "axis": "z",
    "rotation": [
     0.0,
     0.0,
@@ -259,22 +1374,46 @@
    "fill": 1.0
   },
   {
-   "id": "cap1",
-   "name": "DC-link cap 470 \u00b5F 50 V",
+   "id": "tms3",
+   "name": "Terminal screw W",
    "shape": "cylinder",
-   "radius": 8.0,
-   "length": 25.0,
+   "radius": 1.8,
+   "length": 0.6,
    "position": [
-    -30.0,
-    30.0,
-    56.9
+    74.0,
+    -15.08,
+    13.9
+   ],
+   "material": "steel",
+   "color": "#bfc3c7",
+   "group": "bridge",
+   "purpose": "Wire clamp screw",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "c1",
+   "name": "Electrolytic 470 \u00b5F 35 V 12.5x20",
+   "shape": "cylinder",
+   "radius": 6.3,
+   "length": 20.0,
+   "position": [
+    20.0,
+    14.0,
+    11.6
    ],
    "material": "electronics",
+   "color": "#1c2b6e",
    "group": "power",
-   "purpose": "Ripple current buffer",
-   "specs": {
-    "power": "0.3"
-   },
+   "purpose": "DC-link ripple current",
    "axis": "z",
    "rotation": [
     0.0,
@@ -283,25 +1422,24 @@
    ],
    "quantity": 1,
    "process": "buy",
+   "specs": {},
    "fill": 1.0
   },
   {
-   "id": "cap2",
-   "name": "DC-link cap 470 \u00b5F 50 V",
+   "id": "c2",
+   "name": "Electrolytic 470 \u00b5F 35 V 12.5x20",
    "shape": "cylinder",
-   "radius": 8.0,
-   "length": 25.0,
+   "radius": 6.3,
+   "length": 20.0,
    "position": [
-    30.0,
-    30.0,
-    56.9
+    35.0,
+    14.0,
+    11.6
    ],
    "material": "electronics",
+   "color": "#1c2b6e",
    "group": "power",
-   "purpose": "Ripple current buffer",
-   "specs": {
-    "power": "0.3"
-   },
+   "purpose": "DC-link ripple current",
    "axis": "z",
    "rotation": [
     0.0,
@@ -310,27 +1448,185 @@
    ],
    "quantity": 1,
    "process": "buy",
+   "specs": {},
    "fill": 1.0
   },
   {
-   "id": "gate_drv",
-   "name": "H-bridge gate driver IC",
+   "id": "c3",
+   "name": "Electrolytic 470 \u00b5F 35 V 12.5x20",
+   "shape": "cylinder",
+   "radius": 6.3,
+   "length": 20.0,
+   "position": [
+    50.0,
+    14.0,
+    11.6
+   ],
+   "material": "electronics",
+   "color": "#1c2b6e",
+   "group": "power",
+   "purpose": "DC-link ripple current",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "c4",
+   "name": "Electrolytic 470 \u00b5F 35 V 12.5x20",
+   "shape": "cylinder",
+   "radius": 6.3,
+   "length": 20.0,
+   "position": [
+    65.0,
+    14.0,
+    11.6
+   ],
+   "material": "electronics",
+   "color": "#1c2b6e",
+   "group": "power",
+   "purpose": "DC-link ripple current",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "c1t",
+   "name": "C1 aluminium vent top",
+   "shape": "cylinder",
+   "radius": 5.8,
+   "length": 0.4,
+   "position": [
+    20.0,
+    14.0,
+    21.8
+   ],
+   "material": "aluminium",
+   "color": "#c0c4c8",
+   "group": "power",
+   "purpose": "Can top with pressure vent",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "c2t",
+   "name": "C2 aluminium vent top",
+   "shape": "cylinder",
+   "radius": 5.8,
+   "length": 0.4,
+   "position": [
+    35.0,
+    14.0,
+    21.8
+   ],
+   "material": "aluminium",
+   "color": "#c0c4c8",
+   "group": "power",
+   "purpose": "Can top with pressure vent",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "c3t",
+   "name": "C3 aluminium vent top",
+   "shape": "cylinder",
+   "radius": 5.8,
+   "length": 0.4,
+   "position": [
+    50.0,
+    14.0,
+    21.8
+   ],
+   "material": "aluminium",
+   "color": "#c0c4c8",
+   "group": "power",
+   "purpose": "Can top with pressure vent",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "c4t",
+   "name": "C4 aluminium vent top",
+   "shape": "cylinder",
+   "radius": 5.8,
+   "length": 0.4,
+   "position": [
+    65.0,
+    14.0,
+    21.8
+   ],
+   "material": "aluminium",
+   "color": "#c0c4c8",
+   "group": "power",
+   "purpose": "Can top with pressure vent",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "gd1",
+   "name": "Gate driver IC U2 (SOIC-16)",
    "shape": "box",
    "size": [
     10.0,
-    10.0,
-    1.5
+    7.5,
+    1.75
    ],
    "position": [
-    0.0,
-    15.0,
-    71.75
+    -20.0,
+    20.0,
+    2.475
    ],
    "material": "electronics",
+   "color": "#222222",
    "group": "control",
-   "purpose": "Drives MOSFET gates, shoot-through protection",
+   "purpose": "Drives phase U/V half-bridges with bootstrap supply",
    "specs": {
-    "power": "0.5"
+    "power": "0.3"
    },
    "rotation": [
     0.0,
@@ -339,25 +1635,84 @@
    ],
    "quantity": 1,
    "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "gd2",
+   "name": "Gate driver IC U3 (SOIC-16)",
+   "shape": "box",
+   "size": [
+    10.0,
+    7.5,
+    1.75
+   ],
+   "position": [
+    0.0,
+    20.0,
+    2.475
+   ],
+   "material": "electronics",
+   "color": "#222222",
+   "group": "control",
+   "purpose": "Drives phase W half-bridge and brake",
+   "specs": {
+    "power": "0.3"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "mcu_p",
+   "name": "MCU QFP-64 gull-wing leads",
+   "shape": "box",
+   "size": [
+    12.0,
+    12.0,
+    0.4
+   ],
+   "position": [
+    -35.0,
+    0.0,
+    1.8
+   ],
+   "material": "copper",
+   "color": "#cfcfcf",
+   "group": "control",
+   "purpose": "Lead frame of STM32 MCU",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
    "fill": 1.0
   },
   {
    "id": "mcu",
-   "name": "Microcontroller",
+   "name": "MCU STM32F303 LQFP-64 body",
    "shape": "box",
    "size": [
-    7.0,
-    7.0,
-    1.0
+    10.0,
+    10.0,
+    1.4
    ],
    "position": [
-    -30.0,
-    15.0,
-    71.5
+    -35.0,
+    0.0,
+    2.7
    ],
    "material": "electronics",
+   "color": "#262626",
    "group": "control",
-   "purpose": "PWM generation, current limit, throttle input",
+   "purpose": "Commutation, FOC control, CAN protocol",
    "specs": {
     "power": "0.2"
    },
@@ -371,49 +1726,23 @@
    "fill": 1.0
   },
   {
-   "id": "term_batt",
-   "name": "Battery terminal block",
+   "id": "xtal",
+   "name": "Crystal 8 MHz HC-49/SMD",
    "shape": "box",
    "size": [
-    10.0,
-    16.0,
-    6.0
+    11.4,
+    4.7,
+    4.2
    ],
    "position": [
-    55.0,
-    30.0,
-    74.0
-   ],
-   "material": "brass",
-   "group": "power",
-   "purpose": "M5 battery cable lugs",
-   "rotation": [
-    0.0,
-    0.0,
-    0.0
-   ],
-   "quantity": 1,
-   "process": "machine",
-   "specs": {},
-   "fill": 1.0
-  },
-  {
-   "id": "term_motor",
-   "name": "Motor terminal block",
-   "shape": "box",
-   "size": [
-    10.0,
-    16.0,
-    6.0
-   ],
-   "position": [
-    -55.0,
     -35.0,
-    74.0
+    -12.0,
+    3.7
    ],
-   "material": "brass",
-   "group": "power",
-   "purpose": "M5 motor cable lugs",
+   "material": "stainless",
+   "color": "#d4d6d8",
+   "group": "control",
+   "purpose": "MCU clock reference",
    "rotation": [
     0.0,
     0.0,
@@ -425,19 +1754,221 @@
    "fill": 1.0
   },
   {
-   "id": "so1",
-   "name": "Standoff",
-   "shape": "cylinder",
-   "radius": 3.0,
-   "length": 66.4,
+   "id": "cx1",
+   "name": "Crystal load cap 20 pF 0603",
+   "shape": "box",
+   "size": [
+    1.6,
+    0.8,
+    0.8
+   ],
+   "position": [
+    -43.0,
+    -17.0,
+    2.0
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "control",
+   "purpose": "Crystal load capacitance",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cx2",
+   "name": "Crystal load cap 20 pF 0603",
+   "shape": "box",
+   "size": [
+    1.6,
+    0.8,
+    0.8
+   ],
+   "position": [
+    -27.0,
+    -17.0,
+    2.0
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "control",
+   "purpose": "Crystal load capacitance",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ind",
+   "name": "Shielded power inductor 33 \u00b5H 12x12",
+   "shape": "box",
+   "size": [
+    12.0,
+    12.0,
+    8.0
+   ],
+   "position": [
+    -10.0,
+    -32.0,
+    5.6
+   ],
+   "material": "electronics",
+   "color": "#3a3a3a",
+   "group": "power",
+   "purpose": "Buck converter energy storage",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "buck",
+   "name": "Buck regulator LM5163 (SOIC-8)",
+   "shape": "box",
+   "size": [
+    5.0,
+    4.0,
+    1.5
+   ],
+   "position": [
+    -25.0,
+    -32.0,
+    2.35
+   ],
+   "material": "electronics",
+   "color": "#222222",
+   "group": "power",
+   "purpose": "24 V to 5 V logic/gate supply",
+   "specs": {
+    "power": "0.4"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "can",
+   "name": "CAN connector 4-pin JST-XH",
+   "shape": "box",
+   "size": [
+    12.0,
+    6.0,
+    10.0
+   ],
+   "position": [
+    20.0,
+    -44.0,
+    6.6
+   ],
+   "material": "nylon",
+   "color": "#f1eedf",
+   "group": "control",
+   "purpose": "CAN bus throttle and telemetry",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "canx",
+   "name": "CAN transceiver TCAN1042 (SOIC-8)",
+   "shape": "box",
+   "size": [
+    5.0,
+    4.0,
+    1.5
+   ],
+   "position": [
+    20.0,
+    -34.0,
+    2.35
+   ],
+   "material": "electronics",
+   "color": "#222222",
+   "group": "control",
+   "purpose": "CAN physical layer",
+   "specs": {
+    "power": "0.1"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "swd",
+   "name": "SWD header 2x5 1.27 mm",
+   "shape": "box",
+   "size": [
+    12.7,
+    5.0,
+    8.5
+   ],
    "position": [
     -55.0,
-    40.0,
-    36.2
+    -25.0,
+    5.85
    ],
    "material": "nylon",
-   "group": "housing",
-   "purpose": "PCB support",
+   "color": "#151515",
+   "group": "control",
+   "purpose": "Programming and debug",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "led1",
+   "name": "Status LED green 3 mm",
+   "shape": "cylinder",
+   "radius": 1.5,
+   "length": 5.0,
+   "position": [
+    45.0,
+    -44.0,
+    4.1
+   ],
+   "material": "polycarbonate",
+   "look": "glass",
+   "color": "#22e04a",
+   "group": "control",
+   "purpose": "Power OK",
    "axis": "z",
    "rotation": [
     0.0,
@@ -450,19 +1981,21 @@
    "fill": 1.0
   },
   {
-   "id": "so2",
-   "name": "Standoff",
+   "id": "led2",
+   "name": "Status LED yellow 3 mm",
    "shape": "cylinder",
-   "radius": 3.0,
-   "length": 66.4,
+   "radius": 1.5,
+   "length": 5.0,
    "position": [
-    55.0,
-    40.0,
-    36.2
+    52.0,
+    -44.0,
+    4.1
    ],
-   "material": "nylon",
-   "group": "housing",
-   "purpose": "PCB support",
+   "material": "polycarbonate",
+   "look": "glass",
+   "color": "#ffd21f",
+   "group": "control",
+   "purpose": "Motor running",
    "axis": "z",
    "rotation": [
     0.0,
@@ -475,19 +2008,21 @@
    "fill": 1.0
   },
   {
-   "id": "so3",
-   "name": "Standoff",
+   "id": "led3",
+   "name": "Status LED red 3 mm",
    "shape": "cylinder",
-   "radius": 3.0,
-   "length": 66.4,
+   "radius": 1.5,
+   "length": 5.0,
    "position": [
-    -55.0,
-    -40.0,
-    36.2
+    59.0,
+    -44.0,
+    4.1
    ],
-   "material": "nylon",
-   "group": "housing",
-   "purpose": "PCB support",
+   "material": "polycarbonate",
+   "look": "glass",
+   "color": "#ff2a2a",
+   "group": "control",
+   "purpose": "Fault",
    "axis": "z",
    "rotation": [
     0.0,
@@ -500,66 +2035,511 @@
    "fill": 1.0
   },
   {
-   "id": "so4",
-   "name": "Standoff",
-   "shape": "cylinder",
-   "radius": 3.0,
-   "length": 66.4,
-   "position": [
-    55.0,
-    -40.0,
-    36.2
+   "id": "cc1",
+   "name": "Ceramic cap 100 nF 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    1.25
    ],
-   "material": "nylon",
-   "group": "housing",
-   "purpose": "PCB support",
-   "axis": "z",
+   "position": [
+    -10.0,
+    -20.0,
+    2.225
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "passives",
+   "purpose": "Decoupling",
    "rotation": [
     0.0,
     0.0,
     0.0
    ],
    "quantity": 1,
-   "process": "3d_print",
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cc2",
+   "name": "Ceramic cap 100 nF 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    1.25
+   ],
+   "position": [
+    -5.0,
+    -20.0,
+    2.225
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "passives",
+   "purpose": "Decoupling",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cc3",
+   "name": "Ceramic cap 1 \u00b5F 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    1.25
+   ],
+   "position": [
+    0.0,
+    -20.0,
+    2.225
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "passives",
+   "purpose": "Bootstrap",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cc4",
+   "name": "Ceramic cap 1 \u00b5F 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    1.25
+   ],
+   "position": [
+    5.0,
+    -20.0,
+    2.225
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "passives",
+   "purpose": "Bootstrap",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cc5",
+   "name": "Ceramic cap 1 \u00b5F 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    1.25
+   ],
+   "position": [
+    10.0,
+    -20.0,
+    2.225
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "passives",
+   "purpose": "Bootstrap",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cc6",
+   "name": "Ceramic cap 10 \u00b5F 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    1.25
+   ],
+   "position": [
+    15.0,
+    -20.0,
+    2.225
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "passives",
+   "purpose": "Regulator output",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cc7",
+   "name": "Ceramic cap 10 \u00b5F 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    1.25
+   ],
+   "position": [
+    20.0,
+    -20.0,
+    2.225
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "passives",
+   "purpose": "Regulator output",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cc8",
+   "name": "Ceramic cap 100 nF 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    1.25
+   ],
+   "position": [
+    25.0,
+    -20.0,
+    2.225
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "passives",
+   "purpose": "Decoupling",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cc9",
+   "name": "Ceramic cap 100 nF 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    1.25
+   ],
+   "position": [
+    30.0,
+    -20.0,
+    2.225
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "passives",
+   "purpose": "Decoupling",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cc10",
+   "name": "Ceramic cap 4.7 nF 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    1.25
+   ],
+   "position": [
+    35.0,
+    -20.0,
+    2.225
+   ],
+   "material": "electronics",
+   "color": "#c8a46a",
+   "group": "passives",
+   "purpose": "Shunt amp filter",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "r1",
+   "name": "Resistor 10k 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    0.0,
+    -24.0,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "passives",
+   "purpose": "Pull-up",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "r2",
+   "name": "Resistor 10k 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    5.0,
+    -24.0,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "passives",
+   "purpose": "Pull-down",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "r3",
+   "name": "Resistor 1k 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    10.0,
+    -24.0,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "passives",
+   "purpose": "LED current limit",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "r4",
+   "name": "Resistor 1k 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    15.0,
+    -24.0,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "passives",
+   "purpose": "LED current limit",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "r5",
+   "name": "Resistor 1k 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    20.0,
+    -24.0,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "passives",
+   "purpose": "LED current limit",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "r6",
+   "name": "Resistor 120R 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    25.0,
+    -24.0,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "passives",
+   "purpose": "CAN termination",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "r7",
+   "name": "Resistor 47k 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    30.0,
+    -24.0,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "passives",
+   "purpose": "Bus voltage divider",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "r8",
+   "name": "Resistor 4.7k 0805",
+   "shape": "box",
+   "size": [
+    2.0,
+    1.25,
+    0.5
+   ],
+   "position": [
+    35.0,
+    -24.0,
+    1.85
+   ],
+   "material": "electronics",
+   "color": "#1b1b1b",
+   "group": "passives",
+   "purpose": "Bus voltage divider",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
    "specs": {},
    "fill": 1.0
   }
  ],
  "assembly": [
-  {
-   "parts": [
-    "so1",
-    "so2",
-    "so3",
-    "so4",
-    "enclosure"
-   ],
-   "action": "Screw nylon standoffs into enclosure floor bosses"
-  },
-  {
-   "parts": [
-    "q1",
-    "q2",
-    "q3",
-    "q4",
-    "gate_drv",
-    "mcu",
-    "cap1",
-    "cap2",
-    "pcb"
-   ],
-   "action": "Reflow SMD parts, hand-solder DC-link capacitors"
-  },
-  {
-   "parts": [
-    "bus_pos",
-    "bus_neg",
-    "term_batt",
-    "term_motor",
-    "pcb"
-   ],
-   "action": "Solder copper bus bars and terminal blocks onto power pours"
-  },
   {
    "parts": [
     "pcb",
@@ -568,210 +2548,342 @@
     "so3",
     "so4"
    ],
-   "action": "Mount PCB on standoffs"
+   "action": "Screw brass standoffs into chassis plate"
   },
   {
    "parts": [
-    "heatsink",
-    "enclosure",
+    "mcu_p",
+    "mcu",
+    "gd1",
+    "gd2",
+    "buck",
+    "canx",
+    "xtal",
+    "cx1",
+    "cx2",
+    "shunt",
+    "tvs",
+    "cc1",
+    "cc2",
+    "cc3",
+    "cc4",
+    "cc5",
+    "cc6",
+    "cc7",
+    "cc8",
+    "cc9",
+    "cc10",
+    "r1",
+    "r2",
+    "r3",
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "rg1",
+    "rg2",
+    "rg3",
+    "rg4",
+    "rg5",
+    "rg6",
+    "ind"
+   ],
+   "action": "Reflow-solder SMD components"
+  },
+  {
+   "parts": [
+    "c1",
+    "c2",
+    "c3",
+    "c4",
+    "c1t",
+    "c2t",
+    "c3t",
+    "c4t",
+    "tb_bat",
+    "tbs1",
+    "tbs2",
+    "tb_mot",
+    "tms1",
+    "tms2",
+    "tms3",
+    "can",
+    "swd",
+    "led1",
+    "led2",
+    "led3"
+   ],
+   "action": "Wave/hand-solder through-hole parts"
+  },
+  {
+   "parts": [
+    "bus"
+   ],
+   "action": "Solder copper bus bar onto exposed DC+ pour"
+  },
+  {
+   "parts": [
     "q1",
     "q2",
     "q3",
-    "q4"
+    "q4",
+    "q5",
+    "q6",
+    "t1",
+    "t2",
+    "t3",
+    "t4",
+    "t5",
+    "t6",
+    "l1",
+    "l2",
+    "l3",
+    "l4",
+    "l5",
+    "l6",
+    "fs1",
+    "fs2",
+    "fs3",
+    "fs4",
+    "fs5",
+    "fs6",
+    "hs"
    ],
-   "action": "Apply 0.5 mm thermal pad on MOSFETs, close lid, bolt heatsink to lid with thermal compound"
+   "action": "Bolt MOSFETs to heat sink with thermal pads, insert leads, solder"
+  },
+  {
+   "parts": [
+    "pcb",
+    "ms1",
+    "ms2",
+    "ms3",
+    "ms4"
+   ],
+   "action": "Fit board on standoffs and torque M3 screws to 0.5 N\u00b7m"
   }
  ],
  "scenarios": [
   {
-   "id": "hs_heat",
-   "title": "Heatsink at 12 W in still kart air (60 \u00b0C at 25 \u00b0C ambient = 75 \u00b0C at 40 \u00b0C)",
+   "id": "heat",
    "type": "heat",
-   "part": "heatsink",
+   "part": "hs",
+   "title": "Heat sink at full 20 A load in 40 \u00b0C air (10 W, 2.5x calculated loss)",
    "mode": "heatsink",
-   "power": 12,
-   "h": 6,
-   "max_temperature": "60 degC"
+   "power": 10,
+   "ambient": 313.15,
+   "max_temperature": 358.15
   },
   {
-   "id": "bus_current",
-   "title": "Bus bar at 25 A (125% rating)",
+   "id": "busbar",
    "type": "current",
-   "part": "bus_pos",
-   "current": 25,
+   "part": "bus",
+   "title": "20 A continuous through DC+ bus bar",
+   "current": 20,
+   "max_temperature": 343.15,
    "voltage": 24,
-   "max_drop_percent": 0.5,
-   "max_temperature": "70 degC"
+   "max_drop_percent": 0.5
   },
   {
-   "id": "box_heat",
-   "title": "Sealed box inside closed kart, 40 \u00b0C (FET heat exits via lid; 4 W to internal air)",
-   "type": "enclosure",
-   "part": "enclosure",
-   "power": 4,
-   "ambient": "40 degC",
-   "irradiance": 300,
-   "wind": 0.5,
-   "absorptivity": 0.3,
-   "max_temperature": "70 degC"
-  },
-  {
-   "id": "pcb_vib",
-   "title": "PCB vibration from motor/track",
+   "id": "vib",
    "type": "vibration",
    "part": "pcb",
-   "excitation": 100,
-   "support": "simply_supported"
-  },
-  {
-   "id": "drop",
-   "title": "1 m drop onto enclosure during install",
-   "type": "drop",
-   "part": "enclosure",
-   "height": 1
+   "title": "Board vibration from kart chassis (50 Hz)",
+   "excitation": 50,
+   "support": "simply_supported",
+   "margin": 1.2
   }
  ],
  "diagram": {
   "nodes": [
    {
-    "id": "batt",
-    "label": "24 V battery",
+    "id": "bat",
+    "label": "24 V kart battery",
     "kind": "power"
    },
    {
-    "id": "term_in",
-    "label": "Battery terminal",
+    "id": "tb_bat",
+    "label": "Battery screw terminal",
+    "kind": "component",
+    "group": "power"
+   },
+   {
+    "id": "tvs",
+    "label": "TVS clamp",
     "kind": "component",
     "group": "power"
    },
    {
     "id": "bus",
-    "label": "Copper bus bars + DC-link caps",
+    "label": "Copper DC+ bus bar",
     "kind": "component",
     "group": "power"
    },
    {
-    "id": "bridge",
-    "label": "4x MOSFET H-bridge",
+    "id": "caps",
+    "label": "4x 470 \u00b5F bulk caps",
     "kind": "component",
     "group": "power"
    },
    {
-    "id": "drv",
-    "label": "Gate driver",
+    "id": "buck",
+    "label": "Buck regulator + inductor",
     "kind": "component",
-    "group": "control"
+    "group": "power"
    },
    {
     "id": "mcu",
-    "label": "Microcontroller (PWM, current limit)",
+    "label": "MCU (QFP-64) + crystal",
     "kind": "software",
     "group": "control"
    },
    {
-    "id": "throttle",
-    "label": "Throttle pedal",
-    "kind": "signal"
-   },
-   {
-    "id": "term_out",
-    "label": "Motor terminal",
+    "id": "gd",
+    "label": "2x gate driver ICs",
     "kind": "component",
-    "group": "power"
+    "group": "control"
    },
    {
-    "id": "motor",
-    "label": "24 V DC motor",
-    "kind": "component"
+    "id": "fets",
+    "label": "6x TO-220 MOSFET bridge",
+    "kind": "component",
+    "group": "bridge"
    },
    {
     "id": "hs",
-    "label": "Finned heatsink",
+    "label": "Finned heat sink",
     "kind": "component",
     "group": "thermal"
    },
    {
-    "id": "box",
-    "label": "Sealed aluminium enclosure",
+    "id": "shunt",
+    "label": "Current shunt",
     "kind": "component",
-    "group": "housing"
+    "group": "bridge"
    },
    {
-    "id": "amb",
-    "label": "40 \u00b0C air in closed kart",
+    "id": "tb_mot",
+    "label": "Motor phase terminals U/V/W",
+    "kind": "component",
+    "group": "bridge"
+   },
+   {
+    "id": "motor",
+    "label": "BLDC kart motor",
+    "kind": "environment"
+   },
+   {
+    "id": "can",
+    "label": "CAN connector + transceiver",
+    "kind": "component",
+    "group": "control"
+   },
+   {
+    "id": "air",
+    "label": "40 \u00b0C ambient air",
     "kind": "environment"
    },
    {
     "id": "vib",
-    "label": "Kart vibration",
+    "label": "Chassis vibration",
     "kind": "environment"
    }
   ],
   "edges": [
    {
-    "from": "batt",
-    "to": "term_in",
+    "from": "bat",
+    "to": "tb_bat",
     "kind": "power",
-    "label": "24 V, 20 A"
+    "label": "24 V 20 A"
    },
    {
-    "from": "term_in",
+    "from": "tb_bat",
+    "to": "tvs",
+    "kind": "power"
+   },
+   {
+    "from": "tb_bat",
     "to": "bus",
-    "kind": "power"
-   },
-   {
-    "from": "bus",
-    "to": "bridge",
-    "kind": "power"
-   },
-   {
-    "from": "throttle",
-    "to": "mcu",
-    "kind": "data",
-    "label": "0-5 V"
-   },
-   {
-    "from": "mcu",
-    "to": "drv",
-    "kind": "data",
-    "label": "PWM 20 kHz"
-   },
-   {
-    "from": "drv",
-    "to": "bridge",
-    "kind": "data",
-    "label": "gate drive"
-   },
-   {
-    "from": "bridge",
-    "to": "term_out",
-    "kind": "power"
-   },
-   {
-    "from": "term_out",
-    "to": "motor",
     "kind": "power",
     "label": "20 A"
    },
    {
-    "from": "bridge",
-    "to": "box",
-    "kind": "heat",
-    "label": "~12 W"
+    "from": "bus",
+    "to": "caps",
+    "kind": "power"
    },
    {
-    "from": "box",
+    "from": "bus",
+    "to": "fets",
+    "kind": "power",
+    "label": "DC+"
+   },
+   {
+    "from": "bus",
+    "to": "buck",
+    "kind": "power"
+   },
+   {
+    "from": "buck",
+    "to": "mcu",
+    "kind": "power",
+    "label": "5/3.3 V"
+   },
+   {
+    "from": "mcu",
+    "to": "gd",
+    "kind": "data",
+    "label": "6x PWM"
+   },
+   {
+    "from": "gd",
+    "to": "fets",
+    "kind": "data",
+    "label": "gate drive"
+   },
+   {
+    "from": "fets",
+    "to": "tb_mot",
+    "kind": "power",
+    "label": "3 phases"
+   },
+   {
+    "from": "tb_mot",
+    "to": "motor",
+    "kind": "power"
+   },
+   {
+    "from": "fets",
+    "to": "shunt",
+    "kind": "power",
+    "label": "return"
+   },
+   {
+    "from": "shunt",
+    "to": "mcu",
+    "kind": "data",
+    "label": "current sense"
+   },
+   {
+    "from": "can",
+    "to": "mcu",
+    "kind": "data",
+    "label": "throttle/telemetry"
+   },
+   {
+    "from": "fets",
     "to": "hs",
-    "kind": "heat"
+    "kind": "heat",
+    "label": "~15 W"
    },
    {
     "from": "hs",
-    "to": "amb",
+    "to": "air",
     "kind": "heat"
    },
    {
     "from": "vib",
-    "to": "box",
+    "to": "bus",
     "kind": "mechanical"
    }
   ]

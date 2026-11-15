@@ -27,7 +27,9 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#2f3237",
+   "look": null
   },
   {
    "id": "base_housing",
@@ -52,7 +54,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#f28c28"
   },
   {
    "id": "m1",
@@ -83,7 +86,8 @@
    ],
    "quantity": 1,
    "process": "buy",
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#1c1c1c"
   },
   {
    "id": "ctrl",
@@ -113,7 +117,8 @@
    ],
    "quantity": 1,
    "process": "buy",
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#1b6e3a"
   },
   {
    "id": "shoulder_housing",
@@ -140,7 +145,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#f28c28"
   },
   {
    "id": "m2",
@@ -171,7 +177,8 @@
    ],
    "quantity": 1,
    "process": "buy",
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#1c1c1c"
   },
   {
    "id": "upper_arm",
@@ -197,7 +204,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#c9ccd1"
   },
   {
    "id": "elbow_housing",
@@ -224,7 +232,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#f28c28"
   },
   {
    "id": "m3",
@@ -255,7 +264,8 @@
    ],
    "quantity": 1,
    "process": "buy",
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#1c1c1c"
   },
   {
    "id": "forearm",
@@ -281,7 +291,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#c9ccd1"
   },
   {
    "id": "gripper_body",
@@ -310,7 +321,8 @@
    ],
    "quantity": 1,
    "process": "machine",
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#f28c28"
   },
   {
    "id": "finger_l",
@@ -337,7 +349,8 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
-   "fill": 1.0
+   "fill": 1.0,
+   "color": "#c9ccd1"
   },
   {
    "id": "finger_r",
@@ -364,6 +377,2504 @@
    "quantity": 1,
    "process": "machine",
    "specs": {},
+   "fill": 1.0,
+   "color": "#c9ccd1"
+  },
+  {
+   "id": "foot_1",
+   "name": "Rubber foot",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 6.0,
+   "axis": "z",
+   "position": [
+    130.0,
+    130.0,
+    -3.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "color": "#111111",
+   "group": "base",
+   "purpose": "Anti-slip foot",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "foot_2",
+   "name": "Rubber foot",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 6.0,
+   "axis": "z",
+   "position": [
+    -130.0,
+    130.0,
+    -3.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "color": "#111111",
+   "group": "base",
+   "purpose": "Anti-slip foot",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "foot_3",
+   "name": "Rubber foot",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 6.0,
+   "axis": "z",
+   "position": [
+    130.0,
+    -130.0,
+    -3.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "color": "#111111",
+   "group": "base",
+   "purpose": "Anti-slip foot",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "foot_4",
+   "name": "Rubber foot",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 6.0,
+   "axis": "z",
+   "position": [
+    -130.0,
+    -130.0,
+    -3.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "color": "#111111",
+   "group": "base",
+   "purpose": "Anti-slip foot",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "clamp_bolt_1",
+   "name": "M6 desk-clamp bolt",
+   "shape": "cylinder",
+   "radius": 5.0,
+   "length": 4.0,
+   "axis": "z",
+   "position": [
+    125.0,
+    125.0,
+    18.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Clamps base to desk",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "clamp_bolt_2",
+   "name": "M6 desk-clamp bolt",
+   "shape": "cylinder",
+   "radius": 5.0,
+   "length": 4.0,
+   "axis": "z",
+   "position": [
+    -125.0,
+    125.0,
+    18.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Clamps base to desk",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "clamp_bolt_3",
+   "name": "M6 desk-clamp bolt",
+   "shape": "cylinder",
+   "radius": 5.0,
+   "length": 4.0,
+   "axis": "z",
+   "position": [
+    125.0,
+    -125.0,
+    18.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Clamps base to desk",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "clamp_bolt_4",
+   "name": "M6 desk-clamp bolt",
+   "shape": "cylinder",
+   "radius": 5.0,
+   "length": 4.0,
+   "axis": "z",
+   "position": [
+    -125.0,
+    -125.0,
+    18.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Clamps base to desk",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ballast",
+   "name": "Steel ballast plate",
+   "shape": "box",
+   "size": [
+    70.0,
+    160.0,
+    10.0
+   ],
+   "position": [
+    110.0,
+    30.0,
+    21.0
+   ],
+   "material": "steel",
+   "color": "#4a4d52",
+   "group": "base",
+   "purpose": "Counterweight under the reach side, lowers tipping risk",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "housing_flange",
+   "name": "Housing foot flange",
+   "shape": "tube",
+   "radius": 74.0,
+   "inner_radius": 70.0,
+   "length": 6.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    0.0,
+    19.0
+   ],
+   "material": "aluminium",
+   "color": "#d97a1e",
+   "group": "base",
+   "purpose": "Bolts housing to plate",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "flange_screw_1",
+   "name": "M5 flange screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "z",
+   "position": [
+    51.0,
+    51.0,
+    23.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Housing fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "flange_screw_2",
+   "name": "M5 flange screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "z",
+   "position": [
+    -51.0,
+    51.0,
+    23.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Housing fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "flange_screw_3",
+   "name": "M5 flange screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "z",
+   "position": [
+    -51.0,
+    -51.0,
+    23.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Housing fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "flange_screw_4",
+   "name": "M5 flange screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "z",
+   "position": [
+    51.0,
+    -51.0,
+    23.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Housing fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "bearing_ring",
+   "name": "J1 slewing bearing ring",
+   "shape": "tube",
+   "radius": 78.0,
+   "inner_radius": 70.0,
+   "length": 10.0,
+   "axis": "z",
+   "position": [
+    0.0,
+    0.0,
+    85.0
+   ],
+   "material": "steel",
+   "color": "#9da1a6",
+   "group": "base",
+   "purpose": "Turntable bearing outer race",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tt_bolt_1",
+   "name": "Turntable bolt",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 3.0,
+   "axis": "z",
+   "position": [
+    44.0,
+    44.0,
+    91.5
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Bearing inner race bolt",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tt_bolt_2",
+   "name": "Turntable bolt",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 3.0,
+   "axis": "z",
+   "position": [
+    -44.0,
+    44.0,
+    91.5
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Bearing inner race bolt",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tt_bolt_3",
+   "name": "Turntable bolt",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 3.0,
+   "axis": "z",
+   "position": [
+    -44.0,
+    -44.0,
+    91.5
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Bearing inner race bolt",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tt_bolt_4",
+   "name": "Turntable bolt",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 3.0,
+   "axis": "z",
+   "position": [
+    44.0,
+    -44.0,
+    91.5
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "base",
+   "purpose": "Bearing inner race bolt",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "j1_pulley",
+   "name": "GT2 20T motor pulley",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 12.0,
+   "axis": "z",
+   "position": [
+    -100.0,
+    0.0,
+    62.0
+   ],
+   "material": "aluminium",
+   "color": "#b8bcc2",
+   "group": "base",
+   "purpose": "Drives the 5:1 belt",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "belt_a",
+   "name": "GT2 belt strand",
+   "shape": "box",
+   "size": [
+    22.0,
+    2.0,
+    6.0
+   ],
+   "position": [
+    -81.0,
+    7.0,
+    62.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "color": "#151515",
+   "group": "base",
+   "purpose": "Belt to turntable pulley",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "belt_b",
+   "name": "GT2 belt strand",
+   "shape": "box",
+   "size": [
+    22.0,
+    2.0,
+    6.0
+   ],
+   "position": [
+    -81.0,
+    -7.0,
+    62.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "color": "#151515",
+   "group": "base",
+   "purpose": "Belt return strand",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mcu",
+   "name": "MCU chip",
+   "shape": "box",
+   "size": [
+    12.0,
+    12.0,
+    2.0
+   ],
+   "position": [
+    0.0,
+    -100.0,
+    27.0
+   ],
+   "material": "electronics",
+   "color": "#111111",
+   "group": "electronics",
+   "purpose": "Motion controller",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "drv_1",
+   "name": "Stepper driver J1",
+   "shape": "box",
+   "size": [
+    15.0,
+    20.0,
+    6.0
+   ],
+   "position": [
+    -30.0,
+    -118.0,
+    29.0
+   ],
+   "material": "electronics",
+   "color": "#c62828",
+   "group": "electronics",
+   "purpose": "Driver module with heatsink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "drv_2",
+   "name": "Stepper driver J2",
+   "shape": "box",
+   "size": [
+    15.0,
+    20.0,
+    6.0
+   ],
+   "position": [
+    -10.0,
+    -118.0,
+    29.0
+   ],
+   "material": "electronics",
+   "color": "#c62828",
+   "group": "electronics",
+   "purpose": "Driver module with heatsink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "drv_3",
+   "name": "Stepper driver J3",
+   "shape": "box",
+   "size": [
+    15.0,
+    20.0,
+    6.0
+   ],
+   "position": [
+    10.0,
+    -118.0,
+    29.0
+   ],
+   "material": "electronics",
+   "color": "#c62828",
+   "group": "electronics",
+   "purpose": "Driver module with heatsink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "drv_4",
+   "name": "Stepper driver spare",
+   "shape": "box",
+   "size": [
+    15.0,
+    20.0,
+    6.0
+   ],
+   "position": [
+    30.0,
+    -118.0,
+    29.0
+   ],
+   "material": "electronics",
+   "color": "#c62828",
+   "group": "electronics",
+   "purpose": "Driver module with heatsink",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "term_block",
+   "name": "24 V terminal block",
+   "shape": "box",
+   "size": [
+    10.0,
+    8.0,
+    10.0
+   ],
+   "position": [
+    32.0,
+    -98.0,
+    31.0
+   ],
+   "material": "electronics",
+   "color": "#2e7d32",
+   "group": "electronics",
+   "purpose": "Power input",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "usb_conn",
+   "name": "USB connector",
+   "shape": "box",
+   "size": [
+    10.0,
+    8.0,
+    4.0
+   ],
+   "position": [
+    -34.0,
+    -98.0,
+    28.0
+   ],
+   "material": "electronics",
+   "color": "#b0b0b0",
+   "group": "electronics",
+   "purpose": "Host link",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ctrl_cable",
+   "name": "Controller harness",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 20.0,
+   "axis": "y",
+   "position": [
+    0.0,
+    -80.0,
+    19.0
+   ],
+   "material": "copper",
+   "look": "cable",
+   "color": "#222222",
+   "group": "cabling",
+   "purpose": "Motor wiring into the housing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "estop_box",
+   "name": "E-stop housing",
+   "shape": "box",
+   "size": [
+    36.0,
+    36.0,
+    20.0
+   ],
+   "position": [
+    90.0,
+    -105.0,
+    26.0
+   ],
+   "material": "abs",
+   "color": "#f5c518",
+   "group": "electronics",
+   "purpose": "Emergency stop enclosure",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "estop_btn",
+   "name": "E-stop mushroom button",
+   "shape": "cylinder",
+   "radius": 14.0,
+   "length": 8.0,
+   "axis": "z",
+   "position": [
+    90.0,
+    -105.0,
+    40.0
+   ],
+   "material": "abs",
+   "color": "#d32f2f",
+   "group": "electronics",
+   "purpose": "Cuts motor power",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "dc_jack",
+   "name": "DC power jack",
+   "shape": "box",
+   "size": [
+    12.0,
+    10.0,
+    10.0
+   ],
+   "position": [
+    -140.0,
+    -110.0,
+    21.0
+   ],
+   "material": "electronics",
+   "color": "#1a1a1a",
+   "group": "electronics",
+   "purpose": "24 V input",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "sh_horn",
+   "name": "J2 output horn disc",
+   "shape": "cylinder",
+   "radius": 28.0,
+   "length": 5.0,
+   "axis": "y",
+   "position": [
+    0.0,
+    -42.5,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "shoulder",
+   "purpose": "Bearing cap / output flange",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "sh_horn_s1",
+   "name": "Horn screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    14.0,
+    -46.0,
+    144.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Horn fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "sh_horn_s2",
+   "name": "Horn screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    -14.0,
+    -46.0,
+    144.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Horn fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "sh_horn_s3",
+   "name": "Horn screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    14.0,
+    -46.0,
+    116.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Horn fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "sh_horn_s4",
+   "name": "Horn screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    -14.0,
+    -46.0,
+    116.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Horn fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m2_s1",
+   "name": "Motor screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 3.0,
+   "axis": "y",
+   "position": [
+    20.0,
+    117.5,
+    150.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Motor end cap screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m2_s2",
+   "name": "Motor screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 3.0,
+   "axis": "y",
+   "position": [
+    -20.0,
+    117.5,
+    150.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Motor end cap screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m2_s3",
+   "name": "Motor screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 3.0,
+   "axis": "y",
+   "position": [
+    20.0,
+    117.5,
+    110.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Motor end cap screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m2_s4",
+   "name": "Motor screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 3.0,
+   "axis": "y",
+   "position": [
+    -20.0,
+    117.5,
+    110.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Motor end cap screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m2_conn",
+   "name": "J2 motor connector",
+   "shape": "box",
+   "size": [
+    16.0,
+    8.0,
+    12.0
+   ],
+   "position": [
+    0.0,
+    120.0,
+    130.0
+   ],
+   "material": "electronics",
+   "color": "#eeeeee",
+   "group": "shoulder",
+   "purpose": "4-pin motor plug",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "yoke_cover",
+   "name": "Yoke top cover",
+   "shape": "box",
+   "size": [
+    70.0,
+    70.0,
+    3.0
+   ],
+   "position": [
+    0.0,
+    0.0,
+    171.5
+   ],
+   "material": "aluminium",
+   "color": "#2f3237",
+   "group": "shoulder",
+   "purpose": "Closes the yoke",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "yoke_s1",
+   "name": "Cover screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "z",
+   "position": [
+    30.0,
+    30.0,
+    174.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Cover fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "yoke_s2",
+   "name": "Cover screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "z",
+   "position": [
+    -30.0,
+    30.0,
+    174.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Cover fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "yoke_s3",
+   "name": "Cover screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "z",
+   "position": [
+    30.0,
+    -30.0,
+    174.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Cover fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "yoke_s4",
+   "name": "Cover screw",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 2.0,
+   "axis": "z",
+   "position": [
+    -30.0,
+    -30.0,
+    174.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "shoulder",
+   "purpose": "Cover fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_collar_sh",
+   "name": "Upper arm clamp collar (shoulder)",
+   "shape": "tube",
+   "radius": 20.0,
+   "inner_radius": 16.0,
+   "length": 10.0,
+   "axis": "x",
+   "position": [
+    45.0,
+    0.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#2f3237",
+   "group": "links",
+   "purpose": "Clamps tube to shoulder flange",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_collar_el",
+   "name": "Upper arm clamp collar (elbow)",
+   "shape": "tube",
+   "radius": 20.0,
+   "inner_radius": 16.0,
+   "length": 10.0,
+   "axis": "x",
+   "position": [
+    185.0,
+    0.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#2f3237",
+   "group": "links",
+   "purpose": "Clamps tube to elbow block",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_pl_top",
+   "name": "Upper side plate L - top rail",
+   "shape": "box",
+   "size": [
+    150.0,
+    4.0,
+    8.0
+   ],
+   "position": [
+    115.0,
+    23.0,
+    146.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Side link plate with lightening windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_pl_bot",
+   "name": "Upper side plate L - bottom rail",
+   "shape": "box",
+   "size": [
+    150.0,
+    4.0,
+    8.0
+   ],
+   "position": [
+    115.0,
+    23.0,
+    114.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Side link plate with lightening windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_pl_p1",
+   "name": "Upper side plate L - web",
+   "shape": "box",
+   "size": [
+    8.0,
+    4.0,
+    24.0
+   ],
+   "position": [
+    44.0,
+    23.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_pl_p2",
+   "name": "Upper side plate L - web",
+   "shape": "box",
+   "size": [
+    8.0,
+    4.0,
+    24.0
+   ],
+   "position": [
+    115.0,
+    23.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_pl_p3",
+   "name": "Upper side plate L - web",
+   "shape": "box",
+   "size": [
+    8.0,
+    4.0,
+    24.0
+   ],
+   "position": [
+    186.0,
+    23.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_pr_top",
+   "name": "Upper side plate R - top rail",
+   "shape": "box",
+   "size": [
+    150.0,
+    4.0,
+    8.0
+   ],
+   "position": [
+    115.0,
+    -23.0,
+    146.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Side link plate with lightening windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_pr_bot",
+   "name": "Upper side plate R - bottom rail",
+   "shape": "box",
+   "size": [
+    150.0,
+    4.0,
+    8.0
+   ],
+   "position": [
+    115.0,
+    -23.0,
+    114.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Side link plate with lightening windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_pr_p1",
+   "name": "Upper side plate R - web",
+   "shape": "box",
+   "size": [
+    8.0,
+    4.0,
+    24.0
+   ],
+   "position": [
+    44.0,
+    -23.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_pr_p2",
+   "name": "Upper side plate R - web",
+   "shape": "box",
+   "size": [
+    8.0,
+    4.0,
+    24.0
+   ],
+   "position": [
+    115.0,
+    -23.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_pr_p3",
+   "name": "Upper side plate R - web",
+   "shape": "box",
+   "size": [
+    8.0,
+    4.0,
+    24.0
+   ],
+   "position": [
+    186.0,
+    -23.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_cable",
+   "name": "Upper arm cable run",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 126.0,
+   "axis": "x",
+   "position": [
+    115.0,
+    0.0,
+    149.0
+   ],
+   "material": "copper",
+   "look": "cable",
+   "color": "#222222",
+   "group": "cabling",
+   "purpose": "J3 and gripper wiring",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_clip_1",
+   "name": "Cable clip",
+   "shape": "box",
+   "size": [
+    5.0,
+    8.0,
+    3.0
+   ],
+   "position": [
+    80.0,
+    0.0,
+    153.5
+   ],
+   "material": "nylon",
+   "color": "#e0e0e0",
+   "group": "cabling",
+   "purpose": "Holds cable to tube",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_clip_2",
+   "name": "Cable clip",
+   "shape": "box",
+   "size": [
+    5.0,
+    8.0,
+    3.0
+   ],
+   "position": [
+    115.0,
+    0.0,
+    153.5
+   ],
+   "material": "nylon",
+   "color": "#e0e0e0",
+   "group": "cabling",
+   "purpose": "Holds cable to tube",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ua_clip_3",
+   "name": "Cable clip",
+   "shape": "box",
+   "size": [
+    5.0,
+    8.0,
+    3.0
+   ],
+   "position": [
+    150.0,
+    0.0,
+    153.5
+   ],
+   "material": "nylon",
+   "color": "#e0e0e0",
+   "group": "cabling",
+   "purpose": "Holds cable to tube",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "el_horn",
+   "name": "J3 output horn disc",
+   "shape": "cylinder",
+   "radius": 20.0,
+   "length": 4.0,
+   "axis": "y",
+   "position": [
+    220.0,
+    -32.0,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "elbow",
+   "purpose": "Elbow bearing cap / output",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "el_horn_s1",
+   "name": "Horn screw",
+   "shape": "cylinder",
+   "radius": 2.0,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    230.0,
+    -35.0,
+    140.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "elbow",
+   "purpose": "Horn fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "el_horn_s2",
+   "name": "Horn screw",
+   "shape": "cylinder",
+   "radius": 2.0,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    210.0,
+    -35.0,
+    140.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "elbow",
+   "purpose": "Horn fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "el_horn_s3",
+   "name": "Horn screw",
+   "shape": "cylinder",
+   "radius": 2.0,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    230.0,
+    -35.0,
+    120.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "elbow",
+   "purpose": "Horn fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "el_horn_s4",
+   "name": "Horn screw",
+   "shape": "cylinder",
+   "radius": 2.0,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    210.0,
+    -35.0,
+    120.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "elbow",
+   "purpose": "Horn fixing",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m3_s1",
+   "name": "Motor screw",
+   "shape": "cylinder",
+   "radius": 2.0,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    235.0,
+    71.0,
+    145.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "elbow",
+   "purpose": "Motor end cap screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m3_s2",
+   "name": "Motor screw",
+   "shape": "cylinder",
+   "radius": 2.0,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    205.0,
+    71.0,
+    145.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "elbow",
+   "purpose": "Motor end cap screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m3_s3",
+   "name": "Motor screw",
+   "shape": "cylinder",
+   "radius": 2.0,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    235.0,
+    71.0,
+    115.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "elbow",
+   "purpose": "Motor end cap screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m3_s4",
+   "name": "Motor screw",
+   "shape": "cylinder",
+   "radius": 2.0,
+   "length": 2.0,
+   "axis": "y",
+   "position": [
+    205.0,
+    71.0,
+    115.0
+   ],
+   "material": "stainless",
+   "color": "#8a8d91",
+   "group": "elbow",
+   "purpose": "Motor end cap screw",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "m3_conn",
+   "name": "J3 motor connector",
+   "shape": "box",
+   "size": [
+    12.0,
+    8.0,
+    10.0
+   ],
+   "position": [
+    220.0,
+    74.0,
+    130.0
+   ],
+   "material": "electronics",
+   "color": "#eeeeee",
+   "group": "elbow",
+   "purpose": "4-pin motor plug",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "el_cover",
+   "name": "Elbow top cover",
+   "shape": "box",
+   "size": [
+    50.0,
+    50.0,
+    2.0
+   ],
+   "position": [
+    220.0,
+    0.0,
+    161.0
+   ],
+   "material": "aluminium",
+   "color": "#2f3237",
+   "group": "elbow",
+   "purpose": "Closes the elbow block",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_pl_top",
+   "name": "Forearm side plate L - top rail",
+   "shape": "box",
+   "size": [
+    110.0,
+    3.0,
+    6.0
+   ],
+   "position": [
+    305.0,
+    17.5,
+    142.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Side link plate with lightening windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_pl_bot",
+   "name": "Forearm side plate L - bottom rail",
+   "shape": "box",
+   "size": [
+    110.0,
+    3.0,
+    6.0
+   ],
+   "position": [
+    305.0,
+    17.5,
+    118.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Side link plate with lightening windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_pl_p1",
+   "name": "Forearm side plate L - web",
+   "shape": "box",
+   "size": [
+    6.0,
+    3.0,
+    18.0
+   ],
+   "position": [
+    253.0,
+    17.5,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_pl_p2",
+   "name": "Forearm side plate L - web",
+   "shape": "box",
+   "size": [
+    6.0,
+    3.0,
+    18.0
+   ],
+   "position": [
+    305.0,
+    17.5,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_pl_p3",
+   "name": "Forearm side plate L - web",
+   "shape": "box",
+   "size": [
+    6.0,
+    3.0,
+    18.0
+   ],
+   "position": [
+    357.0,
+    17.5,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_pr_top",
+   "name": "Forearm side plate R - top rail",
+   "shape": "box",
+   "size": [
+    110.0,
+    3.0,
+    6.0
+   ],
+   "position": [
+    305.0,
+    -17.5,
+    142.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Side link plate with lightening windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_pr_bot",
+   "name": "Forearm side plate R - bottom rail",
+   "shape": "box",
+   "size": [
+    110.0,
+    3.0,
+    6.0
+   ],
+   "position": [
+    305.0,
+    -17.5,
+    118.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Side link plate with lightening windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_pr_p1",
+   "name": "Forearm side plate R - web",
+   "shape": "box",
+   "size": [
+    6.0,
+    3.0,
+    18.0
+   ],
+   "position": [
+    253.0,
+    -17.5,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_pr_p2",
+   "name": "Forearm side plate R - web",
+   "shape": "box",
+   "size": [
+    6.0,
+    3.0,
+    18.0
+   ],
+   "position": [
+    305.0,
+    -17.5,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_pr_p3",
+   "name": "Forearm side plate R - web",
+   "shape": "box",
+   "size": [
+    6.0,
+    3.0,
+    18.0
+   ],
+   "position": [
+    357.0,
+    -17.5,
+    130.0
+   ],
+   "material": "aluminium",
+   "color": "#c9ccd1",
+   "group": "links",
+   "purpose": "Web between windows",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_cable",
+   "name": "Forearm cable run",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 90.0,
+   "axis": "x",
+   "position": [
+    305.0,
+    0.0,
+    144.5
+   ],
+   "material": "copper",
+   "look": "cable",
+   "color": "#222222",
+   "group": "cabling",
+   "purpose": "Gripper servo wiring",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_clip_1",
+   "name": "Cable clip",
+   "shape": "box",
+   "size": [
+    5.0,
+    7.0,
+    2.5
+   ],
+   "position": [
+    280.0,
+    0.0,
+    148.25
+   ],
+   "material": "nylon",
+   "color": "#e0e0e0",
+   "group": "cabling",
+   "purpose": "Holds cable to tube",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fa_clip_2",
+   "name": "Cable clip",
+   "shape": "box",
+   "size": [
+    5.0,
+    7.0,
+    2.5
+   ],
+   "position": [
+    330.0,
+    0.0,
+    148.25
+   ],
+   "material": "nylon",
+   "color": "#e0e0e0",
+   "group": "cabling",
+   "purpose": "Holds cable to tube",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "grip_servo",
+   "name": "Gripper servo 25 kg\u00b7cm",
+   "shape": "box",
+   "size": [
+    36.0,
+    20.0,
+    20.0
+   ],
+   "position": [
+    380.0,
+    0.0,
+    155.2
+   ],
+   "material": "electronics",
+   "color": "#1c1c1c",
+   "group": "gripper",
+   "purpose": "Drives the rack-and-pinion jaws",
+   "specs": {
+    "stall_torque_kgcm": "25"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0
+  },
+  {
+   "id": "servo_horn",
+   "name": "Servo horn",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 3.0,
+   "axis": "z",
+   "position": [
+    380.0,
+    0.0,
+    166.7
+   ],
+   "material": "aluminium",
+   "color": "#1e5bb8",
+   "group": "gripper",
+   "purpose": "Servo output to pinion",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pad_l",
+   "name": "Jaw pad left",
+   "shape": "box",
+   "size": [
+    30.0,
+    3.0,
+    26.0
+   ],
+   "position": [
+    435.0,
+    18.5,
+    130.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "color": "#111111",
+   "group": "gripper",
+   "purpose": "High-friction grip pad",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pad_r",
+   "name": "Jaw pad right",
+   "shape": "box",
+   "size": [
+    30.0,
+    3.0,
+    26.0
+   ],
+   "position": [
+    435.0,
+    -18.5,
+    130.0
+   ],
+   "material": "nylon",
+   "look": "rubber",
+   "color": "#111111",
+   "group": "gripper",
+   "purpose": "High-friction grip pad",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
    "fill": 1.0
   }
  ],
@@ -371,35 +2882,157 @@
   {
    "parts": [
     "base_plate",
-    "base_housing",
-    "m1",
-    "ctrl"
+    "foot_1",
+    "foot_2",
+    "foot_3",
+    "foot_4",
+    "ballast",
+    "clamp_bolt_1",
+    "clamp_bolt_2",
+    "clamp_bolt_3",
+    "clamp_bolt_4"
    ],
-   "action": "Bolt the housing, J1 motor and controller to the steel plate; tension the GT2 belt"
+   "action": "Stick rubber feet under the aluminium plate, bolt the steel ballast under the reach side, and clamp the plate to the desk with four M6 bolts"
+  },
+  {
+   "parts": [
+    "base_housing",
+    "housing_flange",
+    "flange_screw_1",
+    "flange_screw_2",
+    "flange_screw_3",
+    "flange_screw_4",
+    "bearing_ring",
+    "tt_bolt_1",
+    "tt_bolt_2",
+    "tt_bolt_3",
+    "tt_bolt_4"
+   ],
+   "action": "Screw the turntable housing to the plate and fit the J1 slewing bearing"
+  },
+  {
+   "parts": [
+    "m1",
+    "j1_pulley",
+    "belt_a",
+    "belt_b"
+   ],
+   "action": "Mount the J1 motor, fit the pulley and tension the GT2 belt"
+  },
+  {
+   "parts": [
+    "ctrl",
+    "mcu",
+    "drv_1",
+    "drv_2",
+    "drv_3",
+    "drv_4",
+    "term_block",
+    "usb_conn",
+    "ctrl_cable",
+    "estop_box",
+    "estop_btn",
+    "dc_jack"
+   ],
+   "action": "Fit the controller with its driver modules, wire the e-stop and DC jack, and run the harness into the housing"
   },
   {
    "parts": [
     "shoulder_housing",
-    "m2"
+    "m2",
+    "m2_s1",
+    "m2_s2",
+    "m2_s3",
+    "m2_s4",
+    "m2_conn",
+    "sh_horn",
+    "sh_horn_s1",
+    "sh_horn_s2",
+    "sh_horn_s3",
+    "sh_horn_s4",
+    "yoke_cover",
+    "yoke_s1",
+    "yoke_s2",
+    "yoke_s3",
+    "yoke_s4"
    ],
-   "action": "Mount the shoulder yoke on the slewing bearing; flange the NEMA23 gearbox to the yoke"
+   "action": "Bolt the yoke to the bearing; flange on the NEMA23 gearbox, horn and cover"
   },
   {
    "parts": [
     "upper_arm",
-    "elbow_housing",
-    "m3"
+    "ua_collar_sh",
+    "ua_collar_el",
+    "ua_pl_top",
+    "ua_pl_bot",
+    "ua_pl_p1",
+    "ua_pl_p2",
+    "ua_pl_p3",
+    "ua_pr_top",
+    "ua_pr_bot",
+    "ua_pr_p1",
+    "ua_pr_p2",
+    "ua_pr_p3",
+    "elbow_housing"
    ],
-   "action": "Bond and pin the tube into the shoulder flange and elbow block; mount the J3 motor"
+   "action": "Clamp the tube between the shoulder and elbow blocks and screw on both side plates"
+  },
+  {
+   "parts": [
+    "m3",
+    "m3_s1",
+    "m3_s2",
+    "m3_s3",
+    "m3_s4",
+    "m3_conn",
+    "el_horn",
+    "el_horn_s1",
+    "el_horn_s2",
+    "el_horn_s3",
+    "el_horn_s4",
+    "el_cover"
+   ],
+   "action": "Mount the J3 motor, horn and elbow cover"
   },
   {
    "parts": [
     "forearm",
-    "gripper_body",
-    "finger_l",
-    "finger_r"
+    "fa_pl_top",
+    "fa_pl_bot",
+    "fa_pl_p1",
+    "fa_pl_p2",
+    "fa_pl_p3",
+    "fa_pr_top",
+    "fa_pr_bot",
+    "fa_pr_p1",
+    "fa_pr_p2",
+    "fa_pr_p3"
    ],
-   "action": "Fit the forearm to the J3 output; attach the gripper and jaws; route cables through the tubes"
+   "action": "Fit the forearm to the J3 output with its side plates"
+  },
+  {
+   "parts": [
+    "gripper_body",
+    "grip_servo",
+    "servo_horn",
+    "finger_l",
+    "finger_r",
+    "pad_l",
+    "pad_r"
+   ],
+   "action": "Attach the gripper and servo; fit the jaws and bond on the rubber pads"
+  },
+  {
+   "parts": [
+    "ua_cable",
+    "ua_clip_1",
+    "ua_clip_2",
+    "ua_clip_3",
+    "fa_cable",
+    "fa_clip_1",
+    "fa_clip_2"
+   ],
+   "action": "Route the cables along the links and clip them every 35 to 50 mm"
   }
  ],
  "scenarios": [
