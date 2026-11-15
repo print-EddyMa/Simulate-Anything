@@ -1,7 +1,184 @@
-# Simulate Anything
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo-dark.svg">
+    <img src="docs/brand/logo-light.svg" alt="plimsoll" width="340">
+  </picture>
+</p>
 
-Describe a physical problem. Get back a numerical simulation of it, together
-with a report of how that simulation checked itself.
+<p align="center"><b>Every design gets a load line.</b></p>
+
+Describe something physical. Plimsoll designs it, loads it with the real world
+in simulations that check themselves, and shows how close it runs to its limits.
+
+![Plimsoll: a sensor enclosure at 73 % of its load line, its two real-world tests, and the design on a blueprint bench](docs/brand/screenshot.jpg)
+
+## The name
+
+In the 1870s Samuel Plimsoll campaigned for a mark on the side of every cargo
+ship: a ring with a line through it, painted where the water may come up to
+when the ship is fully loaded. Ships had been sent out overloaded and sunk;
+the Plimsoll line made the limit visible to anyone standing on the quay. It is
+still on every merchant ship.
+
+Plimsoll does the same for anything you design. Every part is loaded with the
+situations it will meet (a weight, a drop, a flame, a current, a flow), and
+every result is shown against its own line.
+
+## Reading the screen
+
+One object appears everywhere: **the load ring**, the Plimsoll mark itself. The
+line through the middle is the limit; the water is how much of it a result uses.
+
+| | |
+|---|---|
+| **Load** | The share of a limit a result uses. 100 % is exactly at the line. A temperature is measured as its rise above the ambient; a minimum (a safety factor, a natural frequency) as required ÷ actual. |
+| **Colour** | Colour means load and nothing else: deep sea (no load), ocean, glacier, sand, **signal orange at the line**, ember, crimson (twice over). Parts in 3D, the page's atmosphere and the contour landscape all take the colour of the design's most loaded test. |
+| **Bands** | Ample margin (up to 50 %), comfortable (to 80 %), close to the line (to 100 %), over the line. |
+| **Trust** | A hatched ring with a dashed rim is *untrusted*: the simulation failed its own checks, so its number is not shown as a result. |
+| **Progress** | While the designer works, a track shows where it is (reading, drafting, testing, improving, proving) and a trend plots every version's load against the line. Any version can be reopened. |
+
+The palette is generated in OKLCH so equal steps in load look like equal steps
+in colour; `docs/brand/make_brand.py` draws the mark, icon and wordmark.
+
+## Install
+
+```bash
+pip install -e ".[agent]"
+```
+
+Python 3.10+, NumPy and SciPy. The `agent` extra (the Anthropic SDK) is only
+needed for designing from a description and for plain-language questions.
+
+## Design anything
+
+The designer (the `create_anything` package) sits on top of the simulations. Describe something physical
+and the design agent writes a design document: parts (shape, dimensions in mm,
+material, process), assembly steps, and the real-world tests it has to survive.
+Each test runs as a verified simulation on the part's real dimensions and
+material, and the agent revises the design until the tests pass.
+
+```bash
+plimsoll serve
+```
+
+Open http://127.0.0.1:8001 and describe what you want to make. The design
+appears in 3D as it is tested, coloured by its load, and every version the agent
+tried can be reopened from the activity log. Ask for changes ("use aluminium
+instead", "make it lighter") and the agent edits the current design rather than
+starting over. You can also change materials, edit the JSON, run the tests and
+optimise by hand. Describing needs `ANTHROPIC_API_KEY` set where the server
+runs; the key never reaches the page. The same agent runs from the command line:
+
+```bash
+plimsoll design "A water-cooled copper cold plate for a 60 W laser diode; the diode base must stay under 45 degC" -o cold_plate.json
+```
+
+### Tests: built-in types, or any simulation
+
+The built-in test types cover the common situations:
+
+| Test | Situation | Simulation behind it |
+|---|---|---|
+| `load` | a steady force on a part held like a beam | `beam` |
+| `drop` | the product falls and lands on the part | `drop_impact` |
+| `vibration` | a part shaken by a motor or fan | `beam_vibration` |
+| `heat` | a heat sink carrying a power, or a bar hot at one end | `heat_sink_fin` |
+| `fire` | a flame or radiant heat on a wall | `flame_exposure` |
+| `current` | current through a conductor | `wire_heating` |
+| `flow` | liquid or gas through a tube | `pipe_flow` |
+
+For anything else, a `simulation` test runs any template in the catalogue. Its
+inputs are **bound** to the part, so the result depends on the design and the
+optimiser can change it:
+
+```json
+{"type": "simulation", "part": "plate", "simulation": "pcb_thermal",
+ "params": {"h": "10 W/(m^2*K)", "chips": [{"name": "LED", "x": "30 mm", "y": "20 mm",
+            "w": "10 mm", "h": "10 mm", "power": "4 W"}]},
+ "bind": {"board_length": "size.x", "board_width": "size.y", "thickness": "size.z",
+          "conductivity": "material.conductivity"},
+ "require": [{"qoi": "max_temperature", "max": "70 degC"}]}
+```
+
+A test with nothing bound is rejected. So are unknown templates, parameters or
+results, a requirement in the wrong units, and any quantity given without a
+unit. A test counts as passed only when the requirement is met **and** the
+simulation passed its own checks. A failed self-check is reported as
+*unverified*, never as a pass.
+
+### Shapes
+
+`box` (optionally a hollow shell), `cylinder`, `tube`, `sphere`, `heatsink`,
+and `extrusion`: any 2-D outline pushed along an axis, such as an L-angle,
+T-beam, channel or gear blank. An extrusion tested as a beam uses its true
+second moment of area and outer-fibre distance. Before any physics, the
+geometry is checked: parts that touch nothing, parts buried in each other,
+parts too thin to make or in the wrong units, and parts left out of the
+assembly.
+
+### The optimiser
+
+As drawn, the example shelf bracket's arm is loaded far past its line: it would
+bend 80.5 mm against a 2.5 mm limit (over 999 %), and a dropped book would
+break it (243 %).
+
+```console
+$ plimsoll optimise create_anything/examples/shelf_bracket.json -o fixed.json
+Wall shelf bracket: 48.1 g -> 99.6 g
+
+Changes
+  fix   Arm: thickness 4 -> 8 mm
+  fix   Arm: thickness 8 -> 16 mm
+  fix   Arm: PLA -> Polycarbonate
+  trim  Arm: thickness 16 -> 15.2 mm
+  trim  Arm: width 30 -> 27 mm
+
+Real-world tests (final design, verified)
+  PASS         96%  4 kg of books on the end  [books, arm]
+             40 N on the arm: safety factor 10.30 (needs 2), bends 2.39 mm (limit 2.5 mm)
+             simulation beam: PASSED WITH WARNINGS: 12 passed, 1 warnings, 0 failed, 2 not applicable
+  PASS         78%  A 1 kg book dropped onto it from 30 cm  [knock, arm]
+             1 kg dropped 0.3 m onto the arm: peak force 325 N (33x the weight), safety factor 1.28 (needs 1)
+             simulation drop_impact: VERIFIED: 12 passed, 0 warnings, 0 failed, 1 not applicable
+
+  2 passed, 0 failed, 0 unverified, 0 could not be run
+  loaded to 96% of the load line (limit: books)
+```
+
+(Output shortened.) The trims spend spare margin to save mass, so the result
+sits just under its line. The warning is the beam check noting that the thicker
+arm is now slightly too stubby for simple beam theory (length/depth 9.9, wants
+10 or more).
+
+It changes the dimensions each failing test depends on (for a `simulation`
+test, the bound ones) and tries other materials. It re-runs every test on every
+candidate and keeps the change that fixes the most for the least added mass.
+Once everything passes, it trims material back off, but never below what the
+manufacturing process can make (1.2 mm for a 3D print, for example). Parts
+marked `"locked": true`, such as screws and circuit boards, are never changed,
+and `material_options` limits which materials a part may switch to. The final
+design is re-run with full verification, and any new overlaps or gaps caused by
+resizing are reported.
+
+Other commands: `plimsoll check FILE` (exits non-zero unless every test
+passes), `plimsoll materials`, `plimsoll tests`. The same commands are also
+installed as `create-anything`. The example
+designs are in `create_anything/examples/`.
+
+### Limits
+
+Parts are idealised to fit the simulations: a bracket arm becomes a beam, a
+round, hollow or extruded section becomes the rectangle with the same stiffness
+and strength, and a wall in a fire becomes a 1-D slab. Each test's notes say
+which idealisation was used. Physics that interacts across parts (a whole
+assembly in one 3-D solve) is checked one piece at a time. Joints, fatigue,
+buckling and stress concentrations are not modelled, and there is no CAD import.
+
+## Plimsoll Lab: simulations that check themselves
+
+Underneath the designer is a catalogue of simulations that check themselves.
+They work on their own too: describe a physical problem, get back a numerical
+simulation of it, together with a report of how that simulation checked itself.
 
 ```console
 $ simulate-anything run heat_sink_fin -p fin_length="40 mm" -p h="40 W/(m^2*K)"
@@ -31,7 +208,7 @@ Self-checks
 
 (Output shortened; every line carries its numbers.)
 
-![The web app: inputs with sliders on the left, results, plots and the check report on the right](docs/screenshot.png)
+![Plimsoll Lab: inputs with sliders on the left, results, the board temperature map and the check report on the right](docs/brand/lab.jpg)
 
 A wrong input is caught instead of computed:
 
@@ -41,21 +218,9 @@ $ simulate-anything run heat_sink_fin -p h="40 W/(m*K)"
           [m·kg/(s^3·K)] but [kg/(s^3·K)] (W/(m^2*K)) is required
 ```
 
-## Install
+### Three ways to use it
 
-```bash
-pip install -e .
-```
-
-Python 3.10+, NumPy and SciPy. For plain-language mode add the agent extra:
-
-```bash
-pip install -e ".[agent]"
-```
-
-## Three ways to use it
-
-**1. Interactive web app.** Pick a simulation, drag a slider, and the result,
+**1. Plimsoll Lab, the web app.** Pick a simulation, drag a slider, and the result,
 the plots and the whole checklist update.
 
 ```bash
@@ -99,7 +264,7 @@ result = sa.run("beam", {"support": "cantilever", "length": "300 mm", "width": "
 print(result.value("max_deflection"), result.report.verdict)
 ```
 
-## Where it applies
+### Where it applies
 
 | Area | Problems | Simulations |
 |---|---|---|
@@ -111,19 +276,20 @@ print(result.value("max_deflection"), result.report.verdict)
 | Bio and medicine | drug diffusion in tissue, blood flow, heat from implants | `drug_diffusion`, `pipe_flow`, `implant_heating` |
 | Climate and energy | groundwater, building heat loss, solar panels, reactor cooling | `groundwater_well`, `wall_heat_loss`, `solar_panel`, `fuel_pin` |
 | Chemistry | reaction-diffusion, mass transfer in reactors | `reaction_diffusion`, `plug_flow_reactor` |
+| Product safety | a part on fire, a wire carrying current, a product dropped on the floor | `flame_exposure`, `wire_heating`, `drop_impact` |
 | Education | any textbook problem as an interactive simulation | `conduction_2d`, `projectile_drag`, and every template above in the web app |
 
 Not in the catalogue? A new simulation is one class; see
 [docs/extending.md](docs/extending.md) and
 [examples/custom_simulation.py](examples/custom_simulation.py).
 
-## How it checks itself
+### How it checks itself
 
 Every run produces a report. Each line is `PASS`, `WARN`, `FAIL` or `skip`,
 with the numbers behind it. A check that does not apply is listed as skipped
 with the reason; it is never left out.
 
-### Every simulation
+#### Every simulation
 
 | Check | What actually happens |
 |---|---|
@@ -132,7 +298,7 @@ with the reason; it is never left out.
 | **Known solutions** | The result is compared with the exact answer where one exists (fin equation, beam formulas, Hagen-Poiseuille, Fresnel slab, layered cylinder...). Where the setup has no closed form, the same solver is run on a benchmark that does. |
 | **Residuals** | The relative residual of the discrete equations must be below tolerance (1e-8 for linear solves). |
 
-### By physics
+#### By physics
 
 | Physics | Checks |
 |---|---|
@@ -141,7 +307,7 @@ with the reason; it is never left out.
 | **Fluids** | Mass in = mass out. The Reynolds number is compared with the regime the model assumes, and a laminar model at a turbulent Reynolds number is flagged. Pressure drop matches Hagen-Poiseuille (laminar) or the Moody chart via Colebrook (turbulent). |
 | **Electromagnetism** | Div B = 0. Charge is conserved. Gauss's law holds over nested closed surfaces. Energy flow adds up: Poynting flux in = out + absorbed. |
 
-### Math sanity
+#### Math sanity
 
 | Check | What actually happens |
 |---|---|
@@ -153,7 +319,7 @@ The checks are tested the same way as the solvers: the test suite injects
 wrong units, unstable time steps, missing supports and wrong physics, and
 requires the matching check to fail.
 
-## How the agent uses the checks
+### How the agent uses the checks
 
 `simulate-anything ask` runs a tool-using language model that never does the
 arithmetic itself. It can list the simulations, read a parameter schema, and
@@ -169,7 +335,7 @@ failure is something it has to deal with:
 It is instructed not to present numbers from a run with failed checks as an
 answer, and to say plainly when no template fits the problem.
 
-## Limits
+### Limits
 
 - Geometry is parametric: rectangles, layers, cylinders and spheres on
   structured 1-D and 2-D grids. There is no CAD import and no 3-D solver.
@@ -183,7 +349,7 @@ answer, and to say plainly when no template fits the problem.
 ## Layout
 
 ```
-simulate_anything/
+simulate_anything/   the simulation engine (Plimsoll Lab)
   units.py        quantities that carry dimensions
   checks.py       the check vocabulary and report
   core.py         Simulation base class: runs the protocol
@@ -191,8 +357,16 @@ simulate_anything/
   sims/           the simulation templates, by area
   agent.py        plain-language agent
   cli.py, server.py, report.py, web/
+create_anything/     the designer (Plimsoll)
+  materials.py    material library
+  design.py       the design document, mass and cost, geometry checks
+  scenarios.py    real-world tests mapped onto verified simulations
+  optimize.py     propose, re-test, keep; then trim
+  agent.py        plain-language designer
+  cli.py, server.py (background jobs), web/ (three.js viewer), examples/
 tests/            solver, template, protocol and app tests
 docs/extending.md
+docs/brand/       logo, mark, icon, screenshots and the script that draws them
 examples/
 ```
 
