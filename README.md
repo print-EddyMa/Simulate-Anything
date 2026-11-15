@@ -1,45 +1,49 @@
-# Create Anything
+# Genie: Create Anything
 
-Describe something, show a photo of it, or import a part. Create Anything
-designs it, shows exactly how it is built, puts it through the real world
-(wind, sun, fire, current, drops, heat, radio), and improves it until every
-test passes on simulations that check themselves.
+Describe something, show a photo of it, or import a part. Genie designs it,
+shows exactly how it is built, puts it through the real world (wind, sun,
+fire, current, drops, heat, radio), and improves it until every test passes on
+simulations that check themselves.
 
-![Create Anything building the Ghostlight field node](docs/screenshot.png)
+![Genie designing a passive radar node](docs/screenshot.png)
 
 ## What happens when you ask
 
-1. **Understand.** The request becomes a short engineering brief.
+1. **Understand.** The request becomes a short engineering brief with numbers
+   the design will be held to.
 2. **Design.** A system diagram, then the parts: materials, dimensions, where
    each sits, how they go together. The 3D model builds in front of you.
 3. **Test.** The design faces the situations it will meet. Each test runs a
-   real numerical simulation with its own verification report.
+   real numerical simulation with its own verification report, and shows how
+   much of its limit it uses.
 4. **Fix.** A failure that needs a new idea (a missing part, the wrong layout)
-   is fixed by the designer, with the number that showed it. A failure that is
-   about size or material is fixed by the optimiser, which keeps only changes
-   the simulations prove and then trims excess material.
+   is fixed in the design, citing the number that showed it. A failure about
+   size or material goes to the optimiser, which keeps only changes the
+   simulations prove and then trims excess material.
 5. **Verify.** The final design is re-run with full verification: grid
    convergence, known solutions, conservation laws. It is only reported as
-   passing if every test passes on verified simulations.
+   passing if every test passes on verified simulations. Every result carries
+   the command that reproduces it.
 
-## The flagship demo: Ghostlight
+## Example: a passive radar to spot drones
 
-Ghostlight is a passive radar: a receive-only sensor that maps drones by
-listening for their echoes of a TV broadcast. The demo turns the bench
-prototype into a node that can stand alone at a substation.
+> Design a passive radar that detects small drones around a US military base.
+> Receive-only, using the TV broadcast signals already in the air. It has to
+> run off-grid for days, survive storms and summer heat, and spot a small
+> quadcopter 1.5 km out.
 
-- The first design fails 4 of 5 tests. Detection reaches only 0.75 km
-  against a 1.5 km requirement, and the simulation shows why: TV signal leaking
-  into the back of the surveillance antenna raises the noise floor by 44 dB.
-  A bigger antenna would not help, because it hears the leak just as loudly.
-- The designer adds a wire-mesh screen between the antenna and the tower.
-  Detection goes to 2.2 km.
-- The optimiser then paints the enclosure white (64 °C inside instead of 71 °C),
-  enlarges the battery for three cloudy winter days, and stiffens the mast for
+- The first design passes 1 of 5 tests. Detection reaches only 0.75 km, and
+  the simulation shows why: TV signal leaking into the back of the
+  surveillance antenna raises the noise floor by 44 dB. A bigger antenna would
+  not help, because it hears the leak just as loudly.
+- A wire-mesh screen between the antenna and the transmitter fixes it:
+  detection reaches 2.2 km.
+- The optimiser paints the enclosure white (64 °C inside instead of 71 °C),
+  enlarges the battery for three cloudy winter days and stiffens the mast for
   a 35 m/s gust, then trims material wherever every test still passes.
 
-The demo uses public textbook physics (the bistatic radar equation) and
-catalogue-level parts only.
+The model is the public bistatic radar equation in free space, with
+catalogue-level parts.
 
 ## Run it
 
@@ -48,25 +52,31 @@ pip install -e ".[agent]"
 ```
 
 ```bash
-python -m create_anything serve
+genie serve
 ```
 
-Open http://127.0.0.1:8000. The examples run without an API key: their design
-steps are scripted, and every simulation runs live. To design anything from
+Open http://127.0.0.1:8000. Without an API key the suggested requests still run:
+their design steps are recorded, and every simulation runs live. To design anything from
 your own words or photos, set your key before starting the server:
 
 ```bash
 export ANTHROPIC_API_KEY="your-key"
 ```
 
+Or from the terminal:
+
+```bash
+genie design "A wall bracket that holds a 5 kg speaker 20 cm off the wall" -o bracket.json
+```
+
 In the terminal:
 
 ```bash
-python -m create_anything demo ghostlight
+genie demo drone_radar
 ```
 
 ```bash
-python -m create_anything optimise my_design.json -o improved.json
+genie optimise my_design.json -o improved.json
 ```
 
 ## Real-world tests
@@ -127,7 +137,7 @@ requires the matching check to fail.
 
 ## Simulations in the engine
 
-Create Anything runs on Simulate Anything, a library of 32 simulations that
+Genie runs on Simulate Anything, a library of 32 simulations that
 verify themselves. Each one can also be run on its own:
 
 | Area | Simulations |

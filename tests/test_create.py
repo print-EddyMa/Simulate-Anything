@@ -125,8 +125,8 @@ def test_unverified_simulation_never_counts_as_pass():
 @pytest.mark.parametrize("example", sorted(examples.EXAMPLES))
 def test_examples_optimise_to_verified_pass(example):
     d = D.normalise(examples.get(example)["design"])
-    if example == "ghostlight":
-        d["parts"].append(copy.deepcopy(examples.GHOSTLIGHT_SCREEN))
+    if example == "drone_radar":
+        d["parts"].append(copy.deepcopy(examples.RADAR_SCREEN))
         d = D.normalise(d)
     before = evaluate(d, verify=False, detail=False)
     assert not before["all_pass"]
@@ -137,19 +137,19 @@ def test_examples_optimise_to_verified_pass(example):
 
 
 def test_optimiser_keeps_contents_inside_housings():
-    d = D.normalise(examples.get("ghostlight")["design"])
-    d["parts"].append(copy.deepcopy(examples.GHOSTLIGHT_SCREEN))
+    d = D.normalise(examples.get("drone_radar")["design"])
+    d["parts"].append(copy.deepcopy(examples.RADAR_SCREEN))
     out = optimise(D.normalise(d))
     box = D.part_by_id(out["design"], "enclosure")
     for pid in ("sdr", "computer"):
         assert D.contains(box, D.part_by_id(out["design"], pid))
 
 
-def test_ghostlight_screen_is_the_coverage_fix():
-    d = D.normalise(examples.get("ghostlight")["design"])
+def test_radar_screen_is_the_coverage_fix():
+    d = D.normalise(examples.get("drone_radar")["design"])
     sc = next(s for s in d["scenarios"] if s["id"] == "coverage")
     without = run_scenario(d, sc, verify=False, detail=False)
-    d["parts"].append(copy.deepcopy(examples.GHOSTLIGHT_SCREEN))
+    d["parts"].append(copy.deepcopy(examples.RADAR_SCREEN))
     d = D.normalise(d)
     with_screen = run_scenario(d, sc, verify=False, detail=False)
     assert without["status"] == "fail" and with_screen["status"] == "pass"
@@ -198,7 +198,7 @@ def test_server_endpoints():
     try:
         assert json.load(urllib.request.urlopen(base + "/api/status"))["version"]
         ids = [e["id"] for e in json.load(urllib.request.urlopen(base + "/api/examples"))]
-        assert ids[0] == "ghostlight"
+        assert ids[0] == "drone_radar"
         out = json.load(post("/api/evaluate", {"design": examples.get("heatsink")["design"]}))
         assert out["evaluation"]["tests"][0]["status"] == "fail"
         raw = post("/api/demo/heatsink", {"pace": 0}).read().decode()

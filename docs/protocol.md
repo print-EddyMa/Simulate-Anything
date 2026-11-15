@@ -44,7 +44,7 @@ in order, ending with a `done` or `error` event.
 
 ```jsonc
 {
-  "name": "Ghostlight passive radar node",
+  "name": "Passive radar node",
   "description": "...",
   "parts": [Part],
   "assembly": [{"parts": ["mast", "clamp"], "action": "Stand the mast in the base"}],

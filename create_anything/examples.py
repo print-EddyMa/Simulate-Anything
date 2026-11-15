@@ -5,9 +5,9 @@ from __future__ import annotations
 
 import copy
 
-# -- Ghostlight: a deployable passive-radar node -----------------------------------
+# -- a passive radar for drone detection ----------------------------------------------
 # Public textbook physics and catalogue-level parts only.
-GHOSTLIGHT_DIAGRAM = {
+RADAR_DIAGRAM = {
     "nodes": [
         {"id": "tv", "label": "TV transmitter", "kind": "environment", "group": "Sky"},
         {"id": "drone", "label": "Drone", "kind": "environment", "group": "Sky"},
@@ -23,7 +23,7 @@ GHOSTLIGHT_DIAGRAM = {
          "part": "computer"},
         {"id": "dsp", "label": "Cancel direct signal → cross-ambiguity → CFAR → tracker",
          "kind": "software", "group": "Electronics"},
-        {"id": "report", "label": "Morning report", "kind": "software", "group": "Output"},
+        {"id": "report", "label": "Tracks to operators", "kind": "software", "group": "Output"},
         {"id": "solar", "label": "Solar panel", "kind": "power", "group": "Power",
          "part": "solar"},
         {"id": "battery", "label": "LiFePO4 battery", "kind": "power", "group": "Power",
@@ -49,11 +49,11 @@ GHOSTLIGHT_DIAGRAM = {
     ],
 }
 
-GHOSTLIGHT = {
-    "name": "Ghostlight field node",
-    "description": "A receive-only radar that maps drones over a site by listening for "
-                   "their echoes of a TV broadcast. This version stands on its own: "
-                   "weatherproof, solar-powered and built to ride out a storm.",
+RADAR = {
+    "name": "Passive radar node",
+    "description": "A receive-only radar that detects drones around a site by listening "
+                   "for their echoes of a TV broadcast. It stands on its own: weatherproof, "
+                   "solar-powered and built to ride out a storm.",
     "parts": [
         {"id": "tripod", "name": "Tripod base", "shape": "box", "look": "tripod",
          "size": [1100, 1100, 700], "position": [0, 0, 350], "material": "aluminium",
@@ -152,10 +152,10 @@ GHOSTLIGHT = {
         {"id": "ice", "type": "load", "part": "antenna_arm", "title": "Ice on the antenna",
          "force": "40 N", "support": "cantilever", "min_safety_factor": 2},
     ],
-    "diagram": GHOSTLIGHT_DIAGRAM,
+    "diagram": RADAR_DIAGRAM,
 }
 
-GHOSTLIGHT_SCREEN = {
+RADAR_SCREEN = {
     "id": "screen", "name": "Direct-path screen", "shape": "box", "look": "wire_mesh",
     "size": [12, 900, 1200], "position": [120, 0, 2300], "material": "galvanised_steel",
     "group": "RF front end", "specs": {"rejection": "10 dB", "mesh": "12 mm squares"},
@@ -219,19 +219,20 @@ HEATSINK = {
 }
 
 EXAMPLES = {
-    "ghostlight": {
-        "title": "Ghostlight field node",
-        "tagline": "A passive radar that sees drones using TV signals",
-        "prompt": "Turn our Ghostlight passive-radar prototype into a field node that can "
-                  "stand alone at a substation: weatherproof, solar-powered, and able to "
-                  "see a small drone 1.5 km out.",
-        "icon": "radar", "design": GHOSTLIGHT},
+    "drone_radar": {
+        "title": "Passive radar to spot drones around a base",
+        "tagline": "Receive-only drone detection using TV signals",
+        "prompt": "Design a passive radar that detects small drones around a US military "
+                  "base. Receive-only, using the TV broadcast signals already in the air. "
+                  "It has to run off-grid for days, survive storms and summer heat, and "
+                  "spot a small quadcopter 1.5 km out.",
+        "icon": "radar", "design": RADAR},
     "bracket": {
-        "title": "Shelf bracket", "tagline": "Will a 3D print hold your books?",
+        "title": "Shelf bracket for 8 kg of books", "tagline": "Will a 3D print hold?",
         "prompt": "A 3D-printed shelf bracket for 8 kg of books.", "icon": "bracket",
         "design": BRACKET},
     "heatsink": {
-        "title": "LED heat sink", "tagline": "Keep 40 W of LED below 85 °C",
+        "title": "Heat sink for a 40 W LED", "tagline": "Keep it below 85 °C",
         "prompt": "A heat sink for a 40 W LED module in still air.", "icon": "thermometer",
         "design": HEATSINK},
 }

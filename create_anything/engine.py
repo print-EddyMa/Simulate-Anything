@@ -167,19 +167,20 @@ def _diagram_subset(diagram, ids):
     return {"type": "diagram", "diagram": {"nodes": nodes, "edges": edges}}
 
 
-def demo_ghostlight(pace=1.0):
+def demo_radar(pace=1.0):
     wait = _Pacer(pace)
-    full = normalise(examples.get("ghostlight")["design"])
+    full = normalise(examples.get("drone_radar")["design"])
     diagram = full["diagram"]
     yield status("understand", "Reading the request")
     wait(0.5)
-    yield thought("Ghostlight is a passive radar: it never transmits. One antenna records a "
-                  "TV broadcast; a second listens for the faint copies of it that bounce off "
-                  "drones, aircraft and birds.")
+    yield thought("A base perimeter needs to see small drones without giving its own "
+                  "position away, so this has to be receive-only: a passive radar. One "
+                  "antenna records a TV broadcast; a second listens for the faint copies of "
+                  "it that bounce off drones.")
     wait(0.9)
-    yield thought("To stand alone at a substation it needs what the prototype lacks: a mast "
-                  "that survives storms, a sealed box for the electronics, its own power, and "
-                  "enough sensitivity to see a small drone well beyond the fence.")
+    yield thought("Requirements I'll hold it to: see a 0.01 m² quadcopter at 1.5 km, run "
+                  "off-grid through three overcast winter days, ride out a 35 m/s storm gust, "
+                  "and keep the electronics below 65 °C on a 38 °C afternoon.")
     wait(0.9)
     yield status("design", "Sketching the system")
     wait(0.3)
@@ -193,13 +194,13 @@ def demo_ghostlight(pace=1.0):
     yield status("build", "Building it part by part")
     groups = [
         (["tripod", "mast"], "A 2.6 m aluminium mast on a tripod lifts the antennas clear "
-                             "of people and parked vehicles."),
+                             "of vehicles and fences, and packs down for transport."),
         (["arm_clamp", "antenna_arm", "surv_antenna", "ref_clamp", "ref_arm", "ref_dipole"],
-         "The surveillance antenna faces the area to protect; the reference dipole faces the "
-         "TV tower behind it."),
+         "The surveillance antenna faces the area to watch; the reference dipole points "
+         "back at the TV tower, 20 km behind the node."),
         (["enclosure", "sdr", "computer", "coax_surv", "coax_ref"],
          "A sealed polycarbonate box holds a two-channel SDR on one clock and the computer "
-         "that runs detection."),
+         "that runs detection; coax runs down the mast to it."),
         (["battery", "panel_bracket", "solar"],
          "A LiFePO4 battery and a solar panel keep it running without mains power."),
     ]
@@ -247,7 +248,7 @@ def demo_ghostlight(pace=1.0):
                   "still get through.")
     wait(0.8)
     with_screen = copy.deepcopy(design)
-    with_screen["parts"].append(copy.deepcopy(examples.GHOSTLIGHT_SCREEN))
+    with_screen["parts"].append(copy.deepcopy(examples.RADAR_SCREEN))
     with_screen["assembly"].insert(2, {"parts": ["screen"], "action":
                                        "Hang the mesh screen on the arm, between the "
                                        "surveillance antenna and the TV tower"})
@@ -348,8 +349,8 @@ def demo_generic(example_id, pace=1.0):
 
 def demo(example_id, pace=1.0):
     """Event stream for a built-in example."""
-    if example_id == "ghostlight":
-        yield from demo_ghostlight(pace)
+    if example_id == "drone_radar":
+        yield from demo_radar(pace)
     else:
         yield from demo_generic(example_id, pace)
 
