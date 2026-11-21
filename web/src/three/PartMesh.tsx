@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import * as THREE from "three";
-import { Edges } from "@react-three/drei";
+import { Edges, RoundedBox } from "@react-three/drei";
 import type { Part, Vec3 } from "@/types";
 import { mulberry, pcbTexture, solarTexture, type Finish } from "./looks";
 
@@ -92,11 +92,16 @@ function Box({ p, o }: { p: Part; o: RenderOpts }) {
     );
   }
   return (
-    <mesh castShadow receiveShadow>
-      <boxGeometry args={s} />
+    <RoundedBox args={s} radius={bevel(s)} smoothness={3} castShadow receiveShadow>
       <Mat o={o} />
-    </mesh>
+    </RoundedBox>
   );
+}
+
+/** Real parts have softened edges that catch the light; a hard 90° box reads as CG. */
+function bevel(s: Vec3) {
+  const m = Math.min(s[0], s[1], s[2]);
+  return Math.max(0.05, Math.min(m * 0.12, 3, m / 2 - 0.01));
 }
 
 function Tube({ p, o }: { p: Part; o: RenderOpts }) {
@@ -176,13 +181,14 @@ function MeshShape({ p, o }: { p: Part; o: RenderOpts }) {
 function Pcb({ p, o }: { p: Part; o: RenderOpts }) {
   const [x, y, z] = p.size as Vec3;
   const board = Math.min(1.6, z * 0.3);
+  const bare = z <= 2.5;   // a bare board: its components are their own parts, so draw none
   const chips = useMemo(() => {
     const r = mulberry(p.id.length * 31 + Math.round(x));
-    return Array.from({ length: 6 }, () => ({
+    return Array.from({ length: bare ? 0 : 6 }, () => ({
       w: x * (0.12 + r() * 0.18), d: y * (0.12 + r() * 0.2), h: Math.min(z - board, 1.2 + r() * 3),
       cx: (r() - 0.5) * x * 0.6, cy: (r() - 0.5) * y * 0.6,
     }));
-  }, [p.id, x, y, z, board]);
+  }, [p.id, x, y, z, board, bare]);
   const tex = pcbTexture();
   const zb = -z / 2 + board / 2;
   return (
@@ -198,7 +204,7 @@ function Pcb({ p, o }: { p: Part; o: RenderOpts }) {
         </mesh>
       ))}
       {/* connectors on one edge (SMA / USB) */}
-      {[-0.25, 0.25].map((f, i) => (
+      {(bare ? [] : [-0.25, 0.25]).map((f, i) => (
         <mesh key={`c${i}`} position={[x / 2 - Math.min(6, x * 0.05), y * f, -z / 2 + board + Math.min(4, (z - board) / 2)]} rotation={[0, 0, Math.PI / 2]} castShadow>
           <cylinderGeometry args={[Math.min(3.2, y * 0.05), Math.min(3.2, y * 0.05), Math.min(12, x * 0.1), 16]} />
           <Mat o={o} color="#d9c27a" metalness={1} roughness={0.25} />
@@ -412,10 +418,10 @@ export function PartShape({ p, o }: { p: Part; o: RenderOpts }) {
         <mesh castShadow receiveShadow><boxGeometry args={p.size} /><Mat o={o} color="#dbeafe" transmission={0.9} roughness={0.05} metalness={0} /></mesh>
       );
       case "screen": return (
-        <mesh castShadow receiveShadow><boxGeometry args={p.size} /><Mat o={o} color="#0b1220" emissive="#1d4ed8" roughness={0.2} metalness={0} /></mesh>
+        <RoundedBox args={p.size as Vec3} radius={bevel(p.size as Vec3)} smoothness={3} castShadow receiveShadow><Mat o={o} color="#0b1220" emissive="#1d4ed8" roughness={0.12} metalness={0} clearcoat={1} /></RoundedBox>
       );
       case "rubber": return (
-        <mesh castShadow receiveShadow><boxGeometry args={p.size} /><Mat o={o} color="#1c1d1f" roughness={0.95} metalness={0} clearcoat={0} /></mesh>
+        <RoundedBox args={p.size as Vec3} radius={bevel(p.size as Vec3)} smoothness={3} castShadow receiveShadow><Mat o={o} color={p.color ?? "#1c1d1f"} roughness={0.9} metalness={0} clearcoat={0} /></RoundedBox>
       );
       default: return <Box p={p} o={o} />;
     }
@@ -424,7 +430,7 @@ export function PartShape({ p, o }: { p: Part; o: RenderOpts }) {
     const rubber = p.look === "rubber" || p.look === "cable";
     return (
       <mesh rotation={axisRot(p.axis ?? "z")} castShadow receiveShadow>
-        <cylinderGeometry args={[p.radius, p.radius, p.length, 40]} />
+        <cylinderGeometry args={[p.radius, p.radius, p.length, 72]} />
         <Mat o={o} color={rubber ? "#1c1d1f" : undefined} roughness={rubber ? 0.9 : undefined} metalness={rubber ? 0 : undefined} />
       </mesh>
     );

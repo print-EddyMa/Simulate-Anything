@@ -26,13 +26,12 @@
   #s-eq .card { transform: scale(.94); transition: transform .5s cubic-bezier(.16,1,.3,1); text-align: center; }
   #s-eq.on .card { transform: scale(1); }
   .eq-label { font-size: 22px; letter-spacing: .32em; text-transform: uppercase; color: var(--accent); margin-bottom: 34px; }
-  .eq { display: inline-flex; align-items: center; gap: 28px; font-family: "Cambria Math", "STIX Two Math", "Times New Roman", serif; font-style: italic; font-size: 64px; color: var(--ink); }
+  .eq { display: inline-flex; align-items: center; gap: 28px; font-family: "Cambria Math", "STIX Two Math", "Times New Roman", serif; font-style: italic; font-size: 72px; color: var(--ink); }
+  .eq * { font-family: inherit; font-style: inherit; color: inherit; }
   .frac { display: inline-flex; flex-direction: column; align-items: center; }
   .frac .num { padding: 0 14px 12px; }
   .frac .den { padding: 12px 14px 0; border-top: 3px solid var(--ink); }
   .eq sub { font-size: .55em; } .eq sup { font-size: .55em; }
-  .eq .up { font-style: normal; }
-  .eq .hl { color: var(--accent); }
   .eq-note { margin-top: 38px; font-size: 22px; color: var(--dim); }
 
   /* 3: the result */
@@ -59,6 +58,16 @@
   #s-end.on .tag { opacity: 1; transform: none; transition-delay: .6s; }
   #s-end.on .gh { opacity: 1; transform: none; transition-delay: 1.1s; }
 
+  /* 5: the wall, six live copies of Margin at once */
+  #s-grid { background: var(--bg); display: grid; align-items: stretch; justify-items: stretch; align-content: stretch; justify-content: stretch; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px; padding: 10px; }
+  #s-grid .tile { position: relative; overflow: hidden; border-radius: 12px; border: 1px solid #1c232c; background: #07090c;
+    opacity: 0; transform: scale(.96); transition: opacity .5s ease, transform .6s cubic-bezier(.16,1,.3,1); }
+  #s-grid.on .tile { opacity: 1; transform: none; }
+  #s-grid.on .tile:nth-child(2) { transition-delay: .08s } #s-grid.on .tile:nth-child(3) { transition-delay: .16s }
+  #s-grid.on .tile:nth-child(4) { transition-delay: .24s } #s-grid.on .tile:nth-child(5) { transition-delay: .32s }
+  #s-grid.on .tile:nth-child(6) { transition-delay: .40s }
+  #s-grid iframe { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; transform-origin: 0 0; visibility: visible; }
+
   /* help, H to toggle; never shown unless asked */
   #help { position: fixed; right: 18px; bottom: 18px; background: rgba(13,17,23,.95); border: 1px solid #2a313b; border-radius: 12px; padding: 16px 20px; font-size: 14px; line-height: 1.8; color: #c8d0d8; display: none; z-index: 10; }
   #help.on { display: block; }
@@ -73,15 +82,13 @@
 
 <section class="slide" id="s-eq">
   <div class="card">
-    <div class="eq-label">Bistatic radar equation</div>
     <div class="eq">
       <span>SNR</span><span class="up">=</span>
       <span class="frac">
-        <span class="num">P<sub>t</sub> G<sub>t</sub> G<sub>r</sub> λ<sup>2</sup> <span class="hl">σ</span> T<sub>i</sub></span>
-        <span class="den"><span class="up">(4π)</span><sup>3</sup> R<sub>t</sub><sup>2</sup> R<sub>r</sub><sup>2</sup> L <span class="up">(</span>k T<sub>0</sub> F <span class="up">+</span> <span class="hl">N<sub>leak</sub></span><span class="up">)</span></span>
+        <span class="num">P<sub>t</sub> G<sub>t</sub> G<sub>r</sub> λ<sup>2</sup> σ T<sub>i</sub></span>
+        <span class="den"><span class="up">(4π)</span><sup>3</sup> R<sub>t</sub><sup>2</sup> R<sub>r</sub><sup>2</sup> L <span class="up">(</span>k T<sub>0</sub> F <span class="up">+</span> N<sub>leak</sub><span class="up">)</span></span>
       </span>
     </div>
-    <div class="eq-note">solved at every point on the map, around the radar</div>
   </div>
 </section>
 
@@ -105,11 +112,14 @@
   </div>
 </section>
 
+<section class="slide" id="s-grid"></section>
+
 <div id="help">
   <div><b>1</b> field photo</div>
   <div><b>2</b> equation (toggle, over the app)</div>
   <div><b>3</b> 13 / 34 → 100%</div>
   <div><b>4</b> close: margin, Create anything</div>
+  <div><b>5</b> six live designs at once (restarts them)</div>
   <div><b>0 / Esc</b> back to the app</div>
   <div><b>R</b> radar run</div>
   <div><b>D</b> next design · <b>⇧D</b> previous</div>
@@ -162,6 +172,30 @@
     slide(s.classList.contains("on") ? null : id);
   }
 
+  // the wall: six full copies of the app, scaled down, all started together
+  const WALL = [`/?mock=1&stage=1&pace=0.35&auto=1`].concat(DESIGNS.map((n) => `/?open=${n}&stage=1`));
+  const grid = document.getElementById("s-grid");
+  function fitWall() {
+    grid.querySelectorAll(".tile").forEach((t) => {
+      const f = t.querySelector("iframe"); if (!f) return;
+      // lay the app out at desktop width, as tall as the tile's shape, then scale it down to fit
+      const k = t.clientWidth / 1440;
+      f.style.width = "1440px"; f.style.height = `${t.clientHeight / k}px`;
+      f.style.transform = `scale(${k})`; f.style.left = "0px"; f.style.top = "0px";
+    });
+  }
+  function startWall() {
+    grid.innerHTML = "";
+    WALL.forEach((src) => {
+      const t = document.createElement("div"); t.className = "tile";
+      const f = document.createElement("iframe"); f.src = src; hook(f);
+      t.appendChild(f); grid.appendChild(t);
+    });
+    slide("s-grid");
+    requestAnimationFrame(fitWall);
+  }
+  window.addEventListener("resize", fitWall);
+
   function onKey(e) {
     const t = e.target;
     const typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
@@ -177,6 +211,7 @@
     else if (k === "2") toggle("s-eq");
     else if (k === "3") slide("s-stat");
     else if (k === "4") slide("s-end");
+    else if (k === "5") startWall();
     else if (k === "0" || k === "Escape") slide(null);
     else if (k === "r" || k === "R") showApp("radar");
     else if (k === "d") { design = (design + 1) % DESIGNS.length; showApp(DESIGNS[design]); }

@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useStore } from "@/store";
-import { getExamples, getMaterials, getStatus, openDesign, type Status } from "@/api";
+import { getExamples, getMaterials, getStatus, openDesign, runSuggestion, type Status } from "@/api";
 import type { Example } from "@/types";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -96,6 +96,8 @@ export default function App() {
       set({ materials: mats });
       const open = new URLSearchParams(location.search).get("open");
       if (open && !st.mock) void openDesign(open);
+      // ?auto: start the first suggested run on load (the presenter's wall of six)
+      if (new URLSearchParams(location.search).has("auto") && ex[0]) void runSuggestion(ex[0], st);
     })();
   }, [set]);
 

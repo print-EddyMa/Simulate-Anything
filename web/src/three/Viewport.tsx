@@ -2,7 +2,7 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { CameraControls, ContactShadows, Environment, Grid, Lightformer, Html, MeshReflectorMaterial } from "@react-three/drei";
-import { Bloom, EffectComposer, N8AO, Outline, Selection, Select, ToneMapping, Vignette } from "@react-three/postprocessing";
+import { Bloom, DepthOfField, EffectComposer, N8AO, Outline, Selection, Select, ToneMapping, Vignette } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import { useStore } from "@/store";
 import type { Part, Vec3 } from "@/types";
@@ -331,7 +331,24 @@ export function useIsDark() {
   return dark;
 }
 
+/** The stage rig: a product-photography studio. Black walls, one big soft key overhead, and
+ *  thin strip lights at the sides and back, so metal edges and glossy faces pick up crisp lines. */
+function StageStudio() {
+  return (
+    <Environment resolution={1024} frames={1} environmentIntensity={1.35}>
+      <color attach="background" args={["#020304"]} />
+      <Lightformer form="rect" intensity={2.6} position={[0, 6, 1]} rotation-x={Math.PI / 2} scale={[8, 5, 1]} color="#ffffff" />
+      <Lightformer form="rect" intensity={6} position={[-5, 1.5, 0]} rotation-y={Math.PI / 2} scale={[0.35, 9, 1]} color="#ffffff" />
+      <Lightformer form="rect" intensity={6} position={[5, 1.5, 0]} rotation-y={-Math.PI / 2} scale={[0.35, 9, 1]} color="#ffffff" />
+      <Lightformer form="rect" intensity={4} position={[0, 2, -6]} scale={[10, 0.3, 1]} color="#dbeafe" />
+      <Lightformer form="rect" intensity={1.6} position={[0, 1, 7]} rotation-y={Math.PI} scale={[6, 2, 1]} color="#fff6ea" />
+      <Lightformer form="ring" intensity={2} position={[3, 4, 4]} scale={2} color="#ffffff" />
+    </Environment>
+  );
+}
+
 function Studio() {
+  if (STAGE) return <StageStudio />;
   // a soft photo studio: big key softbox overhead, cool and warm strip lights,
   // a front fill and a dim floor bounce, so metals always have something to reflect
   return (
@@ -349,11 +366,23 @@ function Studio() {
 
 function Effects({ site }: { site: boolean }) {
   const dark = useIsDark();
+  const design = useStore((st) => st.design);
+  // stage: shallow depth of field focused on the model, like a macro product shot
+  const focus = useMemo(() => {
+    if (!STAGE || !design) return null;
+    const b = new THREE.Box3();
+    design.parts.forEach((p) => b.union(aabb(p)));
+    const min = new THREE.Vector3(b.min.x, b.min.z, -b.max.y).multiplyScalar(MM);
+    const max = new THREE.Vector3(b.max.x, b.max.z, -b.min.y).multiplyScalar(MM);
+    const sph = new THREE.Box3(min, max).getBoundingSphere(new THREE.Sphere());
+    return { target: sph.center, range: sph.radius * 1.6 };
+  }, [design]);
   return (
     <EffectComposer multisampling={4} autoClear={false}>
       <N8AO aoRadius={site ? 2 : 0.25} intensity={site ? 0 : 2.2} distanceFalloff={1} halfRes />
       <Outline visibleEdgeColor={0x7dd3fc} hiddenEdgeColor={0x38bdf8} edgeStrength={3} blur width={1200} />
       <Bloom intensity={site ? 0.9 : 0.35} luminanceThreshold={0.85} luminanceSmoothing={0.2} mipmapBlur />
+      {focus && !site ? <DepthOfField target={focus.target} focusRange={focus.range} bokehScale={3.2} /> : <></>}
       <Vignette offset={0.25} darkness={STAGE ? 0.75 : dark ? 0.45 : 0.2} />
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
     </EffectComposer>
@@ -419,7 +448,7 @@ export default function Viewport() {
       >
         <Suspense fallback={null}>
           <Studio />
-          <hemisphereLight args={["#e8f0ff", "#20242b", 0.6]} />
+          <hemisphereLight args={["#e8f0ff", "#20242b", STAGE ? 0.25 : 0.6]} />
           {/* key: high, from the camera side */}
           <directionalLight position={[6, 8, -2]} intensity={2.4} castShadow shadow-mapSize={[2048, 2048]} shadow-bias={-0.0001} />
           {/* rim: from behind the model, so metal edges separate from the dark background */}

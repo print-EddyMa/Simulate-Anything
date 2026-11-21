@@ -112,13 +112,15 @@ export function finishFor(materialId: string, mats: Record<string, Material>, ov
   const family = (m?.family as string) ?? (["aluminium", "steel", "stainless", "copper", "brass", "titanium"].includes(materialId) ? "metal" : "plastic");
   const color = override ?? (m?.color as string) ?? FALLBACK[materialId] ?? "#c8c8c8";
   if (family === "metal") {
-    const rough = materialId === "steel" ? 0.45 : materialId === "aluminium" ? 0.36 : materialId === "titanium" ? 0.4 : 0.3;
-    // slightly below 1 so the base colour still reads under studio lighting
-    return { color, metalness: 0.82, roughness: rough, clearcoat: 0, family };
+    // machined and plated metals: crisp, mirror-like highlights from the studio strips
+    const rough = materialId === "steel" ? 0.34 : materialId === "aluminium" ? 0.26 : materialId === "titanium" ? 0.3
+      : materialId === "stainless" ? 0.2 : 0.22;
+    return { color, metalness: 0.95, roughness: rough, clearcoat: 0, family };
   }
   if (family === "wood") return { color, metalness: 0, roughness: 0.82, clearcoat: 0, family };
-  if (family === "composite") return { color, metalness: 0.2, roughness: 0.35, clearcoat: 0.8, family };
-  return { color, metalness: 0, roughness: 0.42, clearcoat: 0.25, family };
+  if (family === "composite") return { color, metalness: 0.2, roughness: 0.3, clearcoat: 0.9, family };
+  // moulded plastics and packages: a soft satin sheen
+  return { color, metalness: 0, roughness: 0.38, clearcoat: 0.45, family };
 }
 
 export const STATUS_COLOR = { pass: "#22c55e", fail: "#ef4444", pending: "#38bdf8" } as const;
