@@ -17,6 +17,8 @@ import { useIsDarkDom } from "@/panels/useIsDark";
 const MM = 0.001;
 /** ?stage: presentation look. Black studio, mirror floor, no grid, a slow orbit. */
 const STAGE = typeof location !== "undefined" && new URLSearchParams(location.search).has("stage");
+/** ?lite: cheap rendering for small tiles (the presenter's wall of six): 1x pixels, no AO, DoF or mirror. */
+const LITE = typeof location !== "undefined" && new URLSearchParams(location.search).has("lite");
 
 function rotationMatrix(rot: Vec3) {
   return new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rot.map(THREE.MathUtils.degToRad) as Vec3, "XYZ"));
@@ -277,9 +279,9 @@ function Ground() {
         fadeStrength={1.5}
         infiniteGrid
       />}
-      <ContactShadows position={[0, 0.0006, 0]} scale={span * 3} blur={2.4} far={span * 1.2} opacity={dark ? 0.75 : 0.45} resolution={1024} />
+      <ContactShadows position={[0, 0.0006, 0]} scale={span * 3} blur={2.4} far={span * 1.2} opacity={dark ? 0.75 : 0.45} resolution={LITE ? 256 : 1024} frames={LITE ? 1 : Infinity} />
       {/* a subtle, slightly rough mirror under the grid */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.0004, 0]}>
+      {!LITE && <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.0004, 0]}>
         <circleGeometry args={[span * 2.2, 96]} />
         <MeshReflectorMaterial
           color={dark ? "#06080b" : "#eef1f5"}
@@ -296,7 +298,7 @@ function Ground() {
           minDepthThreshold={0.6}
           maxDepthThreshold={1.2}
         />
-      </mesh>
+      </mesh>}
     </group>
   );
 }
@@ -379,10 +381,10 @@ function Effects({ site }: { site: boolean }) {
   }, [design]);
   return (
     <EffectComposer multisampling={4} autoClear={false}>
-      <N8AO aoRadius={site ? 2 : 0.25} intensity={site ? 0 : 2.2} distanceFalloff={1} halfRes />
+      {LITE ? <></> : <N8AO aoRadius={site ? 2 : 0.25} intensity={site ? 0 : 2.2} distanceFalloff={1} halfRes />}
       <Outline visibleEdgeColor={0x7dd3fc} hiddenEdgeColor={0x38bdf8} edgeStrength={3} blur width={1200} />
       <Bloom intensity={site ? 0.9 : 0.35} luminanceThreshold={0.85} luminanceSmoothing={0.2} mipmapBlur />
-      {focus && !site ? <DepthOfField target={focus.target} focusRange={focus.range} bokehScale={3.2} /> : <></>}
+      {focus && !site && !LITE ? <DepthOfField target={focus.target} focusRange={focus.range} bokehScale={3.2} /> : <></>}
       <Vignette offset={0.25} darkness={STAGE ? 0.75 : dark ? 0.45 : 0.2} />
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
     </EffectComposer>
@@ -440,7 +442,7 @@ export default function Viewport() {
     <div className={"relative size-full overflow-hidden " + (STAGE ? "bg-[#050608]" : "bg-viewport")}>
       <Canvas
         shadows="percentage"
-        dpr={[1, 2]}
+        dpr={LITE ? 1 : [1, 2]}
         camera={{ position: [3, 2.5, 4], fov: 35, near: 0.005, far: 2000 }}
         gl={{ antialias: false, powerPreference: "high-performance" }}
         onPointerMissed={() => set({ selected: null })}
