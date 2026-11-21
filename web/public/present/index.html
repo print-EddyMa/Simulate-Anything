@@ -131,7 +131,7 @@
 <script>
   // Everything runs on the local Margin server: `margin serve`, then open /present/.
   const q = new URLSearchParams(location.search);
-  const pace = q.get("pace") || "2.5";
+  const pace = q.get("pace") || "1.25";
   const RADAR = `/?mock=1&stage=1&pace=${encodeURIComponent(pace)}`;
   const DESIGNS = ["survey_quadcopter", "robot_arm", "field_smartwatch", "kart_motor_driver", "air_quality_sensor"];
 
@@ -173,7 +173,7 @@
   }
 
   // the wall: six full copies of the app, scaled down, all started together
-  const WALL = [`/?mock=1&stage=1&pace=0.35&auto=1`].concat(DESIGNS.map((n) => `/?open=${n}&stage=1`));
+  const WALL = [`/?mock=1&stage=1&pace=0.18&auto=1`].concat(DESIGNS.map((n) => `/?open=${n}&stage=1`));
   const grid = document.getElementById("s-grid");
   function fitWall() {
     grid.querySelectorAll(".tile").forEach((t) => {
