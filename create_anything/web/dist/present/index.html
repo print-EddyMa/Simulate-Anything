@@ -35,7 +35,8 @@
   .eq-note { margin-top: 38px; font-size: 22px; color: var(--dim); }
 
   /* 3: the result */
-  #s-stat { background: radial-gradient(ellipse at 50% 40%, #0d131b, var(--bg) 70%) var(--bg); gap: 0; }
+  #s-stat { background: rgba(3,5,8,.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); gap: 0; }
+  #s-eq, #s-stat { z-index: 5; }
   .stat-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 70px; width: min(1500px, 92vw); }
   .stat { text-align: center; }
   .stat .lab { font-size: 30px; color: var(--dim); font-weight: 500; letter-spacing: -.01em; }
@@ -117,7 +118,7 @@
 <div id="help">
   <div><b>1</b> field photo</div>
   <div><b>2</b> equation (toggle, over the app)</div>
-  <div><b>3</b> 13 / 34 → 100%</div>
+  <div><b>3</b> 13 / 34 → 100%, over the current view (toggle)</div>
   <div><b>4</b> close: margin, Create anything</div>
   <div><b>5</b> six live designs at once (restarts them)</div>
   <div><b>0 / Esc</b> back to the app</div>
@@ -167,9 +168,12 @@
   function slide(id) {
     document.querySelectorAll(".slide").forEach((s) => s.classList.toggle("on", s.id === id));
   }
-  function toggle(id) {
+  // the equation and the result float over whatever is showing (the app, or the wall of six)
+  const OVERLAYS = ["s-eq", "s-stat"];
+  function overlay(id) {
     const s = document.getElementById(id);
-    slide(s.classList.contains("on") ? null : id);
+    const on = !s.classList.contains("on");
+    OVERLAYS.forEach((o) => document.getElementById(o).classList.toggle("on", on && o === id));
   }
 
   // the wall: six full copies of the app, scaled down, all started together
@@ -208,8 +212,8 @@
     const k = e.key;
     let used = true;
     if (k === "1") slide("s-field");
-    else if (k === "2") toggle("s-eq");
-    else if (k === "3") slide("s-stat");
+    else if (k === "2") overlay("s-eq");
+    else if (k === "3") overlay("s-stat");
     else if (k === "4") slide("s-end");
     else if (k === "5") startWall();
     else if (k === "0" || k === "Escape") slide(null);
