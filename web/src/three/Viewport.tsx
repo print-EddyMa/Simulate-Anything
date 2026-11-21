@@ -15,6 +15,8 @@ import Hero from "./Hero";
 import { useIsDarkDom } from "@/panels/useIsDark";
 
 const MM = 0.001;
+/** ?stage: presentation look. Black studio, mirror floor, no grid, a slow orbit. */
+const STAGE = typeof location !== "undefined" && new URLSearchParams(location.search).has("stage");
 
 function rotationMatrix(rot: Vec3) {
   return new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rot.map(THREE.MathUtils.degToRad) as Vec3, "XYZ"));
@@ -192,6 +194,19 @@ function Model() {
 const VIEW_AZ = THREE.MathUtils.degToRad(35);
 const VIEW_EL = THREE.MathUtils.degToRad(18);
 
+/** In ?stage mode, turn slowly around the model like a product shot. */
+function StageOrbit({ controls }: { controls: React.RefObject<CameraControls | null> }) {
+  const idle = useRef(0);
+  useFrame((_, dt) => {
+    const c = controls.current;
+    if (!c) return;
+    if (c.active) { idle.current = 0; return; }        // the presenter is dragging: wait
+    idle.current += dt;
+    if (idle.current > 1.5) void c.rotate(dt * 0.1, 0, false);
+  });
+  return null;
+}
+
 function AutoFrame({ controls }: { controls: React.RefObject<CameraControls | null> }) {
   const design = useStore((s) => s.design);
   const explode = useStore((s) => s.explode);
@@ -218,7 +233,10 @@ function AutoFrame({ controls }: { controls: React.RefObject<CameraControls | nu
     const half = THREE.MathUtils.degToRad(camera.fov / 2);
     const fitH = r / Math.sin(Math.atan(0.7 * Math.tan(half)));
     const fitW = r / Math.sin(Math.atan(0.85 * Math.tan(half) * aspect));
-    const dist = Math.max(fitH, fitW);
+    // the bounding sphere over-counts flat or spindly things; the stage frames them tighter
+    const size = new THREE.Box3(min, max).getSize(new THREE.Vector3());
+    const tall = size.y > 1.6 * Math.max(size.x, size.z);
+    const dist = Math.max(fitH, fitW) * (STAGE ? (tall ? 0.9 : 0.62) : 1);
     const dir = new THREE.Vector3(Math.cos(VIEW_EL) * Math.cos(VIEW_AZ), Math.sin(VIEW_EL), -Math.cos(VIEW_EL) * Math.sin(VIEW_AZ));
     const pos = sphere.center.clone().add(dir.multiplyScalar(dist));
     void controls.current.setLookAt(pos.x, pos.y, pos.z, sphere.center.x, sphere.center.y, sphere.center.z, !first);
@@ -246,7 +264,7 @@ function Ground() {
   const fade = useMemo(() => radialFade(), []);
   return (
     <group position={[0, floor - 0.0005, 0]}>
-      <Grid
+      {!STAGE && <Grid
         position={[0, 0.0002, 0]}
         args={[span * 6, span * 6]}
         cellSize={cell}
@@ -258,7 +276,7 @@ function Ground() {
         fadeDistance={span * 5}
         fadeStrength={1.5}
         infiniteGrid
-      />
+      />}
       <ContactShadows position={[0, 0.0006, 0]} scale={span * 3} blur={2.4} far={span * 1.2} opacity={dark ? 0.75 : 0.45} resolution={1024} />
       {/* a subtle, slightly rough mirror under the grid */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.0004, 0]}>
@@ -270,8 +288,8 @@ function Ground() {
           blur={[400, 120]}
           resolution={1024}
           mixBlur={1}
-          mixStrength={dark ? 0.9 : 0.5}
-          mirror={0.3}
+          mixStrength={STAGE ? 2.2 : dark ? 0.9 : 0.5}
+          mirror={STAGE ? 0.75 : 0.3}
           roughness={1}
           metalness={0.4}
           depthScale={1}
@@ -318,7 +336,7 @@ function Studio() {
   // a front fill and a dim floor bounce, so metals always have something to reflect
   return (
     <Environment resolution={512} frames={1} environmentIntensity={1.15}>
-      <color attach="background" args={["#1a1f27"]} />
+      <color attach="background" args={[STAGE ? "#0b0d11" : "#1a1f27"]} />
       <Lightformer form="rect" intensity={3} position={[0, 7, 0]} rotation-x={Math.PI / 2} scale={[12, 12, 1]} color="#ffffff" />
       <Lightformer form="rect" intensity={2.2} position={[0, 3, -8]} scale={[16, 5, 1]} color="#ffffff" />
       <Lightformer form="rect" intensity={1.8} position={[-8, 2, 1]} rotation-y={Math.PI / 2} scale={[12, 3, 1]} color="#dbeafe" />
@@ -336,7 +354,7 @@ function Effects({ site }: { site: boolean }) {
       <N8AO aoRadius={site ? 2 : 0.25} intensity={site ? 0 : 2.2} distanceFalloff={1} halfRes />
       <Outline visibleEdgeColor={0x7dd3fc} hiddenEdgeColor={0x38bdf8} edgeStrength={3} blur width={1200} />
       <Bloom intensity={site ? 0.9 : 0.35} luminanceThreshold={0.85} luminanceSmoothing={0.2} mipmapBlur />
-      <Vignette offset={0.25} darkness={dark ? 0.45 : 0.2} />
+      <Vignette offset={0.25} darkness={STAGE ? 0.75 : dark ? 0.45 : 0.2} />
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
     </EffectComposer>
   );
@@ -379,6 +397,8 @@ export default function Viewport() {
 
   const dark = useIsDarkDom();
   const running = useStore((s) => s.run === "running");
+  // the stage shows true materials, not the pass/fail tint
+  useEffect(() => { if (STAGE) set({ tint: false }); }, [set]);
   if (!design) {
     return (
       <div className="relative size-full overflow-hidden bg-viewport">
@@ -388,7 +408,7 @@ export default function Viewport() {
   }
 
   return (
-    <div className="relative size-full overflow-hidden bg-viewport">
+    <div className={"relative size-full overflow-hidden " + (STAGE ? "bg-[#050608]" : "bg-viewport")}>
       <Canvas
         shadows="percentage"
         dpr={[1, 2]}
@@ -416,6 +436,7 @@ export default function Viewport() {
           </Selection>
           <CameraControls ref={controls} makeDefault smoothTime={0.35} minDistance={0.02} maxDistance={site ? siteExtent * 8 : 60} />
           {!site && <AutoFrame controls={controls} />}
+          {STAGE && !site && <StageOrbit controls={controls} />}
           <FrameOnSite controls={controls} active={site} extent={siteExtent} />
         </Suspense>
       </Canvas>

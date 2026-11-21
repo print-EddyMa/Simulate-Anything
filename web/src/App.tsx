@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useStore } from "@/store";
-import { getExamples, getMaterials, getStatus, type Status } from "@/api";
+import { getExamples, getMaterials, getStatus, openDesign, type Status } from "@/api";
 import type { Example } from "@/types";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -71,6 +71,20 @@ export default function App() {
   const [examples, setExamples] = useState<Example[]>([]);
   const set = useStore((s) => s.set);
   const hasDesign = useStore((s) => !!s.design);
+  // presenter mode: the presenter page can ask for the 3D view alone, full screen
+  const [focus, setFocus] = useState(false);
+  useEffect(() => {
+    const on = (e: MessageEvent) => {
+      if (e.origin === location.origin && e.data && typeof e.data.focus === "boolean") setFocus(e.data.focus);
+    };
+    window.addEventListener("message", on);
+    return () => window.removeEventListener("message", on);
+  }, []);
+  useEffect(() => {
+    // the 3D canvas remounts in the new layout; nudge it to measure itself
+    const ts = [50, 300, 900].map((ms) => setTimeout(() => window.dispatchEvent(new Event("resize")), ms));
+    return () => ts.forEach(clearTimeout);
+  }, [focus]);
 
   useEffect(() => {
     void (async () => {
@@ -80,6 +94,8 @@ export default function App() {
       const [ex, mats] = await Promise.all([getExamples(st), getMaterials(st)]);
       setExamples(ex);
       set({ materials: mats });
+      const open = new URLSearchParams(location.search).get("open");
+      if (open && !st.mock) void openDesign(open);
     })();
   }, [set]);
 
@@ -88,7 +104,7 @@ export default function App() {
       <div className="flex min-h-dvh flex-col lg:h-dvh">
         <TopBar status={status} examples={examples} />
         <main className="no-print grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[minmax(0,1fr)_400px] lg:grid-rows-[minmax(0,1.45fr)_minmax(0,1fr)]">
-          <section aria-label="3D view" className="relative h-[52vh] min-h-[320px] border-b lg:h-auto lg:min-h-0">
+          <section aria-label="3D view" className={focus ? "fixed inset-0 z-50" : "relative h-[52vh] min-h-[320px] border-b lg:h-auto lg:min-h-0"}>
             <Suspense fallback={<div className="size-full bg-viewport" />}>
               <Viewport />
             </Suspense>

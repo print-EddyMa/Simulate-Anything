@@ -100,7 +100,7 @@ const DELAY: Record<string, number> = {
 async function replayMock(onEvent: (e: EngineEvent) => void, signal?: AbortSignal) {
   const events = (await import("./mock/drone_radar.json")).default as EngineEvent[];
   for (const e of events) {
-    await wait(DELAY[e.type] ?? 500, signal);
+    await wait((DELAY[e.type] ?? 500) * PACE, signal);   // ?pace=2 plays it at half speed
     onEvent(e);
   }
 }
@@ -146,6 +146,17 @@ function currentDesign() {
   if (!s.design) return null;
   if (s.viewing !== null) s.edit(s.design, `Reopened v${s.viewing}`);
   return useStore.getState().design;
+}
+
+/** Open a saved example design (?open=name) and run every test on it. */
+export async function openDesign(name: string) {
+  const r = await fetch(`present/designs/${encodeURIComponent(name)}.json`);
+  if (!r.ok) return;
+  const d = (await r.json()) as Design;
+  d.assembly ??= [];
+  d.scenarios ??= [];
+  useStore.getState().edit(d, d.name ?? name);
+  await runEvaluate();
 }
 
 export async function runEvaluate() {

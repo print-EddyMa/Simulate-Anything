@@ -1,0 +1,3300 @@
+{
+ "name": "Solar street-lamp air quality node",
+ "description": "Self-powered PM2.5/PM10 + NO2/O3 monitor that clamps to a street lamp post with stainless band clamps. A vertical south-facing (+x) 25 W panel sheds snow and suits low winter sun; a 77 Wh LiFePO4 battery and duty-cycled sensors (~0.25 W average) give a week of autonomy. Data via LoRaWAN.",
+ "parts": [
+  {
+   "id": "lamp_post",
+   "name": "Lamp post section (existing)",
+   "shape": "tube",
+   "radius": 70.0,
+   "inner_radius": 65.0,
+   "length": 1600.0,
+   "position": [
+    0.0,
+    0.0,
+    800.0
+   ],
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Existing street lamp column the node clamps to",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "sheet_metal",
+   "specs": {},
+   "fill": 1.0,
+   "color": "#9AA0A6"
+  },
+  {
+   "id": "clamp_low",
+   "name": "Lower band clamp",
+   "shape": "tube",
+   "radius": 72.0,
+   "inner_radius": 70.0,
+   "length": 25.0,
+   "position": [
+    0.0,
+    0.0,
+    700.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Stainless band clamp around post, no drilling",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0,
+   "color": "#C8CCD0"
+  },
+  {
+   "id": "clamp_high",
+   "name": "Upper band clamp",
+   "shape": "tube",
+   "radius": 72.0,
+   "inner_radius": 70.0,
+   "length": 25.0,
+   "position": [
+    0.0,
+    0.0,
+    1200.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Second clamp to resist overturning moment",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0,
+   "color": "#C8CCD0"
+  },
+  {
+   "id": "standoff_low",
+   "name": "Lower standoff bracket",
+   "shape": "box",
+   "size": [
+    49.0,
+    40.0,
+    30.0
+   ],
+   "position": [
+    94.5,
+    0.0,
+    700.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Spaces mast off post, carries band clamp",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0,
+   "color": "#BFC3C7"
+  },
+  {
+   "id": "standoff_high",
+   "name": "Upper standoff bracket",
+   "shape": "box",
+   "size": [
+    49.0,
+    40.0,
+    30.0
+   ],
+   "position": [
+    94.5,
+    0.0,
+    1200.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Spaces mast off post",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0,
+   "color": "#BFC3C7"
+  },
+  {
+   "id": "mast",
+   "name": "Mounting mast",
+   "shape": "tube",
+   "radius": 21.0,
+   "inner_radius": 18.5,
+   "length": 900.0,
+   "position": [
+    140.0,
+    0.0,
+    1000.0
+   ],
+   "material": "aluminium",
+   "group": "mounting",
+   "purpose": "Vertical spine carrying panel, enclosure and sensor shield",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0,
+   "color": "#B8BCC2"
+  },
+  {
+   "id": "solar_panel",
+   "name": "25 W mono solar panel (vertical)",
+   "shape": "box",
+   "size": [
+    25.0,
+    350.0,
+    540.0
+   ],
+   "position": [
+    193.5,
+    0.0,
+    1200.0
+   ],
+   "material": "solar_module",
+   "group": "power",
+   "look": "solar",
+   "purpose": "Charges battery; vertical south-facing to shed snow and catch low winter sun",
+   "specs": {
+    "power": "25",
+    "voltage": "18",
+    "efficiency": "0.2"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0,
+   "color": "#1B2A4A"
+  },
+  {
+   "id": "enclosure",
+   "name": "IP66 electronics enclosure",
+   "shape": "box",
+   "size": [
+    100.0,
+    180.0,
+    220.0
+   ],
+   "wall": 3.0,
+   "position": [
+    211.0,
+    0.0,
+    800.0
+   ],
+   "material": "polycarbonate",
+   "group": "electronics",
+   "purpose": "Sealed, UV-stabilised housing for battery and electronics",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0,
+   "color": "#D9DCDF"
+  },
+  {
+   "id": "battery",
+   "name": "LiFePO4 12.8 V 6 Ah pack",
+   "shape": "box",
+   "size": [
+    65.0,
+    151.0,
+    94.0
+   ],
+   "position": [
+    211.0,
+    0.0,
+    740.0
+   ],
+   "material": "lifepo4",
+   "group": "power",
+   "look": "battery",
+   "purpose": "Energy store for 7-day dark-weather autonomy",
+   "specs": {
+    "capacity_wh": "76.8",
+    "voltage": "12.8"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0,
+   "color": "#2457A6"
+  },
+  {
+   "id": "controller",
+   "name": "MCU + MPPT charger board",
+   "shape": "box",
+   "size": [
+    60.0,
+    150.0,
+    25.0
+   ],
+   "position": [
+    211.0,
+    0.0,
+    855.0
+   ],
+   "material": "electronics",
+   "group": "electronics",
+   "look": "pcb",
+   "purpose": "Charge control with low-temp charge cutoff, sensor scheduling, logging",
+   "specs": {
+    "power": "0.05"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0,
+   "color": "#1F6B3A"
+  },
+  {
+   "id": "radio",
+   "name": "LoRaWAN module",
+   "shape": "box",
+   "size": [
+    30.0,
+    40.0,
+    8.0
+   ],
+   "position": [
+    211.0,
+    60.0,
+    884.0
+   ],
+   "material": "electronics",
+   "group": "electronics",
+   "look": "pcb",
+   "purpose": "Sends readings every 5 min to gateway",
+   "specs": {
+    "power": "0.05"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0,
+   "color": "#16502C"
+  },
+  {
+   "id": "antenna",
+   "name": "868 MHz whip antenna",
+   "shape": "cylinder",
+   "radius": 6.0,
+   "length": 200.0,
+   "position": [
+    240.0,
+    60.0,
+    1037.0
+   ],
+   "material": "abs",
+   "group": "electronics",
+   "purpose": "LoRa antenna, above the box and clear of the post",
+   "axis": "z",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0,
+   "color": "#1A1A1A",
+   "look": "rubber"
+  },
+  {
+   "id": "sensor_shield",
+   "name": "Louvred sensor shield",
+   "shape": "box",
+   "size": [
+    90.0,
+    120.0,
+    70.0
+   ],
+   "wall": 2.0,
+   "position": [
+    211.0,
+    0.0,
+    655.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Rain/sun shield letting air reach sensors",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0,
+   "color": "#F2F2F0"
+  },
+  {
+   "id": "pm_sensor",
+   "name": "Laser PM2.5/PM10 sensor",
+   "shape": "box",
+   "size": [
+    41.0,
+    41.0,
+    12.0
+   ],
+   "position": [
+    211.0,
+    -25.0,
+    655.0
+   ],
+   "material": "electronics",
+   "group": "sensing",
+   "look": "pcb",
+   "purpose": "Optical particle counter, runs 30 s in every 2 min",
+   "specs": {
+    "power": "0.12"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0,
+   "color": "#2B2B2B"
+  },
+  {
+   "id": "gas_sensors",
+   "name": "NO2/O3 electrochemical board",
+   "shape": "box",
+   "size": [
+    40.0,
+    40.0,
+    15.0
+   ],
+   "position": [
+    211.0,
+    30.0,
+    655.0
+   ],
+   "material": "electronics",
+   "group": "sensing",
+   "look": "pcb",
+   "purpose": "Low-power gas concentration measurement",
+   "specs": {
+    "power": "0.03"
+   },
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "buy",
+   "fill": 1.0,
+   "color": "#1F6B3A"
+  },
+  {
+   "id": "post_flange",
+   "name": "Post base flange",
+   "shape": "tube",
+   "radius": 120.0,
+   "inner_radius": 70.0,
+   "length": 15.0,
+   "position": [
+    0.0,
+    0.0,
+    7.5
+   ],
+   "axis": "z",
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Existing column base plate",
+   "color": "#8E9499",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "sheet_metal",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "anchor_nut_1",
+   "name": "Anchor nut 1",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 12.0,
+   "position": [
+    70.7,
+    70.7,
+    21.0
+   ],
+   "axis": "z",
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Foundation anchor nut",
+   "color": "#7E8489",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "anchor_nut_2",
+   "name": "Anchor nut 2",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 12.0,
+   "position": [
+    -70.7,
+    70.7,
+    21.0
+   ],
+   "axis": "z",
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Foundation anchor nut",
+   "color": "#7E8489",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "anchor_nut_3",
+   "name": "Anchor nut 3",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 12.0,
+   "position": [
+    -70.7,
+    -70.7,
+    21.0
+   ],
+   "axis": "z",
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Foundation anchor nut",
+   "color": "#7E8489",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "anchor_nut_4",
+   "name": "Anchor nut 4",
+   "shape": "cylinder",
+   "radius": 12.0,
+   "length": 12.0,
+   "position": [
+    70.7,
+    -70.7,
+    21.0
+   ],
+   "axis": "z",
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Foundation anchor nut",
+   "color": "#7E8489",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "anchor_stud_1",
+   "name": "Anchor stud 1",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 10.0,
+   "position": [
+    70.7,
+    70.7,
+    32.0
+   ],
+   "axis": "z",
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Foundation anchor bolt end",
+   "color": "#8A9095",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "anchor_stud_2",
+   "name": "Anchor stud 2",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 10.0,
+   "position": [
+    -70.7,
+    70.7,
+    32.0
+   ],
+   "axis": "z",
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Foundation anchor bolt end",
+   "color": "#8A9095",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "anchor_stud_3",
+   "name": "Anchor stud 3",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 10.0,
+   "position": [
+    -70.7,
+    -70.7,
+    32.0
+   ],
+   "axis": "z",
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Foundation anchor bolt end",
+   "color": "#8A9095",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "anchor_stud_4",
+   "name": "Anchor stud 4",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 10.0,
+   "position": [
+    70.7,
+    -70.7,
+    32.0
+   ],
+   "axis": "z",
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Foundation anchor bolt end",
+   "color": "#8A9095",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "post_door",
+   "name": "Post service door",
+   "shape": "box",
+   "size": [
+    4.0,
+    80.0,
+    300.0
+   ],
+   "position": [
+    -72.0,
+    0.0,
+    400.0
+   ],
+   "material": "galvanised_steel",
+   "group": "site",
+   "purpose": "Existing lamp wiring access hatch",
+   "color": "#959BA0",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "sheet_metal",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "door_lock",
+   "name": "Service door lock",
+   "shape": "cylinder",
+   "radius": 6.0,
+   "length": 4.0,
+   "position": [
+    -76.0,
+    0.0,
+    470.0
+   ],
+   "axis": "x",
+   "material": "stainless",
+   "group": "site",
+   "purpose": "Triangular-key hatch lock",
+   "color": "#B0B4B8",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "clamp_low_housing",
+   "name": "Lower clamp worm housing",
+   "shape": "box",
+   "size": [
+    12.0,
+    24.0,
+    18.0
+   ],
+   "position": [
+    -78.0,
+    0.0,
+    700.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Worm-drive tensioner of lower band",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "clamp_low_screw",
+   "name": "Lower clamp screw",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 30.0,
+   "position": [
+    -78.0,
+    0.0,
+    700.0
+   ],
+   "axis": "y",
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Tensioning screw",
+   "color": "#D4D7DA",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "clamp_high_housing",
+   "name": "Upper clamp worm housing",
+   "shape": "box",
+   "size": [
+    12.0,
+    24.0,
+    18.0
+   ],
+   "position": [
+    -78.0,
+    0.0,
+    1200.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Worm-drive tensioner of upper band",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "clamp_high_screw",
+   "name": "Upper clamp screw",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 30.0,
+   "position": [
+    -78.0,
+    0.0,
+    1200.0
+   ],
+   "axis": "y",
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Tensioning screw",
+   "color": "#D4D7DA",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ubolt_standoff_low",
+   "name": "Lower standoff U-bolt",
+   "shape": "tube",
+   "radius": 23.5,
+   "inner_radius": 21.0,
+   "length": 10.0,
+   "position": [
+    140.0,
+    0.0,
+    700.0
+   ],
+   "axis": "z",
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Clamps mast to lower standoff",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ubolt_standoff_high",
+   "name": "Upper standoff U-bolt",
+   "shape": "tube",
+   "radius": 23.5,
+   "inner_radius": 21.0,
+   "length": 10.0,
+   "position": [
+    140.0,
+    0.0,
+    1200.0
+   ],
+   "axis": "z",
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Clamps mast to upper standoff",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mast_cap",
+   "name": "Mast top cap",
+   "shape": "cylinder",
+   "radius": 21.0,
+   "length": 6.0,
+   "position": [
+    140.0,
+    0.0,
+    1453.0
+   ],
+   "axis": "z",
+   "material": "nylon",
+   "group": "mounting",
+   "look": "rubber",
+   "purpose": "Keeps rain and birds out of mast",
+   "color": "#151515",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mast_plug",
+   "name": "Mast bottom plug",
+   "shape": "cylinder",
+   "radius": 21.0,
+   "length": 6.0,
+   "position": [
+    140.0,
+    0.0,
+    547.0
+   ],
+   "axis": "z",
+   "material": "nylon",
+   "group": "mounting",
+   "look": "rubber",
+   "purpose": "Closes mast bottom, drain notch",
+   "color": "#151515",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ubolt_enc_low",
+   "name": "Enclosure U-bolt lower",
+   "shape": "tube",
+   "radius": 23.5,
+   "inner_radius": 21.0,
+   "length": 10.0,
+   "position": [
+    140.0,
+    0.0,
+    760.0
+   ],
+   "axis": "z",
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Holds enclosure back plate to mast",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ubolt_enc_high",
+   "name": "Enclosure U-bolt upper",
+   "shape": "tube",
+   "radius": 23.5,
+   "inner_radius": 21.0,
+   "length": 10.0,
+   "position": [
+    140.0,
+    0.0,
+    860.0
+   ],
+   "axis": "z",
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Holds enclosure back plate to mast",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "shield_bracket",
+   "name": "Shield bracket",
+   "shape": "box",
+   "size": [
+    5.0,
+    40.0,
+    50.0
+   ],
+   "position": [
+    163.5,
+    0.0,
+    655.0
+   ],
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Joins sensor shield to mast",
+   "color": "#BFC3C7",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ubolt_shield",
+   "name": "Shield U-bolt",
+   "shape": "tube",
+   "radius": 23.5,
+   "inner_radius": 21.0,
+   "length": 10.0,
+   "position": [
+    140.0,
+    0.0,
+    655.0
+   ],
+   "axis": "z",
+   "material": "stainless",
+   "group": "mounting",
+   "purpose": "Clamps shield bracket to mast",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "panel_frame_left",
+   "name": "Panel frame left",
+   "shape": "box",
+   "size": [
+    25.0,
+    8.0,
+    556.0
+   ],
+   "position": [
+    193.5,
+    -179.0,
+    1200.0
+   ],
+   "material": "aluminium",
+   "group": "power",
+   "purpose": "Anodised panel frame",
+   "color": "#C0C4C8",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "panel_frame_right",
+   "name": "Panel frame right",
+   "shape": "box",
+   "size": [
+    25.0,
+    8.0,
+    556.0
+   ],
+   "position": [
+    193.5,
+    179.0,
+    1200.0
+   ],
+   "material": "aluminium",
+   "group": "power",
+   "purpose": "Anodised panel frame",
+   "color": "#C0C4C8",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "panel_frame_top",
+   "name": "Panel frame top",
+   "shape": "box",
+   "size": [
+    25.0,
+    366.0,
+    8.0
+   ],
+   "position": [
+    193.5,
+    0.0,
+    1474.0
+   ],
+   "material": "aluminium",
+   "group": "power",
+   "purpose": "Anodised panel frame",
+   "color": "#C0C4C8",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "panel_frame_bottom",
+   "name": "Panel frame bottom",
+   "shape": "box",
+   "size": [
+    25.0,
+    366.0,
+    8.0
+   ],
+   "position": [
+    193.5,
+    0.0,
+    926.0
+   ],
+   "material": "aluminium",
+   "group": "power",
+   "purpose": "Anodised panel frame, drain gaps",
+   "color": "#C0C4C8",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "panel_rail_low",
+   "name": "Tilt bracket lower rail",
+   "shape": "box",
+   "size": [
+    20.0,
+    260.0,
+    30.0
+   ],
+   "position": [
+    171.0,
+    0.0,
+    1050.0
+   ],
+   "material": "aluminium",
+   "group": "power",
+   "purpose": "Cross rail carrying panel off mast",
+   "color": "#AEB2B7",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "panel_rail_high",
+   "name": "Tilt bracket upper rail",
+   "shape": "box",
+   "size": [
+    20.0,
+    260.0,
+    30.0
+   ],
+   "position": [
+    171.0,
+    0.0,
+    1350.0
+   ],
+   "material": "aluminium",
+   "group": "power",
+   "purpose": "Cross rail carrying panel off mast",
+   "color": "#AEB2B7",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tilt_plate_ll",
+   "name": "Tilt plate lower left",
+   "shape": "box",
+   "size": [
+    20.0,
+    6.0,
+    60.0
+   ],
+   "position": [
+    171.0,
+    -133.0,
+    1050.0
+   ],
+   "material": "aluminium",
+   "group": "power",
+   "purpose": "Hinge plate allowing 0-30 deg tilt",
+   "color": "#AEB2B7",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tilt_plate_lr",
+   "name": "Tilt plate lower right",
+   "shape": "box",
+   "size": [
+    20.0,
+    6.0,
+    60.0
+   ],
+   "position": [
+    171.0,
+    133.0,
+    1050.0
+   ],
+   "material": "aluminium",
+   "group": "power",
+   "purpose": "Hinge plate allowing 0-30 deg tilt",
+   "color": "#AEB2B7",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tilt_plate_hl",
+   "name": "Tilt plate upper left",
+   "shape": "box",
+   "size": [
+    20.0,
+    6.0,
+    60.0
+   ],
+   "position": [
+    171.0,
+    -133.0,
+    1350.0
+   ],
+   "material": "aluminium",
+   "group": "power",
+   "purpose": "Hinge plate allowing 0-30 deg tilt",
+   "color": "#AEB2B7",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tilt_plate_hr",
+   "name": "Tilt plate upper right",
+   "shape": "box",
+   "size": [
+    20.0,
+    6.0,
+    60.0
+   ],
+   "position": [
+    171.0,
+    133.0,
+    1350.0
+   ],
+   "material": "aluminium",
+   "group": "power",
+   "purpose": "Hinge plate allowing 0-30 deg tilt",
+   "color": "#AEB2B7",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "machine",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tilt_bolt_ll",
+   "name": "Tilt pivot bolt LL",
+   "shape": "cylinder",
+   "radius": 5.0,
+   "length": 6.0,
+   "position": [
+    175.0,
+    -139.0,
+    1050.0
+   ],
+   "axis": "y",
+   "material": "stainless",
+   "group": "power",
+   "purpose": "Pivot / lock bolt",
+   "color": "#D4D7DA",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tilt_bolt_lr",
+   "name": "Tilt pivot bolt LR",
+   "shape": "cylinder",
+   "radius": 5.0,
+   "length": 6.0,
+   "position": [
+    175.0,
+    139.0,
+    1050.0
+   ],
+   "axis": "y",
+   "material": "stainless",
+   "group": "power",
+   "purpose": "Pivot / lock bolt",
+   "color": "#D4D7DA",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tilt_bolt_hl",
+   "name": "Tilt pivot bolt HL",
+   "shape": "cylinder",
+   "radius": 5.0,
+   "length": 6.0,
+   "position": [
+    175.0,
+    -139.0,
+    1350.0
+   ],
+   "axis": "y",
+   "material": "stainless",
+   "group": "power",
+   "purpose": "Pivot / lock bolt",
+   "color": "#D4D7DA",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "tilt_bolt_hr",
+   "name": "Tilt pivot bolt HR",
+   "shape": "cylinder",
+   "radius": 5.0,
+   "length": 6.0,
+   "position": [
+    175.0,
+    139.0,
+    1350.0
+   ],
+   "axis": "y",
+   "material": "stainless",
+   "group": "power",
+   "purpose": "Pivot / lock bolt",
+   "color": "#D4D7DA",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ubolt_panel_low",
+   "name": "Panel U-bolt lower",
+   "shape": "tube",
+   "radius": 23.5,
+   "inner_radius": 21.0,
+   "length": 10.0,
+   "position": [
+    140.0,
+    0.0,
+    1050.0
+   ],
+   "axis": "z",
+   "material": "stainless",
+   "group": "power",
+   "purpose": "Clamps lower rail to mast",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "ubolt_panel_high",
+   "name": "Panel U-bolt upper",
+   "shape": "tube",
+   "radius": 23.5,
+   "inner_radius": 21.0,
+   "length": 10.0,
+   "position": [
+    140.0,
+    0.0,
+    1350.0
+   ],
+   "axis": "z",
+   "material": "stainless",
+   "group": "power",
+   "purpose": "Clamps upper rail to mast",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "junction_box",
+   "name": "Panel junction box",
+   "shape": "box",
+   "size": [
+    15.0,
+    60.0,
+    45.0
+   ],
+   "position": [
+    173.5,
+    -60.0,
+    960.0
+   ],
+   "material": "abs",
+   "group": "power",
+   "purpose": "Bypass diode box on panel back",
+   "color": "#202020",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "panel_cable",
+   "name": "Panel lead",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 15.5,
+   "position": [
+    173.5,
+    -60.0,
+    929.75
+   ],
+   "axis": "z",
+   "material": "copper",
+   "group": "power",
+   "look": "cable",
+   "purpose": "2-core PV lead to charger",
+   "color": "#111111",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "panel_gland",
+   "name": "Panel cable gland",
+   "shape": "cylinder",
+   "radius": 7.0,
+   "length": 12.0,
+   "position": [
+    173.5,
+    -60.0,
+    916.0
+   ],
+   "axis": "z",
+   "material": "nylon",
+   "group": "electronics",
+   "purpose": "IP68 M16 gland for PV lead",
+   "color": "#2A2A2A",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "enclosure_gasket",
+   "name": "Lid gasket",
+   "shape": "box",
+   "size": [
+    2.0,
+    176.0,
+    216.0
+   ],
+   "position": [
+    262.0,
+    0.0,
+    800.0
+   ],
+   "material": "abs",
+   "group": "electronics",
+   "look": "rubber",
+   "purpose": "EPDM seal for IP66",
+   "color": "#101010",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "enclosure_lid",
+   "name": "Enclosure lid",
+   "shape": "box",
+   "size": [
+    8.0,
+    180.0,
+    220.0
+   ],
+   "position": [
+    267.0,
+    0.0,
+    800.0
+   ],
+   "material": "polycarbonate",
+   "group": "electronics",
+   "purpose": "Front access lid, UV-stabilised",
+   "color": "#E4E6E8",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lid_screw_1",
+   "name": "Lid screw 1",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 3.0,
+   "position": [
+    272.5,
+    80.0,
+    900.0
+   ],
+   "axis": "x",
+   "material": "stainless",
+   "group": "electronics",
+   "purpose": "Captive lid screw",
+   "color": "#D4D7DA",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lid_screw_2",
+   "name": "Lid screw 2",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 3.0,
+   "position": [
+    272.5,
+    -80.0,
+    900.0
+   ],
+   "axis": "x",
+   "material": "stainless",
+   "group": "electronics",
+   "purpose": "Captive lid screw",
+   "color": "#D4D7DA",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lid_screw_3",
+   "name": "Lid screw 3",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 3.0,
+   "position": [
+    272.5,
+    80.0,
+    700.0
+   ],
+   "axis": "x",
+   "material": "stainless",
+   "group": "electronics",
+   "purpose": "Captive lid screw",
+   "color": "#D4D7DA",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "lid_screw_4",
+   "name": "Lid screw 4",
+   "shape": "cylinder",
+   "radius": 3.5,
+   "length": 3.0,
+   "position": [
+    272.5,
+    -80.0,
+    700.0
+   ],
+   "axis": "x",
+   "material": "stainless",
+   "group": "electronics",
+   "purpose": "Captive lid screw",
+   "color": "#D4D7DA",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "status_led",
+   "name": "Status LED window",
+   "shape": "cylinder",
+   "radius": 4.0,
+   "length": 1.0,
+   "position": [
+    271.5,
+    0.0,
+    880.0
+   ],
+   "axis": "x",
+   "material": "acrylic",
+   "group": "electronics",
+   "look": "glass",
+   "purpose": "Heartbeat / fault light pipe",
+   "color": "#22DD55",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "brand_label",
+   "name": "Rating / ID label",
+   "shape": "box",
+   "size": [
+    1.0,
+    100.0,
+    40.0
+   ],
+   "position": [
+    271.5,
+    0.0,
+    760.0
+   ],
+   "material": "polycarbonate",
+   "group": "electronics",
+   "purpose": "Node ID, QR code and ratings",
+   "color": "#0B5CAD",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "gland_sensor_body",
+   "name": "Sensor cable gland",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 12.0,
+   "position": [
+    205.0,
+    75.0,
+    684.0
+   ],
+   "axis": "z",
+   "material": "nylon",
+   "group": "electronics",
+   "purpose": "M20 gland for sensor harness",
+   "color": "#2A2A2A",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "gland_sensor_cap",
+   "name": "Sensor gland dome nut",
+   "shape": "cylinder",
+   "radius": 6.5,
+   "length": 6.0,
+   "position": [
+    205.0,
+    75.0,
+    675.0
+   ],
+   "axis": "z",
+   "material": "nylon",
+   "group": "electronics",
+   "purpose": "Compression dome nut",
+   "color": "#333333",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "gland_spare_body",
+   "name": "Spare gland",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 12.0,
+   "position": [
+    205.0,
+    -75.0,
+    684.0
+   ],
+   "axis": "z",
+   "material": "nylon",
+   "group": "electronics",
+   "purpose": "Spare entry for mains option",
+   "color": "#2A2A2A",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "gland_spare_plug",
+   "name": "Spare gland blanking plug",
+   "shape": "cylinder",
+   "radius": 6.5,
+   "length": 6.0,
+   "position": [
+    205.0,
+    -75.0,
+    675.0
+   ],
+   "axis": "z",
+   "material": "nylon",
+   "group": "electronics",
+   "purpose": "Seals unused gland",
+   "color": "#333333",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "vent_plug",
+   "name": "Pressure-equalising vent",
+   "shape": "cylinder",
+   "radius": 6.0,
+   "length": 8.0,
+   "position": [
+    240.0,
+    -78.0,
+    686.0
+   ],
+   "axis": "z",
+   "material": "nylon",
+   "group": "electronics",
+   "purpose": "ePTFE breather stops condensation pumping",
+   "color": "#3A3A3A",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "sensor_cable_drop",
+   "name": "Sensor harness (vertical)",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 75.0,
+   "position": [
+    205.0,
+    75.0,
+    634.5
+   ],
+   "axis": "z",
+   "material": "copper",
+   "group": "sensing",
+   "look": "cable",
+   "purpose": "Harness to T/RH probe",
+   "color": "#111111",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "sensor_cable_run",
+   "name": "Sensor harness (to probe)",
+   "shape": "cylinder",
+   "radius": 3.0,
+   "length": 70.5,
+   "position": [
+    205.0,
+    42.75,
+    597.0
+   ],
+   "axis": "y",
+   "material": "copper",
+   "group": "sensing",
+   "look": "cable",
+   "purpose": "Runs between shield plates to T/RH probe",
+   "color": "#111111",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "battery_strap",
+   "name": "Battery hold-down strap",
+   "shape": "box",
+   "size": [
+    67.0,
+    12.0,
+    3.0
+   ],
+   "position": [
+    211.0,
+    0.0,
+    788.5
+   ],
+   "material": "nylon",
+   "group": "power",
+   "purpose": "Secures battery against vibration",
+   "color": "#303030",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "battery_term_pos",
+   "name": "Battery + terminal",
+   "shape": "cylinder",
+   "radius": 4.0,
+   "length": 6.0,
+   "position": [
+    211.0,
+    60.0,
+    790.0
+   ],
+   "axis": "z",
+   "material": "brass",
+   "group": "power",
+   "purpose": "Positive terminal",
+   "color": "#C0392B",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "battery_term_neg",
+   "name": "Battery - terminal",
+   "shape": "cylinder",
+   "radius": 4.0,
+   "length": 6.0,
+   "position": [
+    211.0,
+    -60.0,
+    790.0
+   ],
+   "axis": "z",
+   "material": "brass",
+   "group": "power",
+   "purpose": "Negative terminal",
+   "color": "#222222",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "din_rail",
+   "name": "DIN mounting rail",
+   "shape": "box",
+   "size": [
+    7.5,
+    160.0,
+    35.0
+   ],
+   "position": [
+    167.75,
+    0.0,
+    855.0
+   ],
+   "material": "galvanised_steel",
+   "group": "electronics",
+   "purpose": "Carries controller on back plate",
+   "color": "#A6ACB1",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "fuse_holder",
+   "name": "Inline fuse holder",
+   "shape": "box",
+   "size": [
+    20.0,
+    30.0,
+    15.0
+   ],
+   "position": [
+    211.0,
+    -60.0,
+    875.0
+   ],
+   "material": "nylon",
+   "group": "electronics",
+   "purpose": "5 A battery fuse",
+   "color": "#E0B000",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mcu_chip",
+   "name": "MCU",
+   "shape": "box",
+   "size": [
+    12.0,
+    12.0,
+    1.5
+   ],
+   "position": [
+    211.0,
+    20.0,
+    868.25
+   ],
+   "material": "electronics",
+   "group": "electronics",
+   "purpose": "Low-power ARM microcontroller",
+   "color": "#111111",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "mppt_inductor",
+   "name": "MPPT inductor",
+   "shape": "cylinder",
+   "radius": 6.0,
+   "length": 7.0,
+   "position": [
+    211.0,
+    -20.0,
+    871.0
+   ],
+   "axis": "z",
+   "material": "copper",
+   "group": "electronics",
+   "purpose": "Buck converter storage inductor",
+   "color": "#3A3A3A",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cap_1",
+   "name": "Bulk capacitor 1",
+   "shape": "cylinder",
+   "radius": 4.0,
+   "length": 10.0,
+   "position": [
+    225.0,
+    -35.0,
+    872.5
+   ],
+   "axis": "z",
+   "material": "electronics",
+   "group": "electronics",
+   "purpose": "Input filter",
+   "color": "#1E3F8A",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "cap_2",
+   "name": "Bulk capacitor 2",
+   "shape": "cylinder",
+   "radius": 4.0,
+   "length": 10.0,
+   "position": [
+    197.0,
+    -35.0,
+    872.5
+   ],
+   "axis": "z",
+   "material": "electronics",
+   "group": "electronics",
+   "purpose": "Output filter",
+   "color": "#1E3F8A",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "terminal_block",
+   "name": "Field terminal block",
+   "shape": "box",
+   "size": [
+    15.0,
+    40.0,
+    12.0
+   ],
+   "position": [
+    230.0,
+    0.0,
+    873.5
+   ],
+   "material": "nylon",
+   "group": "electronics",
+   "purpose": "PV, battery and sensor wiring terminals",
+   "color": "#2E8B57",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "antenna_bulkhead",
+   "name": "N-type bulkhead",
+   "shape": "cylinder",
+   "radius": 9.0,
+   "length": 12.0,
+   "position": [
+    240.0,
+    60.0,
+    916.0
+   ],
+   "axis": "z",
+   "material": "brass",
+   "group": "electronics",
+   "purpose": "Sealed RF feed-through",
+   "color": "#C9B26B",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "antenna_knuckle",
+   "name": "Antenna swivel knuckle",
+   "shape": "cylinder",
+   "radius": 7.0,
+   "length": 15.0,
+   "position": [
+    240.0,
+    60.0,
+    929.5
+   ],
+   "axis": "z",
+   "material": "abs",
+   "group": "electronics",
+   "purpose": "Hinge for whip",
+   "color": "#222222",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "louvre_py_1",
+   "name": "Louvre +y 1",
+   "shape": "box",
+   "size": [
+    94.0,
+    12.0,
+    2.5
+   ],
+   "position": [
+    211.0,
+    66.0,
+    628.0
+   ],
+   "rotation": [
+    30.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Angled rain/sun louvre",
+   "color": "#F2F2F0",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "louvre_py_2",
+   "name": "Louvre +y 2",
+   "shape": "box",
+   "size": [
+    94.0,
+    12.0,
+    2.5
+   ],
+   "position": [
+    211.0,
+    66.0,
+    641.0
+   ],
+   "rotation": [
+    30.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Angled rain/sun louvre",
+   "color": "#F2F2F0",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "louvre_py_3",
+   "name": "Louvre +y 3",
+   "shape": "box",
+   "size": [
+    94.0,
+    12.0,
+    2.5
+   ],
+   "position": [
+    211.0,
+    66.0,
+    654.0
+   ],
+   "rotation": [
+    30.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Angled rain/sun louvre",
+   "color": "#F2F2F0",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "louvre_py_4",
+   "name": "Louvre +y 4",
+   "shape": "box",
+   "size": [
+    94.0,
+    12.0,
+    2.5
+   ],
+   "position": [
+    211.0,
+    66.0,
+    667.0
+   ],
+   "rotation": [
+    30.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Angled rain/sun louvre",
+   "color": "#F2F2F0",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "louvre_py_5",
+   "name": "Louvre +y 5",
+   "shape": "box",
+   "size": [
+    94.0,
+    12.0,
+    2.5
+   ],
+   "position": [
+    211.0,
+    66.0,
+    680.0
+   ],
+   "rotation": [
+    30.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Angled rain/sun louvre",
+   "color": "#F2F2F0",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "louvre_ny_1",
+   "name": "Louvre -y 1",
+   "shape": "box",
+   "size": [
+    94.0,
+    12.0,
+    2.5
+   ],
+   "position": [
+    211.0,
+    -66.0,
+    628.0
+   ],
+   "rotation": [
+    -30.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Angled rain/sun louvre",
+   "color": "#F2F2F0",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "louvre_ny_2",
+   "name": "Louvre -y 2",
+   "shape": "box",
+   "size": [
+    94.0,
+    12.0,
+    2.5
+   ],
+   "position": [
+    211.0,
+    -66.0,
+    641.0
+   ],
+   "rotation": [
+    -30.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Angled rain/sun louvre",
+   "color": "#F2F2F0",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "louvre_ny_3",
+   "name": "Louvre -y 3",
+   "shape": "box",
+   "size": [
+    94.0,
+    12.0,
+    2.5
+   ],
+   "position": [
+    211.0,
+    -66.0,
+    654.0
+   ],
+   "rotation": [
+    -30.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Angled rain/sun louvre",
+   "color": "#F2F2F0",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "louvre_ny_4",
+   "name": "Louvre -y 4",
+   "shape": "box",
+   "size": [
+    94.0,
+    12.0,
+    2.5
+   ],
+   "position": [
+    211.0,
+    -66.0,
+    667.0
+   ],
+   "rotation": [
+    -30.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Angled rain/sun louvre",
+   "color": "#F2F2F0",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "louvre_ny_5",
+   "name": "Louvre -y 5",
+   "shape": "box",
+   "size": [
+    94.0,
+    12.0,
+    2.5
+   ],
+   "position": [
+    211.0,
+    -66.0,
+    680.0
+   ],
+   "rotation": [
+    -30.0,
+    0.0,
+    0.0
+   ],
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Angled rain/sun louvre",
+   "color": "#F2F2F0",
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pm_inlet",
+   "name": "PM sensor inlet nozzle",
+   "shape": "tube",
+   "radius": 6.0,
+   "inner_radius": 4.0,
+   "length": 30.0,
+   "position": [
+    246.5,
+    -25.0,
+    655.0
+   ],
+   "axis": "x",
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Short straight inlet to limit particle losses",
+   "color": "#2B2B2B",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "pm_inlet_mesh",
+   "name": "Inlet insect mesh",
+   "shape": "cylinder",
+   "radius": 6.0,
+   "length": 1.0,
+   "position": [
+    262.0,
+    -25.0,
+    655.0
+   ],
+   "axis": "x",
+   "material": "stainless",
+   "group": "sensing",
+   "look": "wire_mesh",
+   "purpose": "Keeps insects out of optical chamber",
+   "color": "#9A9A9A",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 0.004
+  },
+  {
+   "id": "gas_can_no2",
+   "name": "NO2 sensor cell",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 6.0,
+   "position": [
+    201.0,
+    30.0,
+    644.5
+   ],
+   "axis": "z",
+   "material": "electronics",
+   "group": "sensing",
+   "purpose": "Electrochemical NO2 cell, face down",
+   "color": "#B8B8B8",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "gas_can_o3",
+   "name": "O3 sensor cell",
+   "shape": "cylinder",
+   "radius": 8.0,
+   "length": 6.0,
+   "position": [
+    221.0,
+    30.0,
+    644.5
+   ],
+   "axis": "z",
+   "material": "electronics",
+   "group": "sensing",
+   "purpose": "Electrochemical O3 cell, face down",
+   "color": "#B8B8B8",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "shield_plate_1",
+   "name": "Radiation shield plate 1",
+   "shape": "cylinder",
+   "radius": 48.0,
+   "length": 2.0,
+   "position": [
+    211.0,
+    0.0,
+    612.0
+   ],
+   "axis": "z",
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Stacked white plate, passive ventilation",
+   "color": "#F5F5F2",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "shield_plate_2",
+   "name": "Radiation shield plate 2",
+   "shape": "cylinder",
+   "radius": 48.0,
+   "length": 2.0,
+   "position": [
+    211.0,
+    0.0,
+    602.0
+   ],
+   "axis": "z",
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Stacked white plate, passive ventilation",
+   "color": "#F5F5F2",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "shield_plate_3",
+   "name": "Radiation shield plate 3",
+   "shape": "cylinder",
+   "radius": 48.0,
+   "length": 2.0,
+   "position": [
+    211.0,
+    0.0,
+    592.0
+   ],
+   "axis": "z",
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Stacked white plate, passive ventilation",
+   "color": "#F5F5F2",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "shield_plate_4",
+   "name": "Radiation shield plate 4",
+   "shape": "cylinder",
+   "radius": 48.0,
+   "length": 2.0,
+   "position": [
+    211.0,
+    0.0,
+    582.0
+   ],
+   "axis": "z",
+   "material": "abs",
+   "group": "sensing",
+   "purpose": "Bottom plate",
+   "color": "#F5F5F2",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "process": "3d_print",
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "plate_rod_1",
+   "name": "Plate spacer rod 1",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 40.0,
+   "position": [
+    251.0,
+    0.0,
+    600.0
+   ],
+   "axis": "z",
+   "material": "stainless",
+   "group": "sensing",
+   "purpose": "Ties plate stack to shield",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "plate_rod_2",
+   "name": "Plate spacer rod 2",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 40.0,
+   "position": [
+    191.0,
+    34.6,
+    600.0
+   ],
+   "axis": "z",
+   "material": "stainless",
+   "group": "sensing",
+   "purpose": "Ties plate stack to shield",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "plate_rod_3",
+   "name": "Plate spacer rod 3",
+   "shape": "cylinder",
+   "radius": 2.5,
+   "length": 40.0,
+   "position": [
+    191.0,
+    -34.6,
+    600.0
+   ],
+   "axis": "z",
+   "material": "stainless",
+   "group": "sensing",
+   "purpose": "Ties plate stack to shield",
+   "color": "#C8CCD0",
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "specs": {},
+   "fill": 1.0
+  },
+  {
+   "id": "trh_probe",
+   "name": "Temp/RH probe",
+   "shape": "box",
+   "size": [
+    15.0,
+    15.0,
+    5.0
+   ],
+   "position": [
+    211.0,
+    0.0,
+    597.0
+   ],
+   "material": "electronics",
+   "group": "sensing",
+   "look": "pcb",
+   "purpose": "Air temperature/humidity for gas and PM correction",
+   "color": "#1F6B3A",
+   "specs": {
+    "power": "0.002"
+   },
+   "process": "buy",
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quantity": 1,
+   "fill": 1.0
+  }
+ ],
+ "assembly": [
+  {
+   "parts": [
+    "lamp_post",
+    "post_flange",
+    "post_door",
+    "door_lock",
+    "anchor_nut_1",
+    "anchor_nut_2",
+    "anchor_nut_3",
+    "anchor_nut_4",
+    "anchor_stud_1",
+    "anchor_stud_2",
+    "anchor_stud_3",
+    "anchor_stud_4"
+   ],
+   "action": "Survey existing lamp column: confirm 140 mm diameter, sound galvanising, anchor nuts tight, service door locked"
+  },
+  {
+   "parts": [
+    "mast",
+    "standoff_low",
+    "standoff_high",
+    "ubolt_standoff_low",
+    "ubolt_standoff_high",
+    "mast_cap",
+    "mast_plug"
+   ],
+   "action": "U-bolt mast to both standoffs; fit top cap and drain plug"
+  },
+  {
+   "parts": [
+    "clamp_low",
+    "clamp_high",
+    "clamp_low_housing",
+    "clamp_high_housing",
+    "clamp_low_screw",
+    "clamp_high_screw",
+    "lamp_post"
+   ],
+   "action": "Wrap stainless bands through standoffs around the post and tension worm drives to 15 N\u00b7m"
+  },
+  {
+   "parts": [
+    "controller",
+    "mcu_chip",
+    "mppt_inductor",
+    "cap_1",
+    "cap_2"
+   ],
+   "action": "Inspect populated controller PCB (MCU, MPPT inductor, filter capacitors) and conformal coat"
+  },
+  {
+   "parts": [
+    "battery",
+    "battery_strap",
+    "battery_term_pos",
+    "battery_term_neg",
+    "din_rail",
+    "controller",
+    "radio",
+    "fuse_holder",
+    "terminal_block",
+    "enclosure"
+   ],
+   "action": "Strap battery to base, clip controller and radio on DIN rail, wire through 5 A fuse"
+  },
+  {
+   "parts": [
+    "panel_gland",
+    "gland_sensor_body",
+    "gland_sensor_cap",
+    "gland_spare_body",
+    "gland_spare_plug",
+    "vent_plug",
+    "antenna_bulkhead",
+    "enclosure"
+   ],
+   "action": "Fit glands, blanking plug, breather vent and N-type bulkhead"
+  },
+  {
+   "parts": [
+    "enclosure_gasket",
+    "enclosure_lid",
+    "lid_screw_1",
+    "lid_screw_2",
+    "lid_screw_3",
+    "lid_screw_4",
+    "status_led",
+    "brand_label"
+   ],
+   "action": "Seat gasket, close lid with four captive screws; apply ID label"
+  },
+  {
+   "parts": [
+    "sensor_shield",
+    "louvre_py_1",
+    "louvre_py_2",
+    "louvre_py_3",
+    "louvre_py_4",
+    "louvre_py_5",
+    "louvre_ny_1",
+    "louvre_ny_2",
+    "louvre_ny_3",
+    "louvre_ny_4",
+    "louvre_ny_5"
+   ],
+   "action": "Snap angled louvres into both sides of the sensor shield"
+  },
+  {
+   "parts": [
+    "sensor_shield",
+    "pm_sensor",
+    "pm_inlet",
+    "pm_inlet_mesh",
+    "gas_sensors",
+    "gas_can_no2",
+    "gas_can_o3"
+   ],
+   "action": "Mount PM and gas sensors in louvred shield; PM inlet out the front with mesh"
+  },
+  {
+   "parts": [
+    "shield_plate_1",
+    "shield_plate_2",
+    "shield_plate_3",
+    "shield_plate_4",
+    "plate_rod_1",
+    "plate_rod_2",
+    "plate_rod_3",
+    "trh_probe",
+    "sensor_cable_drop",
+    "sensor_cable_run"
+   ],
+   "action": "Stack radiation plates on spacer rods under shield; thread T/RH harness between plates"
+  },
+  {
+   "parts": [
+    "enclosure",
+    "ubolt_enc_low",
+    "ubolt_enc_high",
+    "shield_bracket",
+    "ubolt_shield",
+    "mast"
+   ],
+   "action": "U-bolt enclosure and shield bracket to the mast"
+  },
+  {
+   "parts": [
+    "panel_rail_low",
+    "panel_rail_high",
+    "tilt_plate_ll",
+    "tilt_plate_lr",
+    "tilt_plate_hl",
+    "tilt_plate_hr",
+    "tilt_bolt_ll",
+    "tilt_bolt_lr",
+    "tilt_bolt_hl",
+    "tilt_bolt_hr",
+    "ubolt_panel_low",
+    "ubolt_panel_high"
+   ],
+   "action": "Clamp tilt rails to mast top; set plates to vertical (0 deg) and torque pivot bolts"
+  },
+  {
+   "parts": [
+    "solar_panel",
+    "panel_frame_left",
+    "panel_frame_right",
+    "panel_frame_top",
+    "panel_frame_bottom",
+    "junction_box",
+    "panel_cable"
+   ],
+   "action": "Bolt framed panel to tilt plates facing south; plug PV lead into panel gland"
+  },
+  {
+   "parts": [
+    "antenna",
+    "antenna_knuckle",
+    "antenna_bulkhead"
+   ],
+   "action": "Screw whip with swivel knuckle onto bulkhead, set vertical"
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "winter_week",
+   "type": "power",
+   "part": "battery",
+   "title": "7 overcast winter days",
+   "panel": "solar_panel",
+   "loads": [
+    "controller",
+    "radio",
+    "pm_sensor",
+    "gas_sensors"
+   ],
+   "days": 7,
+   "peak_irradiance": 250,
+   "day_length": 8,
+   "weather_factor": 0.2,
+   "min_charge": 0.2
+  },
+  {
+   "id": "summer_sun",
+   "type": "enclosure",
+   "part": "enclosure",
+   "title": "Summer sun on sealed box (35 degC air)",
+   "irradiance": 1000,
+   "wind": 1,
+   "absorptivity": 0.4
+  },
+  {
+   "id": "storm",
+   "type": "wind",
+   "part": "mast",
+   "title": "35 m/s storm gust",
+   "speed": 35,
+   "direction": "x",
+   "carries": [
+    "solar_panel",
+    "enclosure",
+    "sensor_shield",
+    "antenna"
+   ],
+   "min_safety_factor": 1.5
+  },
+  {
+   "id": "standoff_yank",
+   "type": "load",
+   "part": "standoff_high",
+   "title": "Ice + snow + tug on upper standoff",
+   "force": 400,
+   "support": "cantilever",
+   "position": 1,
+   "span_axis": "x",
+   "load_axis": "z",
+   "min_safety_factor": 2
+  },
+  {
+   "id": "install_drop",
+   "type": "drop",
+   "part": "enclosure",
+   "title": "Dropped from ladder during install",
+   "height": 1.5,
+   "mass": 1.6,
+   "min_safety_factor": 1
+  }
+ ],
+ "diagram": {
+  "nodes": [
+   {
+    "id": "sun",
+    "label": "Winter sun (low, overcast)",
+    "kind": "environment"
+   },
+   {
+    "id": "wind",
+    "label": "Wind gusts / ice",
+    "kind": "environment"
+   },
+   {
+    "id": "air",
+    "label": "Street air (PM, NO2, O3)",
+    "kind": "environment"
+   },
+   {
+    "id": "panel",
+    "label": "25 W solar panel (vertical, south)",
+    "kind": "power",
+    "part": "solar_panel"
+   },
+   {
+    "id": "mppt",
+    "label": "MPPT charger + MCU board",
+    "kind": "component",
+    "part": "controller"
+   },
+   {
+    "id": "batt",
+    "label": "LiFePO4 12.8 V 6 Ah",
+    "kind": "power",
+    "part": "battery"
+   },
+   {
+    "id": "pm",
+    "label": "Laser PM2.5/PM10 sensor",
+    "kind": "component",
+    "part": "pm_sensor"
+   },
+   {
+    "id": "gas",
+    "label": "Electrochemical gas sensors",
+    "kind": "component",
+    "part": "gas_sensors"
+   },
+   {
+    "id": "radio",
+    "label": "LoRaWAN radio + antenna",
+    "kind": "component",
+    "part": "radio"
+   },
+   {
+    "id": "cloud",
+    "label": "Gateway / cloud dashboard",
+    "kind": "software"
+   },
+   {
+    "id": "mount",
+    "label": "Mast + band clamps on lamp post",
+    "kind": "component",
+    "part": "mast"
+   }
+  ],
+  "edges": [
+   {
+    "from": "sun",
+    "to": "panel",
+    "kind": "power",
+    "label": "irradiance"
+   },
+   {
+    "from": "panel",
+    "to": "mppt",
+    "kind": "power",
+    "label": "18 V DC"
+   },
+   {
+    "from": "mppt",
+    "to": "batt",
+    "kind": "power",
+    "label": "charge"
+   },
+   {
+    "from": "batt",
+    "to": "mppt",
+    "kind": "power",
+    "label": "12.8 V"
+   },
+   {
+    "from": "mppt",
+    "to": "pm",
+    "kind": "power",
+    "label": "5 V duty-cycled"
+   },
+   {
+    "from": "mppt",
+    "to": "gas",
+    "kind": "power",
+    "label": "3.3 V"
+   },
+   {
+    "from": "air",
+    "to": "pm",
+    "kind": "data",
+    "label": "sampled air"
+   },
+   {
+    "from": "air",
+    "to": "gas",
+    "kind": "data",
+    "label": "diffusion"
+   },
+   {
+    "from": "pm",
+    "to": "mppt",
+    "kind": "data",
+    "label": "UART"
+   },
+   {
+    "from": "gas",
+    "to": "mppt",
+    "kind": "data",
+    "label": "ADC/I2C"
+   },
+   {
+    "from": "mppt",
+    "to": "radio",
+    "kind": "data",
+    "label": "readings"
+   },
+   {
+    "from": "radio",
+    "to": "cloud",
+    "kind": "rf",
+    "label": "868 MHz LoRa"
+   },
+   {
+    "from": "wind",
+    "to": "mount",
+    "kind": "mechanical",
+    "label": "gust load"
+   },
+   {
+    "from": "sun",
+    "to": "mppt",
+    "kind": "heat",
+    "label": "solar heating of box"
+   }
+  ]
+ }
+}

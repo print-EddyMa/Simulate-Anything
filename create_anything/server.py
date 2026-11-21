@@ -95,6 +95,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(404, {"error": "not found"})
         rel = path.lstrip("/") or "index.html"
         target = (DIST / rel).resolve()
+        if target.is_dir():
+            target = target / "index.html"
         if not str(target).startswith(str(DIST.resolve())) or not target.is_file():
             target = DIST / "index.html"
         if not target.is_file():
